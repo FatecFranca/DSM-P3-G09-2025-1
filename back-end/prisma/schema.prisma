@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario { // Nome do model com inicial maiúscula e singular
+  id          String    @id@default(auto()) @map("_id") @db.ObjectId
+  nome  String  @unique 
+  email String  @unique
+  foto  String?
+  senha String 
+}
+
+model Notificacao {
+  id         String    @id@default(auto()) @map("_id") @db.ObjectId
+  tipo       String  
+  texto      String   
+  titulo     String   @unique
+  ids_usuarios String[]
+}
+
+model Projeto {
+  id                    String    @id@default(auto()) @map("_id") @db.ObjectId
+  titulo                String  
+  descricao             String   
+  data_limite           DateTime
+  data_entrega          DateTime   
+  data_criacao          DateTime
+  anexo                 String?
+  status                String
+  ids_membros           String[]
+  ids_administradores   String[]
+  id_gestor             String
+}
+
+model Tarefa {
+  id            String    @id@default(auto()) @map("_id") @db.ObjectId
+  titulo        String  
+  descricao     String   
+  data_limite   DateTime
+  data_entrega  DateTime   
+  anexo         String?
+  ordem         Float
+  status        String
+  id_projeto    String
+}
+
+model SubTarefa {
+  id            String    @id@default(auto()) @map("_id") @db.ObjectId
+  titulo        String  
+  descricao     String   
+  data_limite   DateTime
+  data_entrega  DateTime   
+  anexo         String?
+  ordem         Float
+  status        String
+  ids_membros   String[]
+  id_tarefa     String
+}
+
+model Atividade {
+  id              String    @id@default(auto()) @map("_id") @db.ObjectId 
+  descricao       String   
+  data_realizacao DateTime
+  anexo           String?
+  id_usuario      String[]
+  id_subtarefa    String
+}
