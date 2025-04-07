@@ -15,7 +15,7 @@ datasource db {
 
 model Usuario { // Nome do model com inicial maiúscula e singular
   id          String    @id@default(auto()) @map("_id") @db.ObjectId
-  nome  String  @unique 
+  nome  String
   email String  @unique
   foto  String?
   senha String 
@@ -25,7 +25,7 @@ model Notificacao {
   id         String    @id@default(auto()) @map("_id") @db.ObjectId
   tipo       String  
   texto      String   
-  titulo     String   @unique
+  titulo     String
   ids_usuarios String[]
 }
 
@@ -34,7 +34,7 @@ model Projeto {
   titulo                String  
   descricao             String   
   data_limite           DateTime
-  data_entrega          DateTime   
+  data_entrega          DateTime? 
   data_criacao          DateTime
   anexo                 String?
   status                String
@@ -73,6 +73,6 @@ model Atividade {
   descricao       String   
   data_realizacao DateTime
   anexo           String?
-  id_usuario      String[]
+  id_membro       String
   id_subtarefa    String
 }

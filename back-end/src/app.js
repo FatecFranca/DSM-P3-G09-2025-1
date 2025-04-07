@@ -1,25 +1,25 @@
-import express, { json, urlencoded } from 'express'
-import cookieParser from 'cookie-parser'
-import logger from 'morgan'
+import express, { json, urlencoded } from 'express';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-import indexRouter from './routes/index.js'
-import usersRouter from './routes/users.js'
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
-const app = express()
+const app = express();
 
-app.use(logger('dev'))
-app.use(json())
-app.use(urlencoded({ extended: false }))
-app.use(cookieParser())
+app.use(logger('dev'));
+app.use(json());
+app.use(urlencoded({ extended: false }));
+app.use(cookieParser());
 
-app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 // Sessão de Rotas
-// import categoriasRouter from './routes/categorias.js'
-// app.use('/categorias', categoriasRouter)
+import usuariosRouter from './routes/usuarios.js';
+app.use('/usuarios', usuariosRouter);
 
-// import fornecedoresRouter from './routes/fornecedores.js'
-// app.use('/fornecedores', fornecedoresRouter)
+import projetosRouter from './routes/projetos.js';
+app.use('/projetos', projetosRouter);
 
-export default app
+export default app;
