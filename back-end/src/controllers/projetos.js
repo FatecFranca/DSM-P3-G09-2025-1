@@ -1,7 +1,22 @@
 // Criar validação da senha para poder eferuar as aterações eexclusões nos projetos, validar a senha do gestor
 import prisma from '../database/client.js';
+import bcrypt from 'bcrypt';
 
 const controller = {};
+
+// Função para validar senha do gestor
+async function validaSenha(senhaNova, idGestor){
+    const verificaGestor = await prisma.usuario.findUnique({
+        where: { id: idGestor }
+    }); 
+    
+    let verSenha = bcrypt.compare(senhaNova, verificaGestor.senha);
+    if(verSenha){
+        return true;
+    }else{
+        return false;
+    }
+}
 
 // Criando um novo projeto
 controller.create = async function(req, res) {
@@ -174,7 +189,6 @@ controller.update = async function(req, res) {
     try {
 
         // Verificando se quem está alterando é o gestor do projeto
-
         const verificaProjeto = await prisma.projeto.findUnique({
             where: { id: req.params.id }
         });
@@ -185,7 +199,18 @@ controller.update = async function(req, res) {
         
         }
 
-        req.body.data_limite = new Date(req.body.data_limite);
+
+        // Verificando se o usuário informou a senha de cadastro correta para a atualização dos dados do projeto
+        const valSenha = validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
+        if (!valSenha){
+            return res.status(400).json({ mensagem: "Senha Incorreta!" });
+        }
+
+        // Verificando se informou a data limite e alterando o seu formato para um formato aceitavel pelo MongoDB
+        if (req.body.data_limite){
+            req.body.data_limite = new Date(req.body.data_limite);
+        }
+        
 
         // Atualizando os dados do projeto
         await prisma.projeto.update({
@@ -213,7 +238,8 @@ controller.update = async function(req, res) {
     }
 }
 
-// Atualizando o gestor do projeto
+// Não precisa existir, pois da para alterar ele somente pelo updatte normal, pois é possivel alterar um atributo somente no MongoDB
+/*// Atualizando o gestor do projeto
 // Testar amanhã (07/04)
 controller.updateGestor = async function(req, res) {
     try {
@@ -256,7 +282,7 @@ controller.updateGestor = async function(req, res) {
         res.status(500).send(error);
       }
     }
-}
+}*/
 
 // Adicionando um membro no projeto
 controller.addMembro = async function(req, res) {

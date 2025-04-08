@@ -27,6 +27,7 @@ model Notificacao {
   texto      String   
   titulo     String
   ids_usuarios String[]
+  id_subtarefa String
 }
 
 model Projeto {

@@ -14,6 +14,7 @@ router.put('/addMembro/:id', controller.addMembro);
 router.put('/removeMembro/:id', controller.removeMembro);
 router.put('/addAdministrador/:id', controller.addAdministrador);
 router.put('/removeAdministrador/:id', controller.removeAdministrador);
+// router.put('/updateGestor/:id', controller.updateGestor);
 router.delete('/:id', controller.delete);
 
 export default router;
