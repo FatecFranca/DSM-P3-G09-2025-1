@@ -35,7 +35,7 @@ model Projeto {
   titulo                String  
   descricao             String   
   data_limite           DateTime
-  data_entrega          DateTime? 
+  data_entrega          DateTime?
   data_criacao          DateTime
   anexo                 String?
   status                String
@@ -47,9 +47,10 @@ model Projeto {
 model Tarefa {
   id            String    @id@default(auto()) @map("_id") @db.ObjectId
   titulo        String  
-  descricao     String   
+  descricao     String 
+  data_criacao   DateTime  
   data_limite   DateTime
-  data_entrega  DateTime   
+  data_entrega  DateTime?
   anexo         String?
   ordem         Float
   status        String
@@ -59,9 +60,10 @@ model Tarefa {
 model SubTarefa {
   id            String    @id@default(auto()) @map("_id") @db.ObjectId
   titulo        String  
-  descricao     String   
+  descricao     String  
+  data_criacao   DateTime 
   data_limite   DateTime
-  data_entrega  DateTime   
+  data_entrega  DateTime? 
   anexo         String?
   ordem         Float
   status        String
