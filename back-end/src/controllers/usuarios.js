@@ -1,3 +1,7 @@
+// Caro autor do arquivo, favor revisa-lo antes de liber-lo.
+// Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
+
+
 // Verificar com o Front em Update / Create / Delete a adição do anexo de imagens.
 // Posteriormente está aprovado
 
@@ -327,7 +331,8 @@ controller.update = async function(req, res) {
     }
 }
 
-// Validado (12-04) - Verificar exclusão de imagens com o Front
+// Validar Quando estiver com as atividade, tarefas e subtarefas cadastradas
+// Validado (01/05) - Verificar exclusão de imagens com o Front
 // Excluir projetos quando gestor e dados de outros projetos e tarefas
 // Deletando o usuário
 controller.delete = async function(req, res) {
@@ -363,6 +368,71 @@ controller.delete = async function(req, res) {
             deletarImagem(usuarioDeletar.foto);
         }
 
+        // Deletando os projetos em que ele é gestor
+        const projetosDeletar = await prisma.projeto.findMany({
+            where: { id_gestor: req.session.usuario.id }
+        });
+
+        // Verificando se a lsita não voltou vazia
+        if (projetosDeletar){
+            let tarefasDeletar;
+            let subtaresDeletar;
+
+            // Tarefas a deletar
+            for (const projeto of projetosDeletar){
+
+                // Deletando as tarefas
+                tarefasDeletar = await prisma.tarefa.findMany({
+                    where: { id_projeto: projeto.id }
+                });
+
+                // Verificando se a lsita não voltou vazia
+                if (tarefasDeletar){
+
+                    // Tarefas a deletar
+                    for (const tarefa of tarefasDeletar){
+
+                        subtaresDeletar = await prisma.subTarefa.findMany({
+                            where: { id_tarefa: tarefa.id }
+                        });
+
+                        // Verificando se a lsita não voltou vazio
+                        if (subtaresDeletar){
+
+                            // Atividades e SubTarefas a deletar
+                            for (const subTarefa of subtaresDeletar){
+
+                                // Deletando as atividades
+                                await prisma.atividade.delete({
+                                    where: { id_subtarefa: subTarefa.id }
+                                });
+
+                                // Deletando as subtarefas
+                                await prisma.subTarefa.delete({
+                                    where: { id_subtarefa: subTarefa.id }
+                                });
+                    
+                            }
+
+                        }
+
+                        // Deletando as tarefas
+                        await prisma.tarefa.delete({
+                            where: { id_tarefa: tarefa.id }
+                        });
+            
+                    }
+
+                }
+
+                // Deletando os projetos
+                await prisma.projeto.delete({
+                    where: { id_projeto: projeto.id }
+                });
+
+            }
+        }
+
         // Exclui o usuário
         await prisma.usuario.delete({
             where: { id: req.params.id }
@@ -378,6 +448,7 @@ controller.delete = async function(req, res) {
                 res.status(201).json({result: true});
             }
         });
+
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado

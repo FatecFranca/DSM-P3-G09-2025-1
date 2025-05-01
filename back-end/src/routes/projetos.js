@@ -44,7 +44,6 @@ router.put('/:id', upload.single('anexoProjeto'), controller.update);
     descricao: String
     data_limite: Date ou String [2025-04-01]
     anexo: String (Opcional)
-    id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
@@ -89,7 +88,6 @@ router.put('/updateGestor/:id', controller.updateGestor);
 /*
     Dados a serem informados:
     id_gestorNovo: String
-    id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
@@ -107,7 +105,6 @@ router.put('/updateStatus/:id', controller.updateStatus);
 router.delete('/:id', controller.delete);
 /*
     Dados a serem informados:
-    id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 

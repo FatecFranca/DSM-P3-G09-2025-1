@@ -1,6 +1,8 @@
 // Caro autor do arquivo, favor revisa-lo antes de liber-lo.
 // Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
 
+// Revisar deleção de projetos com tarefas, atividades e subtarefas.
+
 // Implemetar em Update / Create / Delete a adição do anexo do projeto em uma pasta, bem como a sua remoção caso necessário.
 
 // Importando arquivos e bibliotecas importantes
@@ -155,12 +157,19 @@ controller.retrieveOne = async function(req, res) {
         return res.send(projeto);
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
@@ -362,10 +371,17 @@ controller.retrieveAllMembro = async function(req, res) {
     }
 }
 
-
+// Validado (01/05) - Validar com front para verificar o anexo
 // Atualizando os dados do projeto
 controller.update = async function(req, res) {
     try {
+
+        // Verificando se a sessão foi iniciada
+        const valSes = validarSessao(req);
+
+        if (!valSes){
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        }
 
         // Verificando se quem está alterando é o gestor do projeto
         const verificaProjeto = await prisma.projeto.findUnique({
@@ -376,10 +392,9 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
-        if(req.body.id_gestor !== verificaProjeto.id_gestor){
+        if(req.session.usuario.id !== verificaProjeto.id_gestor){
             return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!" });
         }
-
 
         // Verificando se a senha informada é a senha atual do usuario
         const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
@@ -398,7 +413,6 @@ controller.update = async function(req, res) {
 
         // Ajustando a url do anexo para a inserção no BD
         req.body.anexo = urlAnexo;
-        console.log("Anexo:" + req.body.anexo);
 
         // Atualizando os dados do projeto
         await prisma.projeto.update({
@@ -410,19 +424,33 @@ controller.update = async function(req, res) {
         return res.status(201).json({mensagem: "Projeto Atualizado com Sucesso!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
-
+// Validado (01/05)
 // Atualizando o gestor do projeto
 controller.updateGestor = async function(req, res) {
     try {
+
+        // Verificando se a sessão foi iniciada
+        const valSes = validarSessao(req);
+
+        if (!valSes){
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        }
 
         // Verificando se quem está alterando é o gestor do projeto
         const verificaProjeto = await prisma.projeto.findUnique({
@@ -433,7 +461,7 @@ controller.updateGestor = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
-        if(req.body.id_gestor !== verificaProjeto.id_gestor){
+        if(req.session.usuario.id !== verificaProjeto.id_gestor){
             return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!"});
         }
 
@@ -441,6 +469,15 @@ controller.updateGestor = async function(req, res) {
         const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
         if (!valSenha){
             return res.status(400).json({ mensagem: "Senha Inválida!"});
+        }
+
+        // Verificando se os id do novo gestor existe
+        const verificaGestor = await prisma.usuario.findUnique({
+            where: { id: req.body.id_gestorNovo }
+        });
+
+        if (!verificaGestor){
+            return res.status(400).json({ mensagem: "Novo Gestor não Existe!"});
         }
 
         // Atualizando o gestor do projeto
@@ -452,15 +489,22 @@ controller.updateGestor = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Gestor alterado com Sucesso! Você cedeu sua posição de Gestor do Projeto"});
+        return res.status(201).json({mensagem: "Gestor alterado com Sucesso! Você cedeu sua posição e não tem mais acesso ao Projeto!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-  
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
@@ -529,12 +573,19 @@ controller.updateStatus = async function(req, res) {
         }
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-  
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
@@ -604,12 +655,19 @@ controller.addMembro = async function(req, res) {
         return res.status(201).json({mensagem: "Membro adicionado no Projeto com Sucesso!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
@@ -659,12 +717,19 @@ controller.removeMembro = async function(req, res) {
         return res.status(201).json({mensagem: "Membro removido do Projeto com Sucesso!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-  
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
@@ -734,12 +799,19 @@ controller.addAdministrador = async function(req, res) {
         return res.status(201).json({mensagem: "Administrador adicionado no Projeto com Sucesso!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-  
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
@@ -787,16 +859,23 @@ controller.removeAdministrador = async function(req, res) {
         return res.status(201).json({mensagem: "Administrador removido do Projeto com Sucesso!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-  
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
-
+// Validado (01/05) - Validar com front para verificar o anexo e Deletar as tarefas, subtarefas e atividades
 // Deletando o projeto
 controller.delete = async function(req, res) {
     try {
@@ -817,7 +896,7 @@ controller.delete = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
-        if(req.body.id_gestor !== verificaProjeto.id_gestor){
+        if(req.session.usuario.id !== verificaProjeto.id_gestor){
             return res.status(400).json({ mensagem: "Você não tem permissão para excluir esse Projeto!" });
         }
 
@@ -827,8 +906,51 @@ controller.delete = async function(req, res) {
             return res.status(400).json({ mensagem: "Senha Inválida!"});
         }
 
-        // Deletando todos os dados relacionados ao projeto
-        // Criar depois as exclusões das Tarefas, Subtarefas e Atividades
+        // Deletando as tarefas
+        const tarefasDeletar = await prisma.tarefa.findMany({
+            where: { id_projeto: verificaProjeto.id }
+        });
+
+        let subtaresDeletar;
+
+        // Verificando se a lsita não voltou vazia
+        if (tarefasDeletar){
+
+            // Tarefas a deletar
+            for (const tarefa of tarefasDeletar){
+
+                subtaresDeletar = await prisma.subTarefa.findMany({
+                    where: { id_tarefa: tarefa.id }
+                });
+
+                // Verificando se a lsita não voltou vazio
+                if (subtaresDeletar){
+
+                    // Atividades e SubTarefas a deletar
+                    for (const subTarefa of subtaresDeletar){
+
+                        // Deletando as atividades
+                        await prisma.atividade.delete({
+                            where: { id_subtarefa: subTarefa.id }
+                        });
+
+                        // Deletando as subtarefas
+                        await prisma.subTarefa.delete({
+                            where: { id_subtarefa: subTarefa.id }
+                        });
+            
+                    }
+                    
+                }
+
+                // Deletando as tarefas
+                await prisma.tarefa.delete({
+                    where: { id_tarefa: tarefa.id }
+                });
+    
+            }
+
+        }
 
         // Busca o projeto a ser excluído
         await prisma.projeto.delete({
@@ -839,12 +961,19 @@ controller.delete = async function(req, res) {
         return res.status(201).json({mensagem: "Projeto Deletado com Sucessso!"});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
-  
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
+        // P2025: erro do Prisma referente a objeto não encontrado
+        if(error?.code === 'P2025' || error?.code === 'P2023') {
+            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+        }
+        else {    // Outros tipos de erro
+            // Deu errado: exibe o erro no terminal
+            console.error(error);
+    
+            // Envia o erro ao front-end, com status de erro
+            // HTTP 500: Internal Server Error
+            res.status(500).send(error);
+        }
     }
 }
 
