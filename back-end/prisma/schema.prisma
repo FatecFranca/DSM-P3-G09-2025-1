@@ -14,7 +14,7 @@ datasource db {
 }
 
 // Criado
-model Usuario { // Nome do model com inicial maiúscula e singular
+model Usuario { 
   id          String    @id@default(auto()) @map("_id") @db.ObjectId
   nome  String
   email String  @unique
@@ -46,7 +46,7 @@ model Projeto {
   id_gestor             String
 }
 
-
+// Criado
 model Tarefa {
   id            String    @id@default(auto()) @map("_id") @db.ObjectId
   titulo        String  
@@ -59,6 +59,7 @@ model Tarefa {
   status        String
   id_projeto    String
 }
+
 
 model SubTarefa {
   id            String    @id@default(auto()) @map("_id") @db.ObjectId

@@ -11,7 +11,7 @@ import bcrypt from 'bcrypt';
 const controller = {};
 
 // Importando validação de sessão
-import { validarSessao } from './utils.js';
+import { atualizaStatus, validarSessao } from './utils.js';
 
 // Validado (30/04)
 // Função para validar senha do gestor
@@ -108,7 +108,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-// Validado (30//04)
+// Validado (30/04)
 // Obtendo um projeto específico pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -185,10 +185,165 @@ controller.retrieveAllGestor = async function(req, res) {
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
 
+        // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
+        const atzStatus = atualizaStatus(req);
+
+        if (!atzStatus){
+            return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
+        }
+
+        // Função desativada (se encontra agora em utils.js)
+        /*
         // Buscando todos os projetos do gestor
         const projetosTodos = await prisma.projeto.findMany({
-            where: {id_gestor: req.session.usuario.id}
+            where: {
+                OR: [
+                    { id_gestor: req.session.usuario.id },
+                    { ids_administradores: { has: req.session.usuario.id } },
+                    { ids_membros: { has: req.session.usuario.id } }
+                ]
+            }
         });
+
+        // Atualizando os status dos projetos, tarefas e subtarefas caso a data de entrega de cada um já esteja vencida
+        for (const projeto of projetosTodos){
+
+            // Se estiver Concluído não fará nada
+            if (projeto.status !== "Concluído"){
+
+                // Se estiver atrasado mas a data limite foi alterada por algum motivo verifica
+                if (projeto.status === "Atrasado"){
+                    if (projeto.data_limite > new Date()){
+
+                        // Obtendo as tarefas a serem ajustadas
+                        const tarefasAjustar = await prisma.tarefa.findMany({
+                            where: {
+                                id_projeto: projeto.id
+                            }
+                        });
+
+                        for (const tarefa of tarefasAjustar){
+
+                            // Obtendo as subtarefas a serem ajustadas
+                            const subTarefasAjustar = await prisma.subTarefa.findMany({
+                                where: {
+                                    id_tarefa: tarefa.id
+                                }
+                            });
+
+                            for (const subTarefa of subTarefasAjustar){
+
+                                // Ajustando o status se as datas estivem ok
+                                if (subTarefa.data_limite > new Date()){
+                                    await prisma.subTarefa.update({
+                                        where: {
+                                            status: "Atrasada",
+                                            id: subTarefa.id
+                                        },
+                                        data:
+                                        {
+                                            status: 'Pendente'
+                                        }
+                                    });
+                                }
+                            }
+
+                            // Ajustando as tarefas caso a data esteja ok
+                            if (tarefa.data_limite > new Date()){
+                                await prisma.tarefa.update({
+                                    where: {
+                                        status: "Atrasada",
+                                        id: tarefa.id
+                                    },
+                                    data:
+                                    {
+                                        status: 'Pendente'
+                                    }
+                                });
+                            }
+                            
+                        }
+
+                        // Ajustando o status do projeto, pela data estar ok
+                        await prisma.projeto.update({
+                            where: {
+                                status: "Atrasado",
+                                id: projeto.id
+                            },
+                            data:
+                            {
+                                status: 'Pendente'
+                            }
+                        });
+                    }
+                }else if (projeto.status === "Pendente"){
+                    if (projeto.data_limite < new Date()){
+
+                        // Obtendo as tarefas a serem ajustadas
+                        const tarefasAjustar = await prisma.tarefa.findMany({
+                            where: {
+                                id_projeto: projeto.id
+                            }
+                        });
+
+                        for (const tarefa of tarefasAjustar){
+
+                            // Obtendo as subtarefas a serem ajustadas
+                            const subTarefasAjustar = await prisma.subTarefa.findMany({
+                                where: {
+                                    id_tarefa: tarefa.id
+                                }
+                            });
+
+                            for (const subTarefa of subTarefasAjustar){
+
+                                // Ajustando o status se as datas estivem off
+                                if (subTarefa.data_limite < new Date()){
+                                    await prisma.subTarefa.update({
+                                        where: {
+                                            status: "Pendente",
+                                            id: subTarefa.id
+                                        },
+                                        data:
+                                        {
+                                            status: 'Atrasada'
+                                        }
+                                    });
+                                }
+                            }
+
+                            // Ajustando as tarefas caso a data esteja off
+                            if (tarefa.data_limite < new Date()){
+                                await prisma.tarefa.update({
+                                    where: {
+                                        status: "Pendente",
+                                        id: tarefa.id
+                                    },
+                                    data:
+                                    {
+                                        status: 'Atrasada'
+                                    }
+                                });
+                            }
+                            
+                        }
+
+                        // Ajustando o status do projeto, pela data estar ok
+                        await prisma.projeto.update({
+                            where: {
+                                status: "Pendente",
+                                id: projeto.id
+                            },
+                            data:
+                            {
+                                status: 'Atrasado'
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        */
 
         // Todos os projetos finalizados
         const projetosConcluidos = await prisma.projeto.findMany({
@@ -200,18 +355,13 @@ controller.retrieveAllGestor = async function(req, res) {
             where: {id_gestor: req.session.usuario.id, status: "Pendente"}
         });
 
-        // Todos os projetos em andamento
-        const projetosEmAndamento = await prisma.projeto.findMany({
-            where: {id_gestor: req.session.usuario.id, status: "Em andamento"}
-        });
-
         // Todos os projetos atrasados
         const projetosAtrasados = await prisma.projeto.findMany({
             where: {id_gestor: req.session.usuario.id, status: "Atrasado"}
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({projetosTodos: projetosTodos, projetosConcluidos: projetosConcluidos, projetosEmAndamento: projetosEmAndamento, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
+        return res.status(200).json({projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -264,16 +414,6 @@ controller.retrieveAllAdministrador = async function(req, res) {
             }
         });
 
-        // Todos os projetos em andamento
-        const projetosEmAndamento = await prisma.projeto.findMany({
-            where: {
-                ids_administradores: {
-                    has: req.session.usuario.id
-                },
-                status: "Em andamento"
-            }
-        });
-
         // Todos os projetos atrasados
         const projetosAtrasados = await prisma.projeto.findMany({
             where: {
@@ -285,7 +425,7 @@ controller.retrieveAllAdministrador = async function(req, res) {
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({projetosTodos: projetosTodos, projetosConcluidos: projetosConcluidos, projetosEmAndamento: projetosEmAndamento, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
+        return res.status(200).json({projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -338,16 +478,6 @@ controller.retrieveAllMembro = async function(req, res) {
             }
         });
 
-        // Todos os projetos em andamento
-        const projetosEmAndamento = await prisma.projeto.findMany({
-            where: {
-                ids_membros: {
-                    has: req.session.usuario.id
-                },
-                status: "Em andamento"
-            }
-        });
-
         // Todos os projetos atrasados
         const projetosAtrasados = await prisma.projeto.findMany({
             where: {
@@ -359,7 +489,7 @@ controller.retrieveAllMembro = async function(req, res) {
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({projetosTodos: projetosTodos, projetosConcluidos: projetosConcluidos, projetosEmAndamento: projetosEmAndamento, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
+        return res.status(200).json({projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -419,6 +549,13 @@ controller.update = async function(req, res) {
             where: { id: req.params.id },
             data: req.body
         });
+
+        // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
+        const atzStatus = atualizaStatus(req);
+
+        if (!atzStatus){
+            return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
+        }
     
         // Retornando mensagem de sucessao caso tenha atualizado
         return res.status(201).json({mensagem: "Projeto Atualizado com Sucesso!"});
@@ -559,7 +696,7 @@ controller.updateStatus = async function(req, res) {
             await prisma.projeto.update({
                 where: { id: req.params.id },
                 data: {
-                    status: "Em andamento",
+                    status: "Pendente",
                     data_entrega: null
                 }
             });
@@ -585,7 +722,7 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-// Validado (30//04)
+// Validado (30/04)
 // Adicionando um membro no projeto
 controller.addMembro = async function(req, res) {
     try {
@@ -667,7 +804,7 @@ controller.addMembro = async function(req, res) {
     }
 }
 
-// Validado (30//04)
+// Validado (30/04)
 // Removendo um membro do projeto
 controller.removeMembro = async function(req, res) {
     try {
@@ -729,7 +866,7 @@ controller.removeMembro = async function(req, res) {
     }
 }
 
-// Validado (30//04)
+// Validado (30/04)
 // Adicionando um adminstrador no projeto
 controller.addAdministrador = async function(req, res) {
     try {
@@ -811,7 +948,7 @@ controller.addAdministrador = async function(req, res) {
     }
 }
 
-// Validado (30//04)
+// Validado (30/04)
 // Removendo um administrador do projeto
 controller.removeAdministrador = async function(req, res) {
     try {
@@ -933,18 +1070,18 @@ controller.delete = async function(req, res) {
                         if (atividadesDeletar){
 
                             // Atividades a deletar
-                            for (const subTarefa of subtaresDeletar){
+                            for (const atividade of atividadesDeletar){
 
                                 // Deletando as atividades
                                 await prisma.atividade.delete({
-                                    where: { id_subtarefa: subTarefa.id }
+                                    where: { id: atividade.id }
                                 });
                             }
                         }
 
                         // Deletando as subtarefas
                         await prisma.subTarefa.delete({
-                            where: { id_subtarefa: subTarefa.id }
+                            where: { id: subTarefa.id }
                         });
             
                     }
@@ -953,7 +1090,7 @@ controller.delete = async function(req, res) {
 
                 // Deletando as tarefas
                 await prisma.tarefa.delete({
-                    where: { id_tarefa: tarefa.id }
+                    where: { id: tarefa.id }
                 });
     
             }

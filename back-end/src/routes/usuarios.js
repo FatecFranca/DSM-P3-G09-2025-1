@@ -26,7 +26,7 @@ router.get('/:id', controller.retrieveOne);
 
 
 // Realizar Login
-router.get('/email/:email', controller.loginEmail);
+router.post('/email/:email', controller.loginEmail);
 /*
     Dados a serem informados:
     senha: String

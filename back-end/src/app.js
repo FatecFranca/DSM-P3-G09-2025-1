@@ -54,4 +54,7 @@ app.use('/projetos', projetosRouter);
 import tarefasRouter from './routes/tarefas.js';
 app.use('/tarefas', tarefasRouter);
 
+import subTarefasRouter from './routes/subtarefas.js';
+app.use('/subtarefas', subTarefasRouter);
+
 export default app;

@@ -167,11 +167,6 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
-// Obter todos os usuários de uma subtarefa
-// Implementa na subtarefa não aqui
-
-
 // Validado (29/04)
 // Encerrar sessão
 controller.encerrarSessao = async function(req, res) {
@@ -397,7 +392,7 @@ controller.delete = async function(req, res) {
                             where: { id_tarefa: tarefa.id }
                         });
 
-                        // Verificando se a lsita não voltou vazio
+                        // Verificando se a lista não voltou vazio
                         if (subtaresDeletar){
 
                             // SubTarefas a deletar
@@ -410,18 +405,18 @@ controller.delete = async function(req, res) {
                                 if (atividadesDeletar){
 
                                     // Atividades a deletar
-                                    for (const subTarefa of subtaresDeletar){
+                                    for (const atividade of atividadesDeletar){
 
                                         // Deletando as atividades
                                         await prisma.atividade.delete({
-                                            where: { id_subtarefa: subTarefa.id }
+                                            where: { id: atividade.id }
                                         });
                                     }
                                 }
 
                                 // Deletando as subtarefas
                                 await prisma.subTarefa.delete({
-                                    where: { id_subtarefa: subTarefa.id }
+                                    where: { id: subTarefa.id }
                                 });
                     
                             }
@@ -430,7 +425,7 @@ controller.delete = async function(req, res) {
 
                         // Deletando as tarefas
                         await prisma.tarefa.delete({
-                            where: { id_tarefa: tarefa.id }
+                            where: { id: tarefa.id }
                         });
             
                     }
@@ -439,7 +434,7 @@ controller.delete = async function(req, res) {
 
                 // Deletando os projetos
                 await prisma.projeto.delete({
-                    where: { id_projeto: projeto.id }
+                    where: { id: projeto.id }
                 });
 
             }

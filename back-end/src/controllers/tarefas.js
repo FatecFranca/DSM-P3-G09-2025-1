@@ -3,14 +3,14 @@
 
 // Revisar deleção de tarefas com atividades e subtarefas.
 
-// Implemetar em Update / Create / Delete a adição do anexo do projeto em uma pasta, bem como a sua remoção caso necessário.
+// Implemetar em Update / Create / Delete a adição do anexo da tarefa em uma pasta, bem como a sua remoção caso necessário.
 
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 const controller = {};
 
 // Importando validação de sessão
-import { validarSessao } from './utils.js';
+import { atualizaStatus, validarSessao } from './utils.js';
 
 // Validar com o front
 // Função para excluir um arquivo da pasta
@@ -309,7 +309,7 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
         }
 
-        // Verificando se quem está alterando é o gestor do projeto ou um administrador
+        // Obtendo os dados do projeto
         const verificaProjeto = await prisma.projeto.findUnique({
             where: { id: verificaTarefa.id_projeto }
         });
@@ -318,7 +318,7 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
-        // Verifica se o usuário tem permissão para alterar
+        // Verificando se quem está alterando é o gestor do projeto ou um administrador
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
             let encontrou;
             verificaProjeto.ids_administradores.forEach(adm => {
@@ -330,15 +330,6 @@ controller.update = async function(req, res) {
             if (!encontrou){
                 return res.status(400).json({ mensagem: "Você não tem permissão para alterar essa Tarefa!" });
             }
-        }
-
-        // Verificando se o projeto informado está cadastrado
-        const verificaProjetoNovo = await prisma.projeto.findUnique({
-            where: { id: req.body.id_projeto }
-        });
-
-        if (!verificaProjetoNovo){
-            return res.status(400).json({mensagem: "Projeto informado inválido!"});
         }
 
         // Verificando se a data foi informada para converte-la em um formato aceitavel
@@ -362,6 +353,13 @@ controller.update = async function(req, res) {
             where: { id: req.params.id },
             data: req.body
         });
+
+        // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
+        const atzStatus = atualizaStatus(req);
+
+        if (!atzStatus){
+            return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
+        }
     
         // Retornando mensagem de sucessao caso tenha atualizado
         return res.status(201).json({mensagem: "Tarefa Atualizada com Sucesso!"});
@@ -437,6 +435,13 @@ controller.updateStatus = async function(req, res) {
                     data_entrega: new Date()
                 }
             });
+
+            // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
+            const atzStatus = atualizaStatus(req);
+
+            if (!atzStatus){
+                return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
+            }
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({mensagem: "Tarefa Concluída!"});
@@ -446,10 +451,17 @@ controller.updateStatus = async function(req, res) {
             await prisma.tarefa.update({
                 where: { id: req.params.id },
                 data: {
-                    status: "Em andamento",
+                    status: "Pendente",
                     data_entrega: null
                 }
             });
+
+            // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
+            const atzStatus = atualizaStatus(req);
+
+            if (!atzStatus){
+                return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
+            }
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({mensagem: "Tarefa Reaberta!"});
@@ -502,7 +514,7 @@ controller.updateOrdem = async function(req, res) {
 
     const qtTarefasProjeto = await prisma.tarefa.findMany({
         where: {
-            id_projeto: req.body.id_projeto
+            id_projeto: verificaTarefa.id_projeto
         }
     });
 
@@ -751,25 +763,25 @@ controller.delete = async function(req, res) {
                 if (atividadesDeletar){
 
                     // Atividades a deletar
-                    for (const subTarefa of subtaresDeletar){
+                    for (const atividade of atividadesDeletar){
 
                         // Deletando as atividades
                         await prisma.atividade.delete({
-                            where: { id_subtarefa: subTarefa.id }
+                            where: { id: atividade.id }
                         });
                     }
                 }
 
                 // Deletando as subtarefas
                 await prisma.subTarefa.delete({
-                    where: { id_subtarefa: subTarefa.id }
+                    where: { id: subTarefa.id }
                 });
     
             }
             
         }
 
-        // Busca o projeto a ser excluído
+        // Busca o a tarefa a ser excluída
         await prisma.tarefa.delete({
             where: { id: req.params.id }
         });
