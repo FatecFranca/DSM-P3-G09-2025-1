@@ -534,10 +534,6 @@ controller.updateStatus = async function(req, res) {
             return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!"});
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
-            return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!"});
-        }
-
         // Verificando se a senha informada é a senha atual do usuario
         const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
         if (!valSenha){
@@ -912,6 +908,7 @@ controller.delete = async function(req, res) {
         });
 
         let subtaresDeletar;
+        let atividadesDeletar;
 
         // Verificando se a lsita não voltou vazia
         if (tarefasDeletar){
@@ -926,13 +923,24 @@ controller.delete = async function(req, res) {
                 // Verificando se a lsita não voltou vazio
                 if (subtaresDeletar){
 
-                    // Atividades e SubTarefas a deletar
+                    // SubTarefas a deletar
                     for (const subTarefa of subtaresDeletar){
 
-                        // Deletando as atividades
-                        await prisma.atividade.delete({
+                        atividadesDeletar = await prisma.atividade.findMany({
                             where: { id_subtarefa: subTarefa.id }
                         });
+
+                        if (atividadesDeletar){
+
+                            // Atividades a deletar
+                            for (const subTarefa of subtaresDeletar){
+
+                                // Deletando as atividades
+                                await prisma.atividade.delete({
+                                    where: { id_subtarefa: subTarefa.id }
+                                });
+                            }
+                        }
 
                         // Deletando as subtarefas
                         await prisma.subTarefa.delete({

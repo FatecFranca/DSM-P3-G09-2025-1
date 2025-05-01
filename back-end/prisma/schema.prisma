@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Criado
 model Usuario { // Nome do model com inicial maiúscula e singular
   id          String    @id@default(auto()) @map("_id") @db.ObjectId
   nome  String
@@ -30,6 +31,7 @@ model Notificacao {
   id_subtarefa String
 }
 
+// Criado
 model Projeto {
   id                    String    @id@default(auto()) @map("_id") @db.ObjectId
   titulo                String  
@@ -44,11 +46,12 @@ model Projeto {
   id_gestor             String
 }
 
+
 model Tarefa {
   id            String    @id@default(auto()) @map("_id") @db.ObjectId
   titulo        String  
   descricao     String 
-  data_criacao   DateTime  
+  data_criacao  DateTime  
   data_limite   DateTime
   data_entrega  DateTime?
   anexo         String?

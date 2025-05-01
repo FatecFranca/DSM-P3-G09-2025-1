@@ -377,6 +377,7 @@ controller.delete = async function(req, res) {
         if (projetosDeletar){
             let tarefasDeletar;
             let subtaresDeletar;
+            let atividadesDeletar;
 
             // Tarefas a deletar
             for (const projeto of projetosDeletar){
@@ -399,13 +400,24 @@ controller.delete = async function(req, res) {
                         // Verificando se a lsita não voltou vazio
                         if (subtaresDeletar){
 
-                            // Atividades e SubTarefas a deletar
+                            // SubTarefas a deletar
                             for (const subTarefa of subtaresDeletar){
 
-                                // Deletando as atividades
-                                await prisma.atividade.delete({
+                                atividadesDeletar = await prisma.atividade.findMany({
                                     where: { id_subtarefa: subTarefa.id }
                                 });
+
+                                if (atividadesDeletar){
+
+                                    // Atividades a deletar
+                                    for (const subTarefa of subtaresDeletar){
+
+                                        // Deletando as atividades
+                                        await prisma.atividade.delete({
+                                            where: { id_subtarefa: subTarefa.id }
+                                        });
+                                    }
+                                }
 
                                 // Deletando as subtarefas
                                 await prisma.subTarefa.delete({
@@ -413,7 +425,7 @@ controller.delete = async function(req, res) {
                                 });
                     
                             }
-
+                            
                         }
 
                         // Deletando as tarefas
