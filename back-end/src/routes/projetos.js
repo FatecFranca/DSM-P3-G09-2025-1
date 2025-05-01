@@ -1,48 +1,45 @@
+// Importando bibliotecas necessárias
 import{Router} from 'express';
 import controller from '../controllers/projetos.js';
+import upload from '../uploads/uploadAneProj.js';
 
 const router = Router();
 
-router.post('/', controller.create);
-// Dados a serem informados
+// Cadastro de projeto
+router.post('/', upload.single('anexoProjeto'), controller.create);
 /*
+    Dados a serem informados:
     titulo: String
     descricao: String
     data_limite: Date ou String [2025-04-01]
     anexo: String (Opcional)
-    id_gestor: String
 */
 
-//router.get('/', controller.retrieveAll);
 
+// Desativar posteriormente
+router.get('/', controller.retrieveAll);
+
+
+// Buscar dados de um projeto
 router.get('/:id', controller.retrieveOne);
-// Dados a serem informados
-/*
-    id String (Projeto) via URL
-*/
 
-router.get('/gestor/:id', controller.retrieveAllGestor);
-// Dados a serem informados
-/*
-    id String (Gestor) via URL
-*/
 
-router.get('/administrador/:id', controller.retrieveAllAdministrador);
-// Dados a serem informados
-/*
-    id String (Administrador) via URL
-*/
+// Busca de projetos do gestor logado
+router.get('/gestor/true', controller.retrieveAllGestor);
 
-router.get('/membro/:id', controller.retrieveAllMembro);
-// Dados a serem informados
-/*
-    id String (Membro) via URL
-*/
 
-router.put('/:id', controller.update);
-// Dados a serem informados
+// Busca de projetos em que é administrador
+router.get('/administrador/true', controller.retrieveAllAdministrador);
+
+
+// Busca de projetos em que é membro
+router.get('/membro/true', controller.retrieveAllMembro);
+
+
+// Alterar projeto
+router.put('/:id', upload.single('anexoProjeto'), controller.update);
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     titulo: String
     descricao: String
     data_limite: Date ou String [2025-04-01]
@@ -51,64 +48,65 @@ router.put('/:id', controller.update);
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+
+// Adicionar membro ao projeto
 router.put('/addMembro/:id', controller.addMembro);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     id_membro: String
-    id_gestor: String (Usuário Logado)
-    senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+
+// Remover membro ao projeto
 router.put('/removeMembro/:id', controller.removeMembro);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     id_membro: String
-    id_gestor: String (Usuário Logado)
-    senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+
+// Adicionar administrador ao projeto
 router.put('/addAdministrador/:id', controller.addAdministrador);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     id_administrador: String
     id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+
+// Remover administrador ao projeto
 router.put('/removeAdministrador/:id', controller.removeAdministrador);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     id_administrador: String
     id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+// Alterar gestor do projeto
 router.put('/updateGestor/:id', controller.updateGestor);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     id_gestorNovo: String
     id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+
+// Mudar o status do projeto (finalizar ou reabrir)
 router.put('/updateStatus/:id', controller.updateStatus);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
-    id_gestor: String (Usuário Logado)
+    Dados a serem informados:
     senha_gestor: String (Usuário Informará a senha atual dele)
     tipo_alteracao: (Concluir / Reabrir)
 */
 
+
+// Deletar projeto
 router.delete('/:id', controller.delete);
-// Dados a serem informados
 /*
-    id String (Projeto) via URL
+    Dados a serem informados:
     id_gestor: String (Usuário Logado)
     senha_gestor: String (Usuário Informará a senha atual dele)
 */

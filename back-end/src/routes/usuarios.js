@@ -1,41 +1,46 @@
+// Importando bibliotecas necessárias
 import{Router} from 'express';
 import controller from '../controllers/usuarios.js';
+import upload from '../uploads/uploadImgUsu.js';
 
 const router = Router();
 
-router.post('/', controller.create);
-// Dados a serem informados
+// Rotas
+
+// Criar usuário
+router.post('/', upload.single('fotoUsuario'), controller.create);
 /*
+    Dados a serem informados:
     nome: String
     email: String
-    foto: String (Opcional)
     senha: String
 */
 
+
 // Desativa após o desenvolvimento
 router.get('/', controller.retrieveAll);
-// Dados a serem informados
-/*
-    Nenhum dado, somente requisitar na URL normal
-*/
 
+
+// Buscar dados de um usuário
 router.get('/:id', controller.retrieveOne);
-// Dados a serem informados
-/*
-    id via URL
-*/
 
-// (Login)
+
+// Realizar Login
 router.get('/email/:email', controller.loginEmail);
-// Dados a serem informados
 /*
-    email via URL
+    Dados a serem informados:
+    senha: String
 */
 
-router.put('/:id', controller.update);
-// Dados a serem informados
+
+// Encerrar sessão
+router.get('/encerrarSessao/true', controller.encerrarSessao);
+
+
+// Alterar dados do usuário
+router.put('/:id', upload.single('fotoUsuario'), controller.update);
 /*
-    id via URL
+    Dados a serem informados:
     nome: String
     email: String
     foto: String (Opcional)
@@ -43,10 +48,11 @@ router.put('/:id', controller.update);
     senha_atual: String (Senha antiga / atual)
 */
 
+
+// Deletar usuário
 router.delete('/:id', controller.delete);
-// Dados a serem informados
 /*
-    id via URL
+    Dados a serem informados:
     senha_atual: String (Senha antiga / atual)
 */
 

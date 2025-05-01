@@ -3,6 +3,9 @@ import express, { json, urlencoded } from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 // Importando e atribuindo rotas padrões necessárias
 import indexRouter from './routes/index.js';
@@ -24,6 +27,22 @@ app.use(session({
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 50 } // 50 minutos
 }));
+
+// Configurando pastas para a adição de anexos e imagens de usuário e projetos
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Tornando todas as pastas de arquivos públicas para o código
+app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoAtividades')));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoProjetos')));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoSubTarefas')));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoTarefas')));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'imgUsuarios')));
+
 
 // Sessão de Rotas
 import usuariosRouter from './routes/usuarios.js';
