@@ -1,18 +1,14 @@
 // Caro autor do arquivo, favor revisa-lo antes de liber-lo.
 // Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
 
-// Revisar deleção de tarefas com atividades e subtarefas.
-
-// Implemetar em Update / Create / Delete a adição do anexo da tarefa em uma pasta, bem como a sua remoção caso necessário.
-
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 const controller = {};
 
 // Importando validação de sessão
-import { atualizaStatus, validarSessao } from './utils.js';
+import { validarSessao } from './utils.js';
 
-// Validar com o front
+
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -32,8 +28,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-// Validado (01/05) - Testar depois anexo com front
-// Validar com o anexo do front
+
 // Criando uma nova tarefa
 controller.create = async function(req, res) {
     try {
@@ -60,25 +55,29 @@ controller.create = async function(req, res) {
         }
 
         // Obtendo os dados da tarefa
-        const tarefaProjeto = await prisma.projeto.findFirst({
+        const verificaProjeto = await prisma.projeto.findFirst({
             where: { id: tarefa.id_projeto }
         });
 
-        if (!tarefaProjeto){
-            return res.status(400).json({mensagem: "Tarefa pertence um projeto inválido!"});
+        if (!verificaProjeto){
+            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         // Verificando se o usuário que está consultando os dados é pelo menos um membro ou administrador do projeto
         let encontrou = false;
-        if (req.session.usuario.id !== tarefaProjeto.id_gestor){
-            tarefaProjeto.ids_membros.forEach(membro => {
+        if (req.session.usuario.id !== verificaProjeto.id_gestor){
+            verificaProjeto.ids_membros.forEach(membro => {
                 if (membro === req.session.usuario.id){
                     encontrou = true;
                 }
             });
 
             if (!encontrou){
-                tarefaProjeto.ids_administradores.forEach(adm => {
+                verificaProjeto.ids_administradores.forEach(adm => {
                     if (adm === req.session.usuario.id){
                         encontrou = true;
                     }
@@ -106,10 +105,22 @@ controller.create = async function(req, res) {
         // Ajustando a url do anexo para a inserção no BD
         req.body.anexo = urlAnexo;
 
+        // Verificando se a data foi informada para converte-la em um formato aceitavel
+        if (req.body.data_limite){
+            req.body.data_limite = new Date(req.body.data_limite);
+
+            // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
+            if (req.body.data_limite < new Date()){
+                return res.status(400).json({mensagem: "Data de Limite não pode ser Menor que a data Atual!"});
+            }
+
+        }
+
+        // Cadastrando
         await prisma.tarefa.create({ data: req.body });
 
         // Retornando mensagem de sucesso
-        return res.status(201).json({mensagem: "Tarefa Cadastrada com Sucessso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -122,7 +133,6 @@ controller.create = async function(req, res) {
 }
 
 // Desativar posteriormente
-// Obtendo todos os tarefas cadastradas
 controller.retrieveAll = async function(req, res) {
     try {
         // Buscando todas a tarefas cadastradas
@@ -143,7 +153,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Obtendo uma tarefa específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -165,25 +175,25 @@ controller.retrieveOne = async function(req, res) {
         }
 
         // Obtendo os dados da tarefa
-        const tarefaProjeto = await prisma.projeto.findFirst({
+        const verificaProjeto = await prisma.projeto.findFirst({
             where: { id: tarefa.id_projeto }
         });
 
-        if (!tarefaProjeto){
+        if (!verificaProjeto){
             return res.status(400).json({mensagem: "Tarefa pertence um projeto inválido!"});
         }
 
         // Verificando se o usuário que está consultando os dados é pelo menos um membro ou administrador do projeto
         let encontrou = false;
-        if (req.session.usuario.id !== tarefaProjeto.id_gestor){
-            tarefaProjeto.ids_membros.forEach(membro => {
+        if (req.session.usuario.id !== verificaProjeto.id_gestor){
+            verificaProjeto.ids_membros.forEach(membro => {
                 if (membro === req.session.usuario.id){
                     encontrou = true;
                 }
             });
 
             if (!encontrou){
-                tarefaProjeto.ids_administradores.forEach(adm => {
+                verificaProjeto.ids_administradores.forEach(adm => {
                     if (adm === req.session.usuario.id){
                         encontrou = true;
                     }
@@ -217,7 +227,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Obtendo todas as tarefas pelo projeto 
 controller.retrieveAllProjeto = async function(req, res) {
     try {
@@ -288,7 +298,7 @@ controller.retrieveAllProjeto = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Atualizando os dados da tarefa
 controller.update = async function(req, res) {
     try {
@@ -318,6 +328,14 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+        }
+
         // Verificando se quem está alterando é o gestor do projeto ou um administrador
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
             let encontrou;
@@ -335,6 +353,19 @@ controller.update = async function(req, res) {
         // Verificando se a data foi informada para converte-la em um formato aceitavel
         if (req.body.data_limite){
             req.body.data_limite = new Date(req.body.data_limite);
+
+            // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
+            if (req.body.data_limite < new Date()){
+                req.body.status = "Atrasada"
+            }else{
+                req.body.status = "Pendente"
+            }
+
+        }
+
+        // Deletando o anexo
+        if (verificaTarefa.anexo){
+            deletarAnexo(verificaTarefa.anexo);
         }
 
         // Monta a URL da anexo
@@ -353,22 +384,15 @@ controller.update = async function(req, res) {
             where: { id: req.params.id },
             data: req.body
         });
-
-        // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
-        const atzStatus = atualizaStatus(req);
-
-        if (!atzStatus){
-            return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
-        }
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Tarefa Atualizada com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
         if(error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Tarefa / Projeto não Encontrada(o)! Verifique os dados enviados!"});
+            res.status(400).json({mensagem: "Tarefa Não Encontrada!"});
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
@@ -381,7 +405,7 @@ controller.update = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Finalizando/Reabrindo a tarefa (Mudando Status e Data Entrega)
 controller.updateStatus = async function(req, res) {
     try {
@@ -411,6 +435,10 @@ controller.updateStatus = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
         // Verifica se o usuário tem permissão para alterar
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
             let encontrou;
@@ -435,16 +463,9 @@ controller.updateStatus = async function(req, res) {
                     data_entrega: new Date()
                 }
             });
-
-            // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
-            const atzStatus = atualizaStatus(req);
-
-            if (!atzStatus){
-                return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
-            }
         
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({mensagem: "Tarefa Concluída!"});
+            return res.status(201).json({result: true, mensagem: "Tarefa Concluída!"});
 
         }else if (req.body.tipo_alteracao === "Reabrir"){
             // Atualizando o status e data de entrega do projeto
@@ -455,16 +476,9 @@ controller.updateStatus = async function(req, res) {
                     data_entrega: null
                 }
             });
-
-            // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
-            const atzStatus = atualizaStatus(req);
-
-            if (!atzStatus){
-                return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
-            }
         
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({mensagem: "Tarefa Reaberta!"});
+            return res.status(201).json({result: true, mensagem: "Tarefa Reaberta!"});
         }
     }
     catch(error) {
@@ -484,7 +498,7 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Alterar a ordem de uma tarefa
 controller.updateOrdem = async function(req, res) {
     // Verificando se a sessão foi iniciada
@@ -510,6 +524,14 @@ controller.updateOrdem = async function(req, res) {
 
     if (!verificaProjeto){
         return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+    }
+
+    if (verificaProjeto.status === "Concluído"){
+        return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+    }
+
+    if (verificaTarefa.status === "Concluída"){
+        return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
     }
 
     const qtTarefasProjeto = await prisma.tarefa.findMany({
@@ -700,8 +722,7 @@ controller.updateOrdem = async function(req, res) {
 
 }
 
-// Validado (01/05)
-// Validar com front para verificar o anexo e Deletar as subtarefas e atividades
+
 // Deletando o projeto
 controller.delete = async function(req, res) {
     try {
@@ -729,6 +750,10 @@ controller.delete = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         // Verifica se o usuário tem permissão para alterar
@@ -764,12 +789,21 @@ controller.delete = async function(req, res) {
 
                     // Atividades a deletar
                     for (const atividade of atividadesDeletar){
+                        // Deletando o anexo
+                        if (atividade.anexo){
+                            deletarAnexo(atividade.anexo);
+                        }
 
                         // Deletando as atividades
                         await prisma.atividade.delete({
                             where: { id: atividade.id }
                         });
                     }
+                }
+
+                // Deletando o anexo
+                if (subTarefa.anexo){
+                    deletarAnexo(su.anexo);
                 }
 
                 // Deletando as subtarefas
@@ -779,6 +813,11 @@ controller.delete = async function(req, res) {
     
             }
             
+        }
+
+        // Deletando o anexo
+        if (verificaTarefa.anexo){
+            deletarAnexo(verificaTarefa.anexo);
         }
 
         // Busca o a tarefa a ser excluída
@@ -812,7 +851,7 @@ controller.delete = async function(req, res) {
         }
     
         // Envia mensagem confirmando a exclusão
-        return res.status(201).json({mensagem: "Tarefa Deletada com Sucessso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado

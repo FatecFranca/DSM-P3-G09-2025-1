@@ -1,10 +1,6 @@
 // Caro autor do arquivo, favor revisa-lo antes de liber-lo.
 // Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
 
-
-// Verificar com o Front em Update / Create / Delete a adição do anexo de imagens.
-// Posteriormente está aprovado
-
 // Importando bibliotecas necessárias
 import prisma from '../database/client.js';
 import bcrypt from 'bcrypt';
@@ -16,7 +12,7 @@ import { validarSessao } from './utils.js';
 
 const controller = {};
 
-// Validado (12-04)
+
 // Função para validar senha do usuário
 async function validaSenha(senhaAtual, idUsuario){
     const verificaUsuario = await prisma.usuario.findFirst({
@@ -31,7 +27,7 @@ async function validaSenha(senhaAtual, idUsuario){
     }
 }
 
-// Validado (12-04) - Validar com o Front Agora
+
 // Função para excluir uma imagem da pasta
 async function deletarImagem(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -51,7 +47,7 @@ async function deletarImagem(nomeArquivo) {
     }
 }
 
-// Validado (12-04) - Validar com o Front Agora
+
 // Criando um novo usuário
 controller.create = async function(req, res) {
     try {
@@ -106,8 +102,6 @@ controller.create = async function(req, res) {
 }
 
 // Desativa após o desenvolvimento
-// Não se faz necessário no momento, e poderia ser perigoso tal ferramenta ser usada de forma incorreta
-// Obtendo todos os usuários cadastrados
 controller.retrieveAll = async function(req, res) {
     try {
 
@@ -133,7 +127,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-// Validado (12-04)
+
 // Obtendo um usuário específico pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -167,7 +161,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validado (29/04)
+
 // Encerrar sessão
 controller.encerrarSessao = async function(req, res) {
     req.session.destroy(err => {
@@ -179,7 +173,7 @@ controller.encerrarSessao = async function(req, res) {
     });
 }
 
-// Validado (12-04)
+
 // Obtendo um usuário específico pelo email (Login)
 controller.loginEmail = async function(req, res) {
     try {
@@ -225,7 +219,7 @@ controller.loginEmail = async function(req, res) {
     }
 }
 
-// Validado (12-04) - Verificar exclusão e upload de imagens com o Front
+
 // Atualizando os dados do usuário
 controller.update = async function(req, res) {
     try {
@@ -307,7 +301,7 @@ controller.update = async function(req, res) {
         };
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Usuário Atualizado com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -326,9 +320,7 @@ controller.update = async function(req, res) {
     }
 }
 
-// Validar Quando estiver com as atividade, tarefas e subtarefas cadastradas
-// Validado (01/05) - Verificar exclusão de imagens com o Front
-// Excluir projetos quando gestor e dados de outros projetos e tarefas
+
 // Deletando o usuário
 controller.delete = async function(req, res) {
     try {
@@ -407,11 +399,21 @@ controller.delete = async function(req, res) {
                                     // Atividades a deletar
                                     for (const atividade of atividadesDeletar){
 
+                                        // Deletando o anexo
+                                        if (atividade.anexo){
+                                            deletarAnexo(atividade.anexo);
+                                        }
+
                                         // Deletando as atividades
                                         await prisma.atividade.delete({
                                             where: { id: atividade.id }
                                         });
                                     }
+                                }
+
+                                // Deletando o anexo
+                                if (subTarefa.anexo){
+                                    deletarAnexo(subTarefa.anexo);
                                 }
 
                                 // Deletando as subtarefas
@@ -423,6 +425,11 @@ controller.delete = async function(req, res) {
                             
                         }
 
+                        // Deletando o anexo
+                        if (tarefa.anexo){
+                            deletarAnexo(tarefa.anexo);
+                        }
+
                         // Deletando as tarefas
                         await prisma.tarefa.delete({
                             where: { id: tarefa.id }
@@ -430,6 +437,11 @@ controller.delete = async function(req, res) {
             
                     }
 
+                }
+
+                // Deletando o anexo
+                if (projeto.anexo){
+                    deletarAnexo(projeto.anexo);
                 }
 
                 // Deletando os projetos

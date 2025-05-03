@@ -57,7 +57,7 @@ router.put('/updateStatus/:id', controller.updateStatus);
 */
 
 
-// Deletar projeto
+// Deletar tarefa
 router.delete('/:id', controller.delete);
 
 

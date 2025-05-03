@@ -9,17 +9,23 @@ export function validarSessao(req){
     }
 }
 
+// Função para ter uma diferença em dias de duas datas, para ver se é necessário enviar uma notificação pela data limite estar próxima
+export function diferencaEmDias(data1, data2) {
+    const umDiaEmMs = 1000 * 60 * 60 * 24;
+    const diffEmMs = new Date(data2) - new Date(data1);
+    return Math.floor(diffEmMs / umDiaEmMs);
+}
+
 // Atualizando os status dos projetos, tarefas e subtarefas caso a data de entrega de cada um já esteja vencida
-export async function atualizaStatus(req){
+
+export async function atualizaStatus(){
 
     // Buscando todos os projetos do gestor
     const projetosTodos = await prisma.projeto.findMany({
-        where: {
-            OR: [
-                { id_gestor: req.session.usuario.id },
-                { ids_administradores: { has: req.session.usuario.id } },
-                { ids_membros: { has: req.session.usuario.id } }
-            ]
+        where:{
+            status: {
+                not: "Concluído"
+            }
         }
     });
 
@@ -27,61 +33,178 @@ export async function atualizaStatus(req){
 
         // Se estiver Concluído não fará nada
         if (projeto.status !== "Concluído"){
+                
+                // Obtendo as tarefas a serem ajustadas
+                const tarefasAjustar = await prisma.tarefa.findMany({
+                    where: {
+                        id_projeto: projeto.id
+                    }
+                });
 
-            // Se estiver atrasado mas a data limite foi alterada por algum motivo verifica
-            if (projeto.status === "Atrasado"){
-                if (projeto.data_limite > new Date()){
+                for (const tarefa of tarefasAjustar){
 
-                    // Obtendo as tarefas a serem ajustadas
-                    const tarefasAjustar = await prisma.tarefa.findMany({
+                    // Obtendo as subtarefas a serem ajustadas
+                    const subTarefasAjustar = await prisma.subTarefa.findMany({
                         where: {
-                            id_projeto: projeto.id
+                            id_tarefa: tarefa.id
                         }
                     });
 
-                    for (const tarefa of tarefasAjustar){
+                    for (const subTarefa of subTarefasAjustar){
 
-                        // Obtendo as subtarefas a serem ajustadas
-                        const subTarefasAjustar = await prisma.subTarefa.findMany({
-                            where: {
-                                id_tarefa: tarefa.id
-                            }
-                        });
+                        // Ajustando o status se as datas estivem off
+                        if (subTarefa.data_limite < new Date() && subTarefa.status === "Pendente"){
 
-                        for (const subTarefa of subTarefasAjustar){
-
-                            // Ajustando o status se as datas estivem ok
-                            if (subTarefa.data_limite > new Date()){
-                                await prisma.subTarefa.update({
+                            // Verificando se as notificações já foram enviadas para os usuários necessários 
+                            for (const idUsu of subTarefa.ids_membros){
+                                const notficacao = await prisma.notificacao.findFirst({
                                     where: {
-                                        status: "Atrasada",
-                                        id: subTarefa.id
-                                    },
-                                    data:
-                                    {
-                                        status: 'Pendente'
+                                        id_usuario: idUsu,
+                                        id_subtarefa: subTarefa.id,
+                                        tipo: "Atraso"
                                     }
                                 });
-                            }
-                        }
 
-                        // Ajustando as tarefas caso a data esteja ok
-                        if (tarefa.data_limite > new Date()){
-                            await prisma.tarefa.update({
+                                if (!notficacao){
+                                    let not;
+                                    not.tipo = "Atraso";
+                                    not.titulo = "Subtarefa Atrasada";
+                                    not.data_criacao = new Date;
+                                    not.texto = "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo;
+                                    not.id_usuario = idUsu;
+                                    not.id_subtarefa = subTarefa.id;
+
+                                    await prisma.notificacao.create({
+                                        data: not
+                                    });
+                                }
+                            }
+
+                            await prisma.subTarefa.update({
+                                where: {
+                                    status: "Pendente",
+                                    id: subTarefa.id
+                                },
+                                data:
+                                {
+                                    status: 'Atrasada'
+                                }
+                            });
+                        }else if (subTarefa.data_limite > new Date() && subTarefa.status === "Atrasada"){
+
+                            await prisma.subTarefa.update({
                                 where: {
                                     status: "Atrasada",
-                                    id: tarefa.id
+                                    id: subTarefa.id
                                 },
                                 data:
                                 {
                                     status: 'Pendente'
                                 }
                             });
+
+                            const diasEntrega = diferencaEmDias(subTarefa.data_limite, new Date());
+
+                            if (diasEntrega <= 3){
+                                // Verificando se as notificações já foram enviadas para os usuários necessários 
+                                for (const idUsu of subTarefa.ids_membros){
+                                    const notficacao = await prisma.notificacao.findFirst({
+                                        where: {
+                                            id_usuario: idUsu,
+                                            id_subtarefa: subTarefa.id,
+                                            tipo: "Prazo Curto"
+                                        }
+                                    });
+
+                                    if (!notficacao){
+                                        let not;
+                                        not.tipo = "Prazo Curto";
+                                        not.titulo = "Prazo para a Entrega Curto";
+                                        not.data_criacao = new Date;
+                                        not.texto = "Há uma subtarefa com o Prazo para a Entrega Curto. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo;
+                                        not.id_usuario = idUsu;
+                                        not.id_subtarefa = subTarefa.id;
+                                    }
+                                }
+                            }
+
                         }
-                        
+
+                        // Verificando se os prasos estão currtos para algumas subtarefas, para enviar uma notificação
+                        if (subTarefa.status === "Pendente" && subTarefa.data_limite > new Date()){
+
+                            const diasEntrega = diferencaEmDias(subTarefa.data_limite, new Date());
+
+                            if (diasEntrega <= 3){
+                                // Verificando se as notificações já foram enviadas para os usuários necessários 
+                                for (const idUsu of subTarefa.ids_membros){
+                                    const notficacao = await prisma.notificacao.findFirst({
+                                        where: {
+                                            id_usuario: idUsu,
+                                            id_subtarefa: subTarefa.id,
+                                            tipo: "Prazo Curto"
+                                        }
+                                    });
+
+                                    if (!notficacao){
+                                        let not;
+                                        not.tipo = "Prazo Curto";
+                                        not.titulo = "Prazo para a Entrega Curto";
+                                        not.data_criacao = new Date;
+                                        not.texto = "Há uma subtarefa com o Prazo para a Entrega Curto. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo;
+                                        not.id_usuario = idUsu;
+                                        not.id_subtarefa = subTarefa.id;
+
+                                        await prisma.notificacao.create({
+                                            data: not
+                                        });
+                                    }
+                                }
+                            }
+                        }
                     }
 
-                    // Ajustando o status do projeto, pela data estar ok
+                    // Ajustando as tarefas caso a data esteja off
+                    if (tarefa.data_limite < new Date() && tarefa.status === "Pendente"){
+                        await prisma.tarefa.update({
+                            where: {
+                                status: "Pendente",
+                                id: tarefa.id
+                            },
+                            data:
+                            {
+                                status: 'Atrasada'
+                            }
+                        });
+                    }else if (tarefa.data_limite > new Date() && tarefa.status === "Atrasada"){
+                        await prisma.tarefa.update({
+                            where: {
+                                status: "Atrasada",
+                                id: tarefa.id
+                            },
+                            data:
+                            {
+                                status: 'Pendente'
+                            }
+                        });
+                    }
+                    
+                }
+
+                if (projeto.data_limite < new Date() && projeto.status === "Pendente"){
+                    // Ajustando o status do projeto, pela data estar off
+                    await prisma.projeto.update({
+                        where: {
+                            status: "Pendente",
+                            id: projeto.id
+                        },
+                        data:
+                        {
+                            status: 'Atrasado'
+                        }
+                    });
+                }else if (projeto.data_limite > new Date() && projeto.status === "Atrasado"){
+                    // Ajustando o status do projeto, pela data estar off
                     await prisma.projeto.update({
                         where: {
                             status: "Atrasado",
@@ -93,71 +216,7 @@ export async function atualizaStatus(req){
                         }
                     });
                 }
-            }else if (projeto.status === "Pendente"){
-                if (projeto.data_limite < new Date()){
 
-                    // Obtendo as tarefas a serem ajustadas
-                    const tarefasAjustar = await prisma.tarefa.findMany({
-                        where: {
-                            id_projeto: projeto.id
-                        }
-                    });
-
-                    for (const tarefa of tarefasAjustar){
-
-                        // Obtendo as subtarefas a serem ajustadas
-                        const subTarefasAjustar = await prisma.subTarefa.findMany({
-                            where: {
-                                id_tarefa: tarefa.id
-                            }
-                        });
-
-                        for (const subTarefa of subTarefasAjustar){
-
-                            // Ajustando o status se as datas estivem off
-                            if (subTarefa.data_limite < new Date()){
-                                await prisma.subTarefa.update({
-                                    where: {
-                                        status: "Pendente",
-                                        id: subTarefa.id
-                                    },
-                                    data:
-                                    {
-                                        status: 'Atrasada'
-                                    }
-                                });
-                            }
-                        }
-
-                        // Ajustando as tarefas caso a data esteja off
-                        if (tarefa.data_limite < new Date()){
-                            await prisma.tarefa.update({
-                                where: {
-                                    status: "Pendente",
-                                    id: tarefa.id
-                                },
-                                data:
-                                {
-                                    status: 'Atrasada'
-                                }
-                            });
-                        }
-                        
-                    }
-
-                    // Ajustando o status do projeto, pela data estar ok
-                    await prisma.projeto.update({
-                        where: {
-                            status: "Pendente",
-                            id: projeto.id
-                        },
-                        data:
-                        {
-                            status: 'Atrasado'
-                        }
-                    });
-                }
-            }
         }
     }
 

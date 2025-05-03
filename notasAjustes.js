@@ -1,12 +1,9 @@
 /*
 
-Vallidar funções subtarefas
+- Validar Todos os recursos
 
-Ajustar status dos projetos, tarefas e subtarefas de acordo com a data de vencimento, criar rotina de análise (sempre que for buscar os projetos, tarefas e subtarefas do usuário)
+- Validar Notificações principalmente, verificar se estão send enviadas e excluidas corretamente
 
-Obter todos os usuários de uma subtarefa
-
-Verificar a compilação de imagens e arquivos
-Em aletar dados, não obter o id pela url e sim via sessão já que existe. O mesmo em deletar e em outro vinculos com as outras coleções;
+- Verificar a compilação e exclusão de imagens e arquivos quando implementar o front
 
 */

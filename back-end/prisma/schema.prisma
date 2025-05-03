@@ -13,73 +13,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Criado
-model Usuario { 
-  id          String    @id@default(auto()) @map("_id") @db.ObjectId
-  nome  String
-  email String  @unique
-  foto  String?
-  senha String 
+model Usuario {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  nome        String
+  email       String        @unique
+  foto        String?
+  senha       String
+
+  notificacoes Notificacao[] @relation("UsuarioNotificacoes")
+  atividades   Atividade[]   @relation("UsuarioAtividades")
 }
 
 model Notificacao {
-  id         String    @id@default(auto()) @map("_id") @db.ObjectId
-  tipo       String  
-  texto      String   
-  titulo     String
-  ids_usuarios String[]
-  id_subtarefa String
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  tipo         String
+  texto        String
+  titulo       String
+  data_criacao DateTime
+
+  id_usuario   String     @db.ObjectId
+  usuario      Usuario    @relation("UsuarioNotificacoes", fields: [id_usuario], references: [id])
+
+  id_subtarefa String     @db.ObjectId
+  subtarefa    SubTarefa  @relation("SubTarefaNotificacoes", fields: [id_subtarefa], references: [id])
 }
 
-// Criado
 model Projeto {
-  id                    String    @id@default(auto()) @map("_id") @db.ObjectId
-  titulo                String  
-  descricao             String   
+  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  titulo                String
+  descricao             String
   data_limite           DateTime
   data_entrega          DateTime?
   data_criacao          DateTime
   anexo                 String?
   status                String
-  ids_membros           String[]
-  ids_administradores   String[]
-  id_gestor             String
+
+  ids_membros           String[]  @db.ObjectId
+  ids_administradores   String[]  @db.ObjectId
+  id_gestor             String    @db.ObjectId
+
+  tarefas               Tarefa[]
 }
 
-// Criado
 model Tarefa {
-  id            String    @id@default(auto()) @map("_id") @db.ObjectId
-  titulo        String  
-  descricao     String 
-  data_criacao  DateTime  
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  titulo        String
+  descricao     String
+  data_criacao  DateTime
   data_limite   DateTime
   data_entrega  DateTime?
   anexo         String?
   ordem         Float
   status        String
-  id_projeto    String
+
+  id_projeto    String      @db.ObjectId
+  projeto       Projeto     @relation(fields: [id_projeto], references: [id])
+
+  subtarefas    SubTarefa[]
 }
 
-
 model SubTarefa {
-  id            String    @id@default(auto()) @map("_id") @db.ObjectId
-  titulo        String  
-  descricao     String  
-  data_criacao   DateTime 
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  titulo        String
+  descricao     String
+  data_criacao  DateTime
   data_limite   DateTime
-  data_entrega  DateTime? 
+  data_entrega  DateTime?
   anexo         String?
   ordem         Float
   status        String
-  ids_membros   String[]
-  id_tarefa     String
+
+  ids_membros   String[]      @db.ObjectId
+
+  id_tarefa     String        @db.ObjectId
+  tarefa        Tarefa        @relation(fields: [id_tarefa], references: [id])
+
+  atividades    Atividade[]   @relation("SubTarefaAtividades")
+  notificacoes  Notificacao[] @relation("SubTarefaNotificacoes")
 }
 
 model Atividade {
-  id              String    @id@default(auto()) @map("_id") @db.ObjectId 
-  descricao       String   
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  descricao       String
   data_realizacao DateTime
   anexo           String?
-  id_membro       String
-  id_subtarefa    String
+
+  id_membro       String     @db.ObjectId
+  usuario         Usuario    @relation("UsuarioAtividades", fields: [id_membro], references: [id])
+
+  id_subtarefa    String     @db.ObjectId
+  subtarefa       SubTarefa  @relation("SubTarefaAtividades", fields: [id_subtarefa], references: [id])
 }

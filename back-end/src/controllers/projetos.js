@@ -1,19 +1,15 @@
 // Caro autor do arquivo, favor revisa-lo antes de liber-lo.
 // Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
 
-// Revisar deleção de projetos com tarefas, atividades e subtarefas.
-
-// Implemetar em Update / Create / Delete a adição do anexo do projeto em uma pasta, bem como a sua remoção caso necessário.
-
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 import bcrypt from 'bcrypt';
 const controller = {};
 
 // Importando validação de sessão
-import { atualizaStatus, validarSessao } from './utils.js';
+import { validarSessao } from './utils.js';
 
-// Validado (30/04)
+
 // Função para validar senha do gestor
 async function validaSenha(senhaNova, idGestor){
     const verificaGestor = await prisma.usuario.findUnique({
@@ -28,7 +24,7 @@ async function validaSenha(senhaNova, idGestor){
     }
 }
 
-// Validar com o front
+
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -48,7 +44,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-// Validar com o anexo do front
+
 // Criando um novo projeto
 controller.create = async function(req, res) {
     try {
@@ -62,8 +58,18 @@ controller.create = async function(req, res) {
 
         req.body.status = "Pendente";
         req.body.data_criacao = new Date();
-        req.body.data_limite = new Date(req.body.data_limite);
         req.body.id_gestor = req.session.usuario.id;
+
+        // Verificando se a data foi informada para converte-la em um formato aceitavel
+        if (req.body.data_limite){
+            req.body.data_limite = new Date(req.body.data_limite);
+
+            // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
+            if (req.body.data_limite < new Date()){
+                return res.status(400).json({mensagem: "Data de Limite não pode ser Menor que a data Atual!"});
+            }
+
+        }
 
         // Monta a URL da anexo
         const urlAnexo = req.file ? `${req.file.filename}` : null;
@@ -74,7 +80,7 @@ controller.create = async function(req, res) {
         await prisma.projeto.create({ data: req.body });
 
         // Retornando mensagem de sucesso
-        return res.status(201).json({mensagem: "Projeto Cadastrado com Sucessso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -87,7 +93,6 @@ controller.create = async function(req, res) {
 }
 
 // Desativar posteriormente
-// Obtendo todos os projetos cadastrados
 controller.retrieveAll = async function(req, res) {
     try {
         // Buscando todos os projetos cadastrados
@@ -108,7 +113,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Obtendo um projeto específico pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -173,7 +178,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Obtendo todos os projetos pelo gestor
 controller.retrieveAllGestor = async function(req, res) {
     try {
@@ -184,166 +189,6 @@ controller.retrieveAllGestor = async function(req, res) {
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
-
-        // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
-        const atzStatus = atualizaStatus(req);
-
-        if (!atzStatus){
-            return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
-        }
-
-        // Função desativada (se encontra agora em utils.js)
-        /*
-        // Buscando todos os projetos do gestor
-        const projetosTodos = await prisma.projeto.findMany({
-            where: {
-                OR: [
-                    { id_gestor: req.session.usuario.id },
-                    { ids_administradores: { has: req.session.usuario.id } },
-                    { ids_membros: { has: req.session.usuario.id } }
-                ]
-            }
-        });
-
-        // Atualizando os status dos projetos, tarefas e subtarefas caso a data de entrega de cada um já esteja vencida
-        for (const projeto of projetosTodos){
-
-            // Se estiver Concluído não fará nada
-            if (projeto.status !== "Concluído"){
-
-                // Se estiver atrasado mas a data limite foi alterada por algum motivo verifica
-                if (projeto.status === "Atrasado"){
-                    if (projeto.data_limite > new Date()){
-
-                        // Obtendo as tarefas a serem ajustadas
-                        const tarefasAjustar = await prisma.tarefa.findMany({
-                            where: {
-                                id_projeto: projeto.id
-                            }
-                        });
-
-                        for (const tarefa of tarefasAjustar){
-
-                            // Obtendo as subtarefas a serem ajustadas
-                            const subTarefasAjustar = await prisma.subTarefa.findMany({
-                                where: {
-                                    id_tarefa: tarefa.id
-                                }
-                            });
-
-                            for (const subTarefa of subTarefasAjustar){
-
-                                // Ajustando o status se as datas estivem ok
-                                if (subTarefa.data_limite > new Date()){
-                                    await prisma.subTarefa.update({
-                                        where: {
-                                            status: "Atrasada",
-                                            id: subTarefa.id
-                                        },
-                                        data:
-                                        {
-                                            status: 'Pendente'
-                                        }
-                                    });
-                                }
-                            }
-
-                            // Ajustando as tarefas caso a data esteja ok
-                            if (tarefa.data_limite > new Date()){
-                                await prisma.tarefa.update({
-                                    where: {
-                                        status: "Atrasada",
-                                        id: tarefa.id
-                                    },
-                                    data:
-                                    {
-                                        status: 'Pendente'
-                                    }
-                                });
-                            }
-                            
-                        }
-
-                        // Ajustando o status do projeto, pela data estar ok
-                        await prisma.projeto.update({
-                            where: {
-                                status: "Atrasado",
-                                id: projeto.id
-                            },
-                            data:
-                            {
-                                status: 'Pendente'
-                            }
-                        });
-                    }
-                }else if (projeto.status === "Pendente"){
-                    if (projeto.data_limite < new Date()){
-
-                        // Obtendo as tarefas a serem ajustadas
-                        const tarefasAjustar = await prisma.tarefa.findMany({
-                            where: {
-                                id_projeto: projeto.id
-                            }
-                        });
-
-                        for (const tarefa of tarefasAjustar){
-
-                            // Obtendo as subtarefas a serem ajustadas
-                            const subTarefasAjustar = await prisma.subTarefa.findMany({
-                                where: {
-                                    id_tarefa: tarefa.id
-                                }
-                            });
-
-                            for (const subTarefa of subTarefasAjustar){
-
-                                // Ajustando o status se as datas estivem off
-                                if (subTarefa.data_limite < new Date()){
-                                    await prisma.subTarefa.update({
-                                        where: {
-                                            status: "Pendente",
-                                            id: subTarefa.id
-                                        },
-                                        data:
-                                        {
-                                            status: 'Atrasada'
-                                        }
-                                    });
-                                }
-                            }
-
-                            // Ajustando as tarefas caso a data esteja off
-                            if (tarefa.data_limite < new Date()){
-                                await prisma.tarefa.update({
-                                    where: {
-                                        status: "Pendente",
-                                        id: tarefa.id
-                                    },
-                                    data:
-                                    {
-                                        status: 'Atrasada'
-                                    }
-                                });
-                            }
-                            
-                        }
-
-                        // Ajustando o status do projeto, pela data estar ok
-                        await prisma.projeto.update({
-                            where: {
-                                status: "Pendente",
-                                id: projeto.id
-                            },
-                            data:
-                            {
-                                status: 'Atrasado'
-                            }
-                        });
-                    }
-                }
-            }
-        }
-        */
 
         // Todos os projetos finalizados
         const projetosConcluidos = await prisma.projeto.findMany({
@@ -373,7 +218,7 @@ controller.retrieveAllGestor = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Obtendo todos os projetos pelo administrador
 controller.retrieveAllAdministrador = async function(req, res) {
     try {
@@ -437,7 +282,7 @@ controller.retrieveAllAdministrador = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Obtendo todos os projetos pelo membro
 controller.retrieveAllMembro = async function(req, res) {
     try {
@@ -501,7 +346,7 @@ controller.retrieveAllMembro = async function(req, res) {
     }
 }
 
-// Validado (01/05) - Validar com front para verificar o anexo
+
 // Atualizando os dados do projeto
 controller.update = async function(req, res) {
     try {
@@ -522,6 +367,10 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
         }
 
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
             return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!" });
         }
@@ -536,6 +385,19 @@ controller.update = async function(req, res) {
         // Verificando se a data foi informada para converte-la em um formato aceitavel
         if (req.body.data_limite){
             req.body.data_limite = new Date(req.body.data_limite);
+
+            // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
+            if (req.body.data_limite < new Date()){
+                req.body.status = "Atrasado"
+            }else{
+                req.body.status = "Pendente"
+            }
+
+        }
+
+        // Deletando o anexo
+        if (verificaProjeto.anexo){
+            deletarAnexo(verificaProjeto.anexo);
         }
 
         // Monta a URL da anexo
@@ -549,16 +411,9 @@ controller.update = async function(req, res) {
             where: { id: req.params.id },
             data: req.body
         });
-
-        // Chamando a função para atualizar os status dos projetos, tarefas e subtarefas do usuário
-        const atzStatus = atualizaStatus(req);
-
-        if (!atzStatus){
-            return res.status(400).json({ mensagem: "Erro ao atualizar Status de Projetos!" }); 
-        }
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Projeto Atualizado com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -577,7 +432,7 @@ controller.update = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Atualizando o gestor do projeto
 controller.updateGestor = async function(req, res) {
     try {
@@ -596,6 +451,10 @@ controller.updateGestor = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
@@ -626,7 +485,7 @@ controller.updateGestor = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Gestor alterado com Sucesso! Você cedeu sua posição e não tem mais acesso ao Projeto!"});
+        return res.status(201).json({result: true, mensagem: "Gestor alterado com Sucesso! Você cedeu sua posição e não tem mais acesso ao Projeto!"});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -645,7 +504,7 @@ controller.updateGestor = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Finalizando/Reabrindo o projeto (Mudando Status e Data Entrega)
 controller.updateStatus = async function(req, res) {
     try {
@@ -689,7 +548,7 @@ controller.updateStatus = async function(req, res) {
             });
         
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({mensagem: "Projeto Concluído!"});
+            return res.status(201).json({result: true, mensagem: "Projeto Concluído!"});
 
         }else if (req.body.tipo_alteracao === "Reabrir"){
             // Atualizando o status e data de entrega do projeto
@@ -702,7 +561,7 @@ controller.updateStatus = async function(req, res) {
             });
         
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({mensagem: "Projeto Reaberto!"});
+            return res.status(201).json({result: true, mensagem: "Projeto Reaberto!"});
         }
     }
     catch(error) {
@@ -722,7 +581,7 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Adicionando um membro no projeto
 controller.addMembro = async function(req, res) {
     try {
@@ -741,6 +600,10 @@ controller.addMembro = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({ mensagem: "Projeto não encontrado!" });
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         // Verificando se é o gestor que está tentando adicionar um membro
@@ -785,7 +648,7 @@ controller.addMembro = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Membro adicionado no Projeto com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -804,7 +667,7 @@ controller.addMembro = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Removendo um membro do projeto
 controller.removeMembro = async function(req, res) {
     try {
@@ -823,6 +686,10 @@ controller.removeMembro = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
@@ -847,7 +714,7 @@ controller.removeMembro = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Membro removido do Projeto com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -866,7 +733,7 @@ controller.removeMembro = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Adicionando um adminstrador no projeto
 controller.addAdministrador = async function(req, res) {
     try {
@@ -885,6 +752,10 @@ controller.addAdministrador = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({ mensagem: "Projeto não encontrado!" });
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         // Verificando se é o gestor que está tentando adicionar um membro
@@ -929,7 +800,7 @@ controller.addAdministrador = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Administrador adicionado no Projeto com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -948,7 +819,7 @@ controller.addAdministrador = async function(req, res) {
     }
 }
 
-// Validado (30/04)
+
 // Removendo um administrador do projeto
 controller.removeAdministrador = async function(req, res) {
     try {
@@ -967,6 +838,10 @@ controller.removeAdministrador = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
@@ -989,7 +864,7 @@ controller.removeAdministrador = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Administrador removido do Projeto com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -1008,7 +883,7 @@ controller.removeAdministrador = async function(req, res) {
     }
 }
 
-// Validado (01/05) - Validar com front para verificar o anexo e Deletar as tarefas, subtarefas e atividades
+
 // Deletando o projeto
 controller.delete = async function(req, res) {
     try {
@@ -1037,6 +912,11 @@ controller.delete = async function(req, res) {
         const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
         if (!valSenha){
             return res.status(400).json({ mensagem: "Senha Inválida!"});
+        }
+
+        // Deletando o anexo
+        if (verificaProjeto.anexo){
+            deletarAnexo(verificaProjeto.anexo);
         }
 
         // Deletando as tarefas
@@ -1072,11 +952,21 @@ controller.delete = async function(req, res) {
                             // Atividades a deletar
                             for (const atividade of atividadesDeletar){
 
+                                // Deletando o anexo
+                                if (atividade.anexo){
+                                    deletarAnexo(atividade.anexo);
+                                }
+
                                 // Deletando as atividades
                                 await prisma.atividade.delete({
                                     where: { id: atividade.id }
                                 });
                             }
+                        }
+
+                        // Deletando o anexo
+                        if (subTarefa.anexo){
+                            deletarAnexo(subTarefa.anexo);
                         }
 
                         // Deletando as subtarefas
@@ -1086,6 +976,11 @@ controller.delete = async function(req, res) {
             
                     }
                     
+                }
+
+                // Deletando o anexo
+                if (tarefa.anexo){
+                    deletarAnexo(tarefa.anexo);
                 }
 
                 // Deletando as tarefas
@@ -1103,7 +998,7 @@ controller.delete = async function(req, res) {
         });
     
         // Envia mensagem confirmando a exclusão
-        return res.status(201).json({mensagem: "Projeto Deletado com Sucessso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado

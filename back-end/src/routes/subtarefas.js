@@ -5,7 +5,7 @@ import upload from '../uploads/uploadAneSubTar.js';
 
 const router = Router();
 
-// Cadastro de Tarefa
+// Cadastro de Subtarefa
 router.post('/', upload.single('anexoSubtarefa'), controller.create);
 /*
     Dados a serem informados:
@@ -29,7 +29,7 @@ router.get('/:id', controller.retrieveOne);
 router.get('/tarefa/:id', controller.retrieveAllTarefa);
 
 
-// Alterar Tarefa
+// Alterar Subtarefa
 router.put('/:id', upload.single('anexoSubtarefa'), controller.update);
 /*
     Dados a serem informados:
@@ -52,7 +52,7 @@ router.put('/updateOrdem/:id', controller.updateOrdem);
 router.put('/updateStatus/:id', controller.updateStatus);
 /*
     Dados a serem informados:
-    tipo_alteracao: String (Concluir, Reabrir))
+    tipo_alteracao: String (Concluir, Reabrir)
 
 */
 
@@ -71,11 +71,10 @@ router.put('/removeMembro/:id', controller.removeMembro);
 /*
     Dados a serem informados:
     id_membro: String
-
 */
 
 
-// Deletar projeto
+// Deletar subtarefa
 router.delete('/:id', controller.delete);
 
 

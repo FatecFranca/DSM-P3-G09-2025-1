@@ -6,6 +6,7 @@ import logger from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import cron from 'node-cron';
 
 // Importando e atribuindo rotas padrões necessárias
 import indexRouter from './routes/index.js';
@@ -27,6 +28,34 @@ app.use(session({
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 50 } // 50 minutos
 }));
+
+
+// Configurando servidor para que seja feita a verifcação de projetos vencidos e/ou pendentes de todos os usuários a meia-noite ou quando o servidor for iniciado
+import { atualizaStatus } from './controllers/utils.js';
+
+
+// Na inicialização do servidor
+(async () => {
+    console.log("Verificando status de projetos na inicialização...");
+    try {
+        await atualizaStatus();
+        console.log("Status atualizado com sucesso.");
+    } catch (err) {
+        console.error("Erro ao atualizar status na inicialização:", err);
+    }
+})();
+
+// Todos os dias meia-noite
+cron.schedule('0 0 * * *', async () => {
+    console.log('Executando atualização de status às 00:00');
+    try {
+        await atualizaStatus();
+        console.log("Status atualizado com sucesso as 00:00");
+    } catch (err) {
+        console.error('Erro ao atualizar status automático:', err);
+    }
+});
+
 
 // Configurando pastas para a adição de anexos e imagens de usuário e projetos
 const __filename = fileURLToPath(import.meta.url);
@@ -56,5 +85,11 @@ app.use('/tarefas', tarefasRouter);
 
 import subTarefasRouter from './routes/subtarefas.js';
 app.use('/subtarefas', subTarefasRouter);
+
+import atividadesRouter from './routes/atividades.js';
+app.use('/atividades', atividadesRouter);
+
+import notificacoesRouter from './routes/notificacoes.js';
+app.use('/notificacoes', notificacoesRouter);
 
 export default app;

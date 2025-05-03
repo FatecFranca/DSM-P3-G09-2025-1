@@ -1,10 +1,6 @@
 // Caro autor do arquivo, favor revisa-lo antes de liber-lo.
 // Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
 
-// Revisar deleção de subtarefas com atividades.
-
-// Implemetar em Update / Create / Delete a adição do anexo da subtarefa em uma pasta, bem como a sua remoção caso necessário.
-
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 const controller = {};
@@ -12,7 +8,7 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-// Validar com o front
+
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -32,8 +28,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-// Validado (01/05)
-// Validar com o anexo do front
+
 // Criando uma nova subtarefa
 controller.create = async function(req, res) {
     try {
@@ -48,7 +43,17 @@ controller.create = async function(req, res) {
         // Ajustando alguns dados
         req.body.status = "Pendente";
         req.body.data_criacao = new Date();
-        req.body.data_limite = new Date(req.body.data_limite);
+        
+        // Verificando se a data foi informada para converte-la em um formato aceitavel
+        if (req.body.data_limite){
+            req.body.data_limite = new Date(req.body.data_limite);
+
+            // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
+            if (req.body.data_limite < new Date()){
+                return res.status(400).json({mensagem: "Data de Limite não pode ser Menor que a data Atual!"});
+            }
+
+        }
 
         // Obtendo os dados da tarefa
         const tarefa = await prisma.tarefa.findFirst({
@@ -68,15 +73,17 @@ controller.create = async function(req, res) {
             return res.status(400).json({mensagem: "Tarefa pertence a um projeto inválido!"});
         }
 
+        if (projeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (tarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+        }
+
         // Verificando se o usuário que está tentando cadastrar a sub é um adm ou gestor, pelo menos
         let encontrou = false;
         if (req.session.usuario.id !== projeto.id_gestor){
-            projeto.ids_membros.forEach(membro => {
-                if (membro === req.session.usuario.id){
-                    encontrou = true;
-                }
-            });
-
             if (!encontrou){
                 projeto.ids_administradores.forEach(adm => {
                     if (adm === req.session.usuario.id){
@@ -109,13 +116,13 @@ controller.create = async function(req, res) {
         await prisma.subTarefa.create({ data: req.body });
 
         // Retornando mensagem de sucesso
-        return res.status(201).json({mensagem: "Subtarefa Cadastrada com Sucessso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
         if(error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Tarefa Não Encontrada!"});
+            res.status(400).json({mensagem: "Subtarefa Não Encontrada!"});
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
@@ -128,7 +135,7 @@ controller.create = async function(req, res) {
     }
 }
 
-// Desativar posteriormente
+
 // Obtendo todos os subtarefas cadastradas
 controller.retrieveAll = async function(req, res) {
     try {
@@ -150,7 +157,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Obtendo uma subtarefa específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -189,7 +196,7 @@ controller.retrieveOne = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto não encontrado!"});
         }
 
-        // Verificando se o usuário que está tentando cadastrar a sub é um adm ou gestor, pelo menos
+        // Verificando se o usuário que está tentando obter os dados da sub é um adm ou gestor ou membro
         let encontrou = false;
         if (req.session.usuario.id !== projeto.id_gestor){
             projeto.ids_membros.forEach(membro => {
@@ -233,7 +240,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validado (01/05)
+
 // Obtendo todas as subtarefas pela tarefa 
 controller.retrieveAllTarefa = async function(req, res) {
     try {
@@ -323,7 +330,7 @@ controller.retrieveAllTarefa = async function(req, res) {
 }
 
 
-// Atualizando os dados da tarefa
+// Atualizando os dados da subtarefa
 controller.update = async function(req, res) {
     try {
 
@@ -344,7 +351,7 @@ controller.update = async function(req, res) {
         }
 
         // Obtendo os dados da tarefa para validação
-        const verificaTarefa = await prisma.subTarefa.findUnique({
+        const verificaTarefa = await prisma.tarefa.findUnique({
             where: { id: verificaSubTarefa.id_tarefa }
         });
 
@@ -359,6 +366,18 @@ controller.update = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+        }
+
+        if (verificaSubTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
         }
 
         // Verificando se quem está alterando é o gestor do projeto ou um administrador
@@ -378,6 +397,19 @@ controller.update = async function(req, res) {
         // Verificando se a data foi informada para converte-la em um formato aceitavel
         if (req.body.data_limite){
             req.body.data_limite = new Date(req.body.data_limite);
+
+            // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
+            if (req.body.data_limite < new Date()){
+                req.body.status = "Atrasada"
+            }else{
+                req.body.status = "Pendente"
+            }
+
+        }
+
+        // Deletando o anexo
+        if (verificaSubTarefa.anexo){
+            deletarAnexo(verificaSubTarefa.anexo);
         }
 
         // Monta a URL da anexo
@@ -392,19 +424,19 @@ controller.update = async function(req, res) {
         delete req.body.id_projeto;
 
         // Atualizando os dados do projeto
-        await prisma.tarefa.update({
+        await prisma.subTarefa.update({
             where: { id: req.params.id },
             data: req.body
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Subtarefa Atualizada com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
         if(error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Tarefa  não Encontrada!"});
+            res.status(400).json({mensagem: "Subtarefa Não Encontrada!"});
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
@@ -439,8 +471,8 @@ controller.updateStatus = async function(req, res) {
         }
 
         // Obtendo os dados da taera a qual ela pertence
-        const verificaTarefa = await prisma.subTarefa.findUnique({
-            where: { id: req.params.id }
+        const verificaTarefa = await prisma.tarefa.findUnique({
+            where: { id: verificaSubTarefa.id_tarefa }
         });
 
         if (!verificaTarefa){
@@ -454,6 +486,14 @@ controller.updateStatus = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
         }
 
         // Verificando se quem está alterando é o gestor do projeto ou um administrador
@@ -480,19 +520,64 @@ controller.updateStatus = async function(req, res) {
                     data_entrega: new Date()
                 }
             });
+
+            // Deletando todas as notificações criadas dessa subtarefa
+            await prisma.notificacao.delete({
+                where: {
+                    id_subtarefa: req.params.id
+                }
+            });
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({mensagem: "Subtarefa Concluída!"});
 
         }else if (req.body.tipo_alteracao === "Reabrir"){
-            // Atualizando o status e data de entrega do projeto
-            await prisma.subTarefa.update({
-                where: { id: req.params.id },
-                data: {
-                    status: "Pendente",
-                    data_entrega: null
+
+            // Atualizando o status e data de entrega do projeto, de acordo com a data limite
+            if (verificaSubTarefa.data_limite < new Date()){
+                await prisma.subTarefa.update({
+                    where: { id: req.params.id },
+                    data: {
+                        status: "Atrasada",
+                        data_entrega: null
+                    }
+                });
+
+                // Verificando se as notificações já foram enviadas para os usuários necessários 
+                for (const idUsu of verificaSubTarefa.ids_membros){
+                    const notficacao = await prisma.notificacao.findFirst({
+                        where: {
+                            id_usuario: idUsu,
+                            id_subtarefa: verificaSubTarefa.id,
+                            tipo: "Atraso"
+                        }
+                    });
+
+                    if (!notficacao){
+                        let not;
+                        not.tipo = "Atraso";
+                        not.titulo = "Subtarefa Atrasada";
+                        not.data_criacao = new Date;
+                        not.texto = "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => " + " Subtarefa: " + verificaSubTarefa.titulo;
+                        not.id_usuario = idUsu;
+                        not.id_subtarefa = verificaSubTarefa.id;
+
+                        await prisma.notificacao.create({
+                            data: not
+                        });
+                    }
                 }
-            });
+
+            }else{
+                await prisma.subTarefa.update({
+                    where: { id: req.params.id },
+                    data: {
+                        status: "Pendente",
+                        data_entrega: null
+                    }
+                });
+            }
+           
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({mensagem: "Subtarefa Reaberta!"});
@@ -526,17 +611,17 @@ controller.updateOrdem = async function(req, res) {
     }
 
     // Verificando se a tarefa existe
-    const verificaSubtarefa = await prisma.subTarefa.findUnique({
+    const verificaSubTarefa = await prisma.subTarefa.findUnique({
         where: { id: req.params.id }
     });
 
-    if (!verificaSubtarefa){
+    if (!verificaSubTarefa){
         return res.status(400).json({mensagem: "Subtarefa não Encontrada!"});
     }
 
     // Verificando se a tarefa existe
     const verificaTarefa = await prisma.tarefa.findUnique({
-        where: { id: verificaSubtarefa.id_tarefa }
+        where: { id: verificaSubTarefa.id_tarefa }
     });
 
     if (!verificaTarefa){
@@ -550,6 +635,18 @@ controller.updateOrdem = async function(req, res) {
 
     if (!verificaProjeto){
         return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+    }
+
+    if (verificaProjeto.status === "Concluído"){
+        return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+    }
+
+    if (verificaTarefa.status === "Concluída"){
+        return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+    }
+
+    if (verificaSubTarefa.status === "Concluída"){
+        return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
     }
 
     // Verifica se o usuário tem permissão para alterar
@@ -569,7 +666,7 @@ controller.updateOrdem = async function(req, res) {
     // Obtendo a quantidade de subtarefas da tarefa
     const qtSubtarefas = await prisma.subTarefa.findMany({
         where: {
-            id_projeto: verificaSubtarefa.id_tarefa
+            id_tarefa: verificaSubTarefa.id_tarefa
         }
     });
 
@@ -586,14 +683,14 @@ controller.updateOrdem = async function(req, res) {
         }
 
         // Se a ordem nova for menor qua a atual (de prioridade 5 para 2, ser mais urgente)
-        if (req.body.ordem < verificaSubtarefa.ordem){
+        if (req.body.ordem < verificaSubTarefa.ordem){
             // Obtendo as outras tarefas que estão antes dele, mas depois de sua nova ordem, para recurem 1 (+1, de 2 para 3...)
             const subTarefasMenores = await prisma.subTarefa.findMany({
                 where: {
                     id_tarefa: verificaTarefa.id, 
                     ordem: {
                         gte: req.body.ordem,
-                        lt: verificaTarefa.ordem
+                        lt: verificaSubTarefa.ordem
                     }
                 },
                 orderBy: {
@@ -615,7 +712,7 @@ controller.updateOrdem = async function(req, res) {
                 }
             }
 
-        }else if (req.body.ordem > verificaSubtarefa.ordem){
+        }else if (req.body.ordem > verificaSubTarefa.ordem){
 
             // Obtendo as outras tarefas que estão depois dela, mas antes de sua nova ordem, para avançarem 1 (-1, de 3 para 2...)
             const subTarefasMenores = await prisma.subTarefa.findMany({
@@ -623,7 +720,7 @@ controller.updateOrdem = async function(req, res) {
                     id_tarefa: verificaTarefa.id, 
                     ordem: {
                         lte: req.body.ordem,
-                        gt: verificaTarefa.ordem
+                        gt: verificaSubTarefa.ordem
                     }
                 },
                 orderBy: {
@@ -649,14 +746,14 @@ controller.updateOrdem = async function(req, res) {
 
         await prisma.subTarefa.update({
             where: {
-                id: verificaSubtarefa.id
+                id: verificaSubTarefa.id
             },
             data: {
                 ordem: req.body.ordem
             }
         });
 
-        return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + req.body.ordem + "!" });
+        return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + req.body.ordem + 1 + "!" });
 
     // Se for pot tipo (uma casa para frente ou para traz)
     }else if (req.body.tipo){
@@ -667,7 +764,7 @@ controller.updateOrdem = async function(req, res) {
                 where: {
                     id_tarefa: verificaTarefa.id, 
                     ordem: {
-                        equals: verificaSubtarefa.ordem - 1
+                        equals: verificaSubTarefa.ordem - 1
                     }
                 }
             });
@@ -687,14 +784,14 @@ controller.updateOrdem = async function(req, res) {
 
             await prisma.subTarefa.update({
                 where: {
-                    id: verificaSubtarefa.id
+                    id: verificaSubTarefa.id
                 },
                 data:{
-                    ordem: verificaSubtarefa.ordem - 1
+                    ordem: verificaSubTarefa.ordem - 1
                 }
             });
 
-            return res.status(200).json({ result: true, mensagem: "Subtarefa alterada para a posição " + (verificaTarefa.ordem -1) + "!" });
+            return res.status(200).json({ result: true, mensagem: "Subtarefa alterada para a posição " + (verificaSubTarefa.ordem -1) + "!" });
 
 
         // Se for regredir uma casa, alterada sera +1 e a que esta no seu lugar sera -1 (Troca de posições)
@@ -704,7 +801,7 @@ controller.updateOrdem = async function(req, res) {
                 where: {
                     id_tarefa: verificaTarefa.id, 
                     ordem: {
-                        equals: verificaSubtarefa.ordem + 1
+                        equals: verificaSubTarefa.ordem + 1
                     }
                 }
             });
@@ -725,14 +822,14 @@ controller.updateOrdem = async function(req, res) {
 
             await prisma.subTarefa.update({
                 where: {
-                    id: verificaSubtarefa.id
+                    id: verificaSubTarefa.id
                 },
                 data:{
-                    ordem: verificaSubtarefa.ordem + 1
+                    ordem: verificaSubTarefa.ordem + 1
                 }
             });
 
-            return res.status(200).json({ result: true, mensagem: "Subtarefa alterada para a posição " + (verificaTarefa.ordem +1) + "!" });
+            return res.status(200).json({ result: true, mensagem: "Subtarefa alterada para a posição " + (verificaSubTarefa.ordem +1) + "!" });
         }
         
     }
@@ -764,7 +861,7 @@ controller.addMembro = async function(req, res) {
 
         // Obtendo os dados da tarefa
         const verificaTarefa = await prisma.tarefa.findUnique({
-            where: { id: verificaSubTarefa.id }
+            where: { id: verificaSubTarefa.id_tarefa }
         });
 
         if (!verificaTarefa){
@@ -773,11 +870,23 @@ controller.addMembro = async function(req, res) {
 
         // Verificando se quem está alterando é o gestor do projeto ou administrador
         const verificaProjeto = await prisma.projeto.findUnique({
-            where: { id: verificaTarefa.id }
+            where: { id: verificaTarefa.id_projeto }
         });
 
         if (!verificaProjeto){
             return res.status(400).json({ mensagem: "Projeto não encontrado!" });
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+        }
+
+        if (verificaSubTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
         }
 
         // Verifica se o usuário tem permissão para adicionar um membro a tarefa
@@ -802,16 +911,8 @@ controller.addMembro = async function(req, res) {
                     encontrou = true;
                 }
             }); 
-
-            if (!encontrou){
-                verificaProjeto.ids_administradores.forEach(adm => {
-                    if(req.body.id_membro === adm){
-                        encontrou = true;
-                    }
-                }); 
-            } 
         }else{
-            encontrou = true;
+            return res.status(400).json({ mensagem: "Você não pode se adicionar em uma Subtarefa!" });
         }
 
         
@@ -830,6 +931,23 @@ controller.addMembro = async function(req, res) {
             return res.status(400).json({ mensagem: "Membro já está alocado a Subtarefa!"});
         }
 
+        // Criando a notificação a ser apresentada ao novo membro da subtarefa
+        let notifica;
+
+        const dtLimFormatada = new Date(verificaSubTarefa.data_limite).toLocaleDateString('pt-BR');
+
+        notifica.tipo = "Atribuição";
+        notifica.titulo = "Nova Subtarefa atribuida";
+        notifica.texto = "Uma nova Subtarefa foi atribuida a você. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => Subtarefa: " + verificaSubTarefa.titulo + "; Com o praso de entraga para o dia " + dtLimFormatada + "; Fique atento para contribuir com ela até este praso.";
+        notifica.id_usuario = req.body.id_membro;
+        notifica.id_subtarefa = verificaSubTarefa.id;
+        notifica.data_criacao = new Date();
+
+        // Cadastrando a notificação
+        await prisma.notificacao.create({
+            data: notifica
+        });
+
         // Atualizando os membros da subtarefa
         await prisma.subTarefa.update({
             where: { id: req.params.id },
@@ -841,7 +959,7 @@ controller.addMembro = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Membro adicionado na Subtarefa com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -883,7 +1001,7 @@ controller.removeMembro = async function(req, res) {
 
         // Obtendo os dados da tarefa
         const verificaTarefa = await prisma.tarefa.findUnique({
-            where: { id: verificaSubTarefa.id }
+            where: { id: verificaSubTarefa.id_tarefa }
         });
 
         if (!verificaTarefa){
@@ -892,11 +1010,23 @@ controller.removeMembro = async function(req, res) {
 
         // Verificando se quem está alterando é o gestor do projeto ou administrador
         const verificaProjeto = await prisma.projeto.findUnique({
-            where: { id: verificaTarefa.id }
+            where: { id: verificaTarefa.id_projeto }
         });
 
         if (!verificaProjeto){
             return res.status(400).json({ mensagem: "Projeto não encontrado!" });
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+        }
+
+        if (verificaSubTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
         }
 
         // Verifica se o usuário tem permissão para adicionar um membro a tarefa
@@ -909,9 +1039,18 @@ controller.removeMembro = async function(req, res) {
             });
 
             if (!encontrou){
-                return res.status(400).json({ mensagem: "Você não tem permissão para adicionar um membro a essa Subtarefa!" });
+                return res.status(400).json({ mensagem: "Você não tem permissão para remover um membro a essa Subtarefa!" });
             }
         }
+
+        // Deletando todas as notificações criadas para esse usuário
+        await prisma.notificacao.delete({
+            where: {
+                id_subtarefa: verificaSubTarefa.id,
+                id_usuario: req.params.id
+            }
+        })
+    
 
         // Obtendo os membros que permaneceram na subtarefa
         const subtarefa = await prisma.subTarefa.findUnique({
@@ -921,7 +1060,7 @@ controller.removeMembro = async function(req, res) {
         const membrosManter = subtarefa.ids_membros.filter(membro => membro !== req.body.id_membro);
 
         // Atualizando os membros removendo o solicitado
-        await prisma.projeto.update({
+        await prisma.subTarefa.update({
             where: { id: req.params.id },
             data: {
                 ids_membros: membrosManter
@@ -929,7 +1068,7 @@ controller.removeMembro = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({mensagem: "Membro removido da Subtarefa com Sucesso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -949,11 +1088,11 @@ controller.removeMembro = async function(req, res) {
 }
 
 
-// Validar com front para verificar o anexo e Deletar as subtarefas e atividades
+
 // Deletando o projeto
 controller.delete = async function(req, res) {
     try {
-
+        
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
@@ -962,17 +1101,17 @@ controller.delete = async function(req, res) {
         }
 
         // Verificando se a subtarefa existe
-        const verificaSubtarefa = await prisma.subTarefa.findUnique({
+        const verificaSubTarefa = await prisma.subTarefa.findUnique({
             where: { id: req.params.id }
         });
 
-        if (!verificaSubtarefa){
+        if (!verificaSubTarefa){
             return res.status(400).json({mensagem: "Subtarefa não Encontrada!"});
         }
 
         // Verificando se a tarefa existe
         const verificaTarefa = await prisma.tarefa.findUnique({
-            where: { id: verificaSubtarefa.id_tarefa }
+            where: { id: verificaSubTarefa.id_tarefa }
         });
 
         if (!verificaTarefa){
@@ -986,6 +1125,14 @@ controller.delete = async function(req, res) {
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
         }
 
         // Verifica se o usuário tem permissão para alterar
@@ -1002,16 +1149,26 @@ controller.delete = async function(req, res) {
             }
         }
 
-        // Subtarefas a deletar
+        // Atividades a deletar
         const atividadesDeletar = await prisma.atividade.findMany({
             where: { id_subtarefa: req.params.id }
         });
 
-        // Verificando se a lista não voltou vazio
+        // Notificações a deletar
+        const notificacoesDeletar = await prisma.notificacao.findMany({
+            where: { id_subtarefa: req.params.id }
+        });
+
+        // Verificando se a lista não voltou vazia
         if (atividadesDeletar){
 
             // SubTarefas a deletar
             for (const atividade of atividadesDeletar){
+
+                // Deletando o anexo
+                if (atividade.anexo){
+                    deletarAnexo(atividade.anexo);
+                }
 
                 // Deletando as subtarefas
                 await prisma.atividade.delete({
@@ -1022,8 +1179,28 @@ controller.delete = async function(req, res) {
             
         }
 
+        // Verificando se a lista não voltou vazia
+        if (notificacoesDeletar){
+
+            // SubTarefas a deletar
+            for (const notificacao of notificacoesDeletar){
+
+                // Deletando as subtarefas
+                await prisma.notificacao.delete({
+                    where: { id: notificacao.id }
+                });
+    
+            }
+            
+        }
+
+        // Deletando o anexo
+        if (verificaSubTarefa.anexo){
+            deletarAnexo(verificaSubTarefa.anexo);
+        }
+
         // Busca a subtarefa a ser excluída
-        await prisma.tarefa.delete({
+        await prisma.subTarefa.delete({
             where: { id: req.params.id }
         });
 
@@ -1053,7 +1230,7 @@ controller.delete = async function(req, res) {
         }
     
         // Envia mensagem confirmando a exclusão
-        return res.status(201).json({mensagem: "Subtarefa Deletada com Sucessso!"});
+        return res.status(201).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
