@@ -5,6 +5,9 @@ import upload from '../uploads/uploadAneTar.js';
 
 const router = Router();
 
+// Rotas
+
+// Validada (04/05)
 // Cadastro de Tarefa
 router.post('/', upload.single('anexoTarefa'), controller.create);
 /*
@@ -21,10 +24,13 @@ router.post('/', upload.single('anexoTarefa'), controller.create);
 router.get('/', controller.retrieveAll);
 
 
+
+// Validada (04/05)
 // Buscar os dados de uma tarefa específica
 router.get('/:id', controller.retrieveOne);
 
 
+// Validada (04/05)
 // Buscar todas as tarefas de um projeto
 router.get('/projeto/:id', controller.retrieveAllProjeto);
 

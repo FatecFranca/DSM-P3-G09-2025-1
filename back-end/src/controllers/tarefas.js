@@ -9,6 +9,7 @@ const controller = {};
 import { validarSessao } from './utils.js';
 
 
+// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -28,7 +29,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-
+// Validada (04/05)
 // Criando uma nova tarefa
 controller.create = async function(req, res) {
     try {
@@ -46,17 +47,8 @@ controller.create = async function(req, res) {
         req.body.data_limite = new Date(req.body.data_limite);
 
         // Obtendo os dados da tarefa
-        const tarefa = await prisma.tarefa.findFirst({
-            where: { id: req.params.id }
-        });
-
-        if (!tarefa){
-            return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
-        }
-
-        // Obtendo os dados da tarefa
         const verificaProjeto = await prisma.projeto.findFirst({
-            where: { id: tarefa.id_projeto }
+            where: { id: req.body.id_projeto }
         });
 
         if (!verificaProjeto){
@@ -70,12 +62,6 @@ controller.create = async function(req, res) {
         // Verificando se o usuário que está consultando os dados é pelo menos um membro ou administrador do projeto
         let encontrou = false;
         if (req.session.usuario.id !== verificaProjeto.id_gestor){
-            verificaProjeto.ids_membros.forEach(membro => {
-                if (membro === req.session.usuario.id){
-                    encontrou = true;
-                }
-            });
-
             if (!encontrou){
                 verificaProjeto.ids_administradores.forEach(adm => {
                     if (adm === req.session.usuario.id){
@@ -132,6 +118,7 @@ controller.create = async function(req, res) {
     }
 }
 
+
 // Desativar posteriormente
 controller.retrieveAll = async function(req, res) {
     try {
@@ -154,6 +141,7 @@ controller.retrieveAll = async function(req, res) {
 }
 
 
+// Validada (04/05)
 // Obtendo uma tarefa específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -227,7 +215,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Obtendo todas as tarefas pelo projeto 
 controller.retrieveAllProjeto = async function(req, res) {
     try {

@@ -12,7 +12,7 @@ import { validarSessao } from './utils.js';
 
 const controller = {};
 
-
+// Validada
 // Função para validar senha do usuário
 async function validaSenha(senhaAtual, idUsuario){
     const verificaUsuario = await prisma.usuario.findFirst({
@@ -27,7 +27,7 @@ async function validaSenha(senhaAtual, idUsuario){
     }
 }
 
-
+// Testar com o front
 // Função para excluir uma imagem da pasta
 async function deletarImagem(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -47,7 +47,7 @@ async function deletarImagem(nomeArquivo) {
     }
 }
 
-
+// Validada (04/05) - Validar Imagem com Front
 // Criando um novo usuário
 controller.create = async function(req, res) {
     try {
@@ -127,7 +127,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Obtendo um usuário específico pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -161,7 +161,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Encerrar sessão
 controller.encerrarSessao = async function(req, res) {
     req.session.destroy(err => {
@@ -173,7 +173,7 @@ controller.encerrarSessao = async function(req, res) {
     });
 }
 
-
+// Validada (04/05)
 // Obtendo um usuário específico pelo email (Login)
 controller.loginEmail = async function(req, res) {
     try {
@@ -219,7 +219,7 @@ controller.loginEmail = async function(req, res) {
     }
 }
 
-
+// Validada (04/05) - Validar Imagem com Front
 // Atualizando os dados do usuário
 controller.update = async function(req, res) {
     try {
@@ -320,7 +320,7 @@ controller.update = async function(req, res) {
     }
 }
 
-
+// Testar com projetos / tarefas / subtarefas / atividades 
 // Deletando o usuário
 controller.delete = async function(req, res) {
     try {

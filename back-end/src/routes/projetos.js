@@ -5,6 +5,9 @@ import upload from '../uploads/uploadAneProj.js';
 
 const router = Router();
 
+// Rotas
+
+// Validada (04/05) - Validar Anexo com Front
 // Cadastro de projeto
 router.post('/', upload.single('anexoProjeto'), controller.create);
 /*
@@ -20,22 +23,27 @@ router.post('/', upload.single('anexoProjeto'), controller.create);
 router.get('/', controller.retrieveAll);
 
 
+// Validada (04/05) 
 // Buscar dados de um projeto
 router.get('/:id', controller.retrieveOne);
 
 
+// Validada (04/05)
 // Busca de projetos do gestor logado
 router.get('/gestor/true', controller.retrieveAllGestor);
 
 
+// Validada (04/05)
 // Busca de projetos em que é administrador
 router.get('/administrador/true', controller.retrieveAllAdministrador);
 
 
+// Validada (04/05)
 // Busca de projetos em que é membro
 router.get('/membro/true', controller.retrieveAllMembro);
 
 
+// Validada (04/05)
 // Alterar projeto
 router.put('/:id', upload.single('anexoProjeto'), controller.update);
 /*
@@ -48,6 +56,7 @@ router.put('/:id', upload.single('anexoProjeto'), controller.update);
 */
 
 
+// Validada (04/05)
 // Adicionar membro ao projeto
 router.put('/addMembro/:id', controller.addMembro);
 /*
@@ -56,6 +65,7 @@ router.put('/addMembro/:id', controller.addMembro);
 */
 
 
+// Validada (04/05)
 // Remover membro ao projeto
 router.put('/removeMembro/:id', controller.removeMembro);
 /*
@@ -64,16 +74,16 @@ router.put('/removeMembro/:id', controller.removeMembro);
 */
 
 
+// Validada (04/05) 
 // Adicionar administrador ao projeto
 router.put('/addAdministrador/:id', controller.addAdministrador);
 /*
     Dados a serem informados:
     id_administrador: String
-    id_gestor: String (Usuário Logado)
-    senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
 
+// Validada (04/05)
 // Remover administrador ao projeto
 router.put('/removeAdministrador/:id', controller.removeAdministrador);
 /*
@@ -83,6 +93,8 @@ router.put('/removeAdministrador/:id', controller.removeAdministrador);
     senha_gestor: String (Usuário Informará a senha atual dele)
 */
 
+
+// Validada (04/05)
 // Alterar gestor do projeto
 router.put('/updateGestor/:id', controller.updateGestor);
 /*
@@ -92,6 +104,7 @@ router.put('/updateGestor/:id', controller.updateGestor);
 */
 
 
+// Validada (04/05)
 // Mudar o status do projeto (finalizar ou reabrir)
 router.put('/updateStatus/:id', controller.updateStatus);
 /*
@@ -101,6 +114,7 @@ router.put('/updateStatus/:id', controller.updateStatus);
 */
 
 
+// Testar com tarefas / subtarefas / atividades 
 // Deletar projeto
 router.delete('/:id', controller.delete);
 /*

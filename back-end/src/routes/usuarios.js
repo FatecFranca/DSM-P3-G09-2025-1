@@ -7,6 +7,7 @@ const router = Router();
 
 // Rotas
 
+// Validada (04/05) - Validar Imagem com Front
 // Criar usuário
 router.post('/', upload.single('fotoUsuario'), controller.create);
 /*
@@ -21,10 +22,12 @@ router.post('/', upload.single('fotoUsuario'), controller.create);
 router.get('/', controller.retrieveAll);
 
 
+// Validada (04/05)
 // Buscar dados de um usuário
 router.get('/:id', controller.retrieveOne);
 
 
+// Validada (04/05)
 // Realizar Login
 router.post('/email/:email', controller.loginEmail);
 /*
@@ -33,10 +36,12 @@ router.post('/email/:email', controller.loginEmail);
 */
 
 
+// Validada (04/05)
 // Encerrar sessão
 router.get('/encerrarSessao/true', controller.encerrarSessao);
 
 
+// Validada (04/05) - Validar Imagem com Front
 // Alterar dados do usuário
 router.put('/:id', upload.single('fotoUsuario'), controller.update);
 /*
@@ -49,6 +54,7 @@ router.put('/:id', upload.single('fotoUsuario'), controller.update);
 */
 
 
+// Testar com projetos / tarefas / subtarefas / atividades 
 // Deletar usuário
 router.delete('/:id', controller.delete);
 /*

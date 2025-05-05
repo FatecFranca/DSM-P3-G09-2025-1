@@ -9,7 +9,7 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-
+// Validada
 // Função para validar senha do gestor
 async function validaSenha(senhaNova, idGestor){
     const verificaGestor = await prisma.usuario.findUnique({
@@ -24,7 +24,7 @@ async function validaSenha(senhaNova, idGestor){
     }
 }
 
-
+// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -44,7 +44,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-
+// Validada (04/05) - Validar Anexo com Front
 // Criando um novo projeto
 controller.create = async function(req, res) {
     try {
@@ -92,6 +92,7 @@ controller.create = async function(req, res) {
     }
 }
 
+
 // Desativar posteriormente
 controller.retrieveAll = async function(req, res) {
     try {
@@ -113,7 +114,7 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Obtendo um projeto específico pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -178,7 +179,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Obtendo todos os projetos pelo gestor
 controller.retrieveAllGestor = async function(req, res) {
     try {
@@ -218,7 +219,7 @@ controller.retrieveAllGestor = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Obtendo todos os projetos pelo administrador
 controller.retrieveAllAdministrador = async function(req, res) {
     try {
@@ -282,7 +283,7 @@ controller.retrieveAllAdministrador = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Obtendo todos os projetos pelo membro
 controller.retrieveAllMembro = async function(req, res) {
     try {
@@ -346,7 +347,7 @@ controller.retrieveAllMembro = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Atualizando os dados do projeto
 controller.update = async function(req, res) {
     try {
@@ -432,7 +433,7 @@ controller.update = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Atualizando o gestor do projeto
 controller.updateGestor = async function(req, res) {
     try {
@@ -476,6 +477,29 @@ controller.updateGestor = async function(req, res) {
             return res.status(400).json({ mensagem: "Novo Gestor não Existe!"});
         }
 
+        // Removendo o novo gestor das suas outras funções, se tiver (ADM/Membro)
+        // Obtendo os membros que permaneceram no projeto
+        const membrosManter = verificaProjeto.ids_membros.filter(membro => membro !== req.body.id_gestorNovo);
+
+        // Atualizando os membros removendo o novo gestor
+        await prisma.projeto.update({
+            where: { id: req.params.id },
+            data: {
+                ids_membros: membrosManter
+            }
+        });
+
+        // Obtendo os adms que permaneceram no projeto
+        const admsManter = verificaProjeto.ids_administradores.filter(adm => adm !== req.body.id_gestorNovo);
+
+        // Atualizando os membros removendo o novo gestor
+        await prisma.projeto.update({
+            where: { id: req.params.id },
+            data: {
+                ids_administradores: admsManter
+            }
+        });
+
         // Atualizando o gestor do projeto
         await prisma.projeto.update({
             where: { id: req.params.id },
@@ -504,7 +528,7 @@ controller.updateGestor = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Finalizando/Reabrindo o projeto (Mudando Status e Data Entrega)
 controller.updateStatus = async function(req, res) {
     try {
@@ -562,6 +586,8 @@ controller.updateStatus = async function(req, res) {
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({result: true, mensagem: "Projeto Reaberto!"});
+        }else{
+            return res.status(201).json({ mensagem: "Função Inválida!"});
         }
     }
     catch(error) {
@@ -581,7 +607,7 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-
+// Validada (04/05) 
 // Adicionando um membro no projeto
 controller.addMembro = async function(req, res) {
     try {
@@ -667,7 +693,7 @@ controller.addMembro = async function(req, res) {
     }
 }
 
-
+// Validada (04/05) 
 // Removendo um membro do projeto
 controller.removeMembro = async function(req, res) {
     try {
@@ -694,7 +720,7 @@ controller.removeMembro = async function(req, res) {
 
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
         
-            return res.status(400).json({ mensagem: "Você não tem permissão para adicionar membros nesse Projeto!" });
+            return res.status(400).json({ mensagem: "Você não tem permissão para remover membros nesse Projeto!" });
         
         }
 
@@ -733,7 +759,7 @@ controller.removeMembro = async function(req, res) {
     }
 }
 
-
+// Validada (04/05) 
 // Adicionando um adminstrador no projeto
 controller.addAdministrador = async function(req, res) {
     try {
@@ -819,7 +845,7 @@ controller.addAdministrador = async function(req, res) {
     }
 }
 
-
+// Validada (04/05)
 // Removendo um administrador do projeto
 controller.removeAdministrador = async function(req, res) {
     try {
@@ -883,7 +909,7 @@ controller.removeAdministrador = async function(req, res) {
     }
 }
 
-
+// Testar com tarefas / subtarefas / atividades 
 // Deletando o projeto
 controller.delete = async function(req, res) {
     try {
