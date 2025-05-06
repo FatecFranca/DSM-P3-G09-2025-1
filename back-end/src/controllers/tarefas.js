@@ -286,7 +286,7 @@ controller.retrieveAllProjeto = async function(req, res) {
     }
 }
 
-
+// Validada (06/05)
 // Atualizando os dados da tarefa
 controller.update = async function(req, res) {
     try {
@@ -366,6 +366,17 @@ controller.update = async function(req, res) {
         // Deletanndo também possíbilidade de alterar o projeto da tarefa
         delete req.body.ordem;
         delete req.body.id_projeto;
+        delete req.body.status;
+        delete req.body.data_entrega;
+        delete req.body.data_criacao;
+
+        if (req.body.data_limite){
+            if (req.body.data_limite > new Date()){
+                req.body.status = "Pendente";
+            }else{
+                req.body.status = "Atrasada";
+            }
+        }
 
         // Atualizando os dados do projeto
         await prisma.tarefa.update({
@@ -393,7 +404,7 @@ controller.update = async function(req, res) {
     }
 }
 
-
+// Validada (06/05)
 // Finalizando/Reabrindo a tarefa (Mudando Status e Data Entrega)
 controller.updateStatus = async function(req, res) {
     try {
@@ -467,6 +478,8 @@ controller.updateStatus = async function(req, res) {
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({result: true, mensagem: "Tarefa Reaberta!"});
+        }else{
+            return res.status(400).json({ mensagem: "Função Inválida! Operação não existente!"});
         }
     }
     catch(error) {
@@ -486,7 +499,7 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-
+// Validada (06/05)
 // Alterar a ordem de uma tarefa
 controller.updateOrdem = async function(req, res) {
     // Verificando se a sessão foi iniciada
@@ -516,10 +529,6 @@ controller.updateOrdem = async function(req, res) {
 
     if (verificaProjeto.status === "Concluído"){
         return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
-    }
-
-    if (verificaTarefa.status === "Concluída"){
-        return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
     }
 
     const qtTarefasProjeto = await prisma.tarefa.findMany({
@@ -702,6 +711,8 @@ controller.updateOrdem = async function(req, res) {
             });
 
             return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + (verificaTarefa.ordem +1) + "!" });
+        }else{
+            return res.status(400).json({ mensagem: "Função Inválida! Operação não existente!"});
         }
         
     }
@@ -710,7 +721,7 @@ controller.updateOrdem = async function(req, res) {
 
 }
 
-
+// Testar com subtarefas / atividades 
 // Deletando o projeto
 controller.delete = async function(req, res) {
     try {

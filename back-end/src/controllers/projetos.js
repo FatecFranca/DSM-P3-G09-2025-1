@@ -587,7 +587,7 @@ controller.updateStatus = async function(req, res) {
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({result: true, mensagem: "Projeto Reaberto!"});
         }else{
-            return res.status(201).json({ mensagem: "Função Inválida!"});
+            return res.status(400).json({ mensagem: "Função Inválida!"});
         }
     }
     catch(error) {
