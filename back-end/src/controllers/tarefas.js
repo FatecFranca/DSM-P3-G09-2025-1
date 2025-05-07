@@ -59,6 +59,14 @@ controller.create = async function(req, res) {
             return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
+        if (req.body.data_limite){
+            if (new Date(verificaProjeto.data_limite) < req.body.data_limite){
+                return res.status(400).json({mensagem: "Data limite para a entrega deve ser menor que a data limite para entrega do projeto!"});
+            }
+        }else{
+            return res.status(400).json({mensagem: "Data limite para a entrega deve ser informada!"});
+        }
+
         // Verificando se o usuário que está consultando os dados é pelo menos um membro ou administrador do projeto
         let encontrou = false;
         if (req.session.usuario.id !== verificaProjeto.id_gestor){
@@ -324,6 +332,16 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
         }
 
+        
+
+        if (req.body.data_limite){
+            if (new Date(verificaProjeto.data_limite) < new Date(req.body.data_limite)){
+                return res.status(400).json({mensagem: "Data limite para a entrega deve ser menor que a data limite para entrega do projeto!"});
+            }  
+        }else{
+            return res.status(400).json({mensagem: "Data limite para a entrega deve ser informada!"});
+        }
+
         // Verificando se quem está alterando é o gestor do projeto ou um administrador
         if(req.session.usuario.id !== verificaProjeto.id_gestor){
             let encontrou;
@@ -370,13 +388,13 @@ controller.update = async function(req, res) {
         delete req.body.data_entrega;
         delete req.body.data_criacao;
 
-        if (req.body.data_limite){
-            if (req.body.data_limite > new Date()){
-                req.body.status = "Pendente";
-            }else{
-                req.body.status = "Atrasada";
-            }
+        
+        if (req.body.data_limite > new Date()){
+            req.body.status = "Pendente";
+        }else{
+            req.body.status = "Atrasada";
         }
+        
 
         // Atualizando os dados do projeto
         await prisma.tarefa.update({

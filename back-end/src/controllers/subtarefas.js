@@ -8,7 +8,7 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-
+// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -28,7 +28,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-
+// Validada (07/05)
 // Criando uma nova subtarefa
 controller.create = async function(req, res) {
     try {
@@ -62,6 +62,14 @@ controller.create = async function(req, res) {
 
         if (!tarefa){
             return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
+        }
+
+        if (req.body.data_limite){
+            if (tarefa.data_limite < req.body.data_limite){
+                return res.status(400).json({mensagem: "Data limite para a entrega deve ser menor que a data limite para entrega da tarefa!"});
+            }
+        }else{
+            return res.status(400).json({mensagem: "Data limite para a entrega deve ser informada!"});
         }
 
         // Obtendo os dados do projeto
@@ -136,7 +144,7 @@ controller.create = async function(req, res) {
 }
 
 
-// Obtendo todos os subtarefas cadastradas
+// Desativar depois
 controller.retrieveAll = async function(req, res) {
     try {
         // Buscando todas a tarefas cadastradas
@@ -158,6 +166,7 @@ controller.retrieveAll = async function(req, res) {
 }
 
 
+// Validada (07/05)
 // Obtendo uma subtarefa específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -240,7 +249,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
+// Validada (07/05)
 // Obtendo todas as subtarefas pela tarefa 
 controller.retrieveAllTarefa = async function(req, res) {
     try {
@@ -359,6 +368,14 @@ controller.update = async function(req, res) {
             return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
         }
 
+        if (req.body.data_limite){
+            if (verificaTarefa.data_limite < req.body.data_limite){
+                return res.status(400).json({mensagem: "Data limite para a entrega deve ser menor que a data limite para entrega da tarefa!"});
+            }
+        }else{
+            return res.status(400).json({mensagem: "Data limite para a entrega deve ser informada!"});
+        }
+
         // Obtendo os dados do projeto
         const verificaProjeto = await prisma.projeto.findUnique({
             where: { id: verificaTarefa.id_projeto }
@@ -449,7 +466,7 @@ controller.update = async function(req, res) {
     }
 }
 
-
+// Validada (07/05)
 // Finalizando/Reabrindo a tarefa (Mudando Status e Data Entrega)
 controller.updateStatus = async function(req, res) {
     try {
@@ -522,7 +539,7 @@ controller.updateStatus = async function(req, res) {
             });
 
             // Deletando todas as notificações criadas dessa subtarefa
-            await prisma.notificacao.delete({
+            await prisma.notificacao.deleteMany({
                 where: {
                     id_subtarefa: req.params.id
                 }
@@ -581,6 +598,8 @@ controller.updateStatus = async function(req, res) {
         
             // Retornando mensagem de sucessao caso tenha atualizado
             return res.status(201).json({mensagem: "Subtarefa Reaberta!"});
+        }else{
+            return res.status(400).json({ mensagem: "Função Inválida! Operação não existente!"});
         }
     }
     catch(error) {
@@ -600,7 +619,7 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-
+// Validada (07/05)
 // Alterar a ordem de uma tarefa
 controller.updateOrdem = async function(req, res) {
     // Verificando se a sessão foi iniciada
@@ -643,10 +662,6 @@ controller.updateOrdem = async function(req, res) {
 
     if (verificaTarefa.status === "Concluída"){
         return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
-    }
-
-    if (verificaSubTarefa.status === "Concluída"){
-        return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
     }
 
     // Verifica se o usuário tem permissão para alterar
@@ -753,7 +768,7 @@ controller.updateOrdem = async function(req, res) {
             }
         });
 
-        return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + req.body.ordem + 1 + "!" });
+        return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + req.body.ordem + "!" });
 
     // Se for pot tipo (uma casa para frente ou para traz)
     }else if (req.body.tipo){
@@ -838,7 +853,7 @@ controller.updateOrdem = async function(req, res) {
 
 }
 
-
+// Validada (07/05)
 // Adicionando um membro na subtarefa
 controller.addMembro = async function(req, res) {
     try {
@@ -932,16 +947,17 @@ controller.addMembro = async function(req, res) {
         }
 
         // Criando a notificação a ser apresentada ao novo membro da subtarefa
-        let notifica;
 
         const dtLimFormatada = new Date(verificaSubTarefa.data_limite).toLocaleDateString('pt-BR');
 
-        notifica.tipo = "Atribuição";
-        notifica.titulo = "Nova Subtarefa atribuida";
-        notifica.texto = "Uma nova Subtarefa foi atribuida a você. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => Subtarefa: " + verificaSubTarefa.titulo + "; Com o praso de entraga para o dia " + dtLimFormatada + "; Fique atento para contribuir com ela até este praso.";
-        notifica.id_usuario = req.body.id_membro;
-        notifica.id_subtarefa = verificaSubTarefa.id;
-        notifica.data_criacao = new Date();
+        const notifica = {
+            tipo: "Atribuição",
+            titulo: "Nova Subtarefa atribuida",
+            texto: "Uma nova Subtarefa foi atribuida a você. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => Subtarefa: " + verificaSubTarefa.titulo + " Com o praso de entraga para o dia " + dtLimFormatada + " Fique atento para contribuir com ela até este praso.",
+            id_usuario: req.body.id_membro,
+            id_subtarefa: verificaSubTarefa.id,
+            data_criacao: new Date()
+        }
 
         // Cadastrando a notificação
         await prisma.notificacao.create({
@@ -978,7 +994,7 @@ controller.addMembro = async function(req, res) {
     }
 }
 
-
+// Validada (07/05)
 // Removendo um membro da subtarefa
 controller.removeMembro = async function(req, res) {
     try {
@@ -1044,7 +1060,7 @@ controller.removeMembro = async function(req, res) {
         }
 
         // Deletando todas as notificações criadas para esse usuário
-        await prisma.notificacao.delete({
+        await prisma.notificacao.deleteMany({
             where: {
                 id_subtarefa: verificaSubTarefa.id,
                 id_usuario: req.params.id

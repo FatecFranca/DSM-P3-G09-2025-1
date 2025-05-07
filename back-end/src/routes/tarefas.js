@@ -35,6 +35,7 @@ router.get('/:id', controller.retrieveOne);
 router.get('/projeto/:id', controller.retrieveAllProjeto);
 
 
+// Validada (04/05)
 // Alterar Tarefa
 router.put('/:id', upload.single('anexoTarefa'), controller.update);
 /*
@@ -46,6 +47,7 @@ router.put('/:id', upload.single('anexoTarefa'), controller.update);
 */
 
 
+// Validada (04/05)
 // Adicionar administrador ao projeto
 router.put('/updateOrdem/:id', controller.updateOrdem);
 /*
@@ -54,6 +56,7 @@ router.put('/updateOrdem/:id', controller.updateOrdem);
 */
 
 
+// Validada (04/05)
 // Adicionar administrador ao projeto
 router.put('/updateStatus/:id', controller.updateStatus);
 /*
@@ -63,6 +66,7 @@ router.put('/updateStatus/:id', controller.updateStatus);
 */
 
 
+// Testar com tarefas / subtarefas / atividades 
 // Deletar tarefa
 router.delete('/:id', controller.delete);
 
