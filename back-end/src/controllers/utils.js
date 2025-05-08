@@ -66,16 +66,20 @@ export async function atualizaStatus(){
                                 });
 
                                 if (!notficacao){
-                                    let not;
-                                    not.tipo = "Atraso";
-                                    not.titulo = "Subtarefa Atrasada";
-                                    not.data_criacao = new Date;
-                                    not.texto = "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo;
-                                    not.id_usuario = idUsu;
-                                    not.id_subtarefa = subTarefa.id;
+
+                                    // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                                    const notifica = {
+                                        tipo: "Atraso",
+                                        titulo: "Subtarefa Atrasada",
+                                        texto: "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo,
+                                        id_usuario: idUsu,
+                                        id_subtarefa: subTarefa.id,
+                                        data_criacao: new Date()
+                                    }
 
                                     await prisma.notificacao.create({
-                                        data: not
+                                        data: notifica
                                     });
                                 }
                             }
@@ -117,13 +121,21 @@ export async function atualizaStatus(){
                                     });
 
                                     if (!notficacao){
-                                        let not;
-                                        not.tipo = "Prazo Curto";
-                                        not.titulo = "Prazo para a Entrega Curto";
-                                        not.data_criacao = new Date;
-                                        not.texto = "Há uma subtarefa com o Prazo para a Entrega Curto. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo;
-                                        not.id_usuario = idUsu;
-                                        not.id_subtarefa = subTarefa.id;
+
+                                        // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                                        const notifica = {
+                                            tipo: "Prazo Curto",
+                                            titulo: "Prazo para a Entrega Curto",
+                                            texto: "Há uma subtarefa com o Prazo para a Entrega Curto. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo,
+                                            id_usuario: idUsu,
+                                            id_subtarefa: subTarefa.id,
+                                            data_criacao: new Date()
+                                        }
+
+                                        await prisma.notificacao.create({
+                                            data: notifica
+                                        });
                                     }
                                 }
                             }
@@ -147,17 +159,21 @@ export async function atualizaStatus(){
                                     });
 
                                     if (!notficacao){
-                                        let not;
-                                        not.tipo = "Prazo Curto";
-                                        not.titulo = "Prazo para a Entrega Curto";
-                                        not.data_criacao = new Date;
-                                        not.texto = "Há uma subtarefa com o Prazo para a Entrega Curto. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo;
-                                        not.id_usuario = idUsu;
-                                        not.id_subtarefa = subTarefa.id;
+                                        // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                                        const notifica = {
+                                            tipo: "Prazo Curto",
+                                            titulo: "Prazo para a Entrega Curto",
+                                            texto: "Há uma subtarefa com o Prazo para a Entrega Curto. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + projeto.titulo + " => Tarefa: " + tarefa.titulo + " => " + " Subtarefa: " + subTarefa.titulo,
+                                            id_usuario: idUsu,
+                                            id_subtarefa: subTarefa.id,
+                                            data_criacao: new Date()
+                                        }
 
                                         await prisma.notificacao.create({
-                                            data: not
+                                            data: notifica
                                         });
+
                                     }
                                 }
                             }

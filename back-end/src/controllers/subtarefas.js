@@ -338,7 +338,7 @@ controller.retrieveAllTarefa = async function(req, res) {
     }
 }
 
-
+// Validada (08/05)
 // Atualizando os dados da subtarefa
 controller.update = async function(req, res) {
     try {
@@ -435,11 +435,43 @@ controller.update = async function(req, res) {
         // Ajustando a url do anexo para a inserção no BD
         req.body.anexo = urlAnexo;
 
-        // Deletando a possibilidade de ser informada a ordem da tarefa, há uma função específica para esse controle.
-        // Deletanndo também possíbilidade de alterar o projeto da tarefa
+        // Deletando dados que não devem ser informados nessa função, mas que são alterados em outras
         delete req.body.ordem;
-        delete req.body.id_projeto;
+        delete req.body.id_tarefa;
+        delete req.body.data_entrega;
+        delete req.body.ids_membros;
 
+        if (req.body.status === "Atrasada"){
+            // Verificando se as notificações já foram enviadas para os usuários necessários 
+            for (const idUsu of verificaSubTarefa.ids_membros){
+                const notficacao = await prisma.notificacao.findFirst({
+                    where: {
+                        id_usuario: idUsu,
+                        id_subtarefa: verificaSubTarefa.id,
+                        tipo: "Atraso"
+                    }
+                });
+
+                if (!notficacao){
+                    
+                    // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                    const notifica = {
+                        tipo: "Atraso",
+                        titulo: "Subtarefa Atrasada",
+                        texto: "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => " + " Subtarefa: " + verificaSubTarefa.titulo,
+                        id_usuario: idUsu,
+                        id_subtarefa: verificaSubTarefa.id,
+                        data_criacao: new Date()
+                    }
+
+                    await prisma.notificacao.create({
+                        data: notifica
+                    });
+                }
+            }
+        }
+        
         // Atualizando os dados do projeto
         await prisma.subTarefa.update({
             where: { id: req.params.id },
@@ -571,16 +603,20 @@ controller.updateStatus = async function(req, res) {
                     });
 
                     if (!notficacao){
-                        let not;
-                        not.tipo = "Atraso";
-                        not.titulo = "Subtarefa Atrasada";
-                        not.data_criacao = new Date;
-                        not.texto = "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => " + " Subtarefa: " + verificaSubTarefa.titulo;
-                        not.id_usuario = idUsu;
-                        not.id_subtarefa = verificaSubTarefa.id;
+                        
+                        // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                        const notifica = {
+                            tipo: "Atraso",
+                            titulo: "Subtarefa Atrasada",
+                            texto: "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => " + " Subtarefa: " + verificaSubTarefa.titulo,
+                            id_usuario: idUsu,
+                            id_subtarefa: verificaSubTarefa.id,
+                            data_criacao: new Date()
+                        }
 
                         await prisma.notificacao.create({
-                            data: not
+                            data: notifica
                         });
                     }
                 }
@@ -1104,8 +1140,8 @@ controller.removeMembro = async function(req, res) {
 }
 
 
-
-// Deletando o projeto
+// Testar com atividades 
+// Deletando a subtarefa
 controller.delete = async function(req, res) {
     try {
         

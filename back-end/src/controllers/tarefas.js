@@ -740,7 +740,7 @@ controller.updateOrdem = async function(req, res) {
 }
 
 // Testar com subtarefas / atividades 
-// Deletando o projeto
+// Deletando a tarefa
 controller.delete = async function(req, res) {
     try {
 
