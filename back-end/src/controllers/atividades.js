@@ -8,7 +8,7 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-
+// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
@@ -28,8 +28,7 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-
-// Validar com o anexo do front
+// Validada (08/05)
 // Criando uma nova atividade
 controller.create = async function(req, res) {
     try {
@@ -160,6 +159,7 @@ controller.retrieveAll = async function(req, res) {
 }
 
 
+// Validada (08/05)
 // Obtendo uma atividade específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -251,7 +251,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
+// Validada (08/05)
 // Obtendo todas as subtarefas pela tarefa 
 controller.retrieveAllSubTarefa = async function(req, res) {
     try {
@@ -344,7 +344,7 @@ controller.retrieveAllSubTarefa = async function(req, res) {
     }
 }
 
-
+// Validada (08/05)
 // Atualizando os dados da subtarefa
 controller.update = async function(req, res) {
     try {
@@ -435,6 +435,10 @@ controller.update = async function(req, res) {
         // Ajustando a url do anexo para a inserção no BD
         req.body.anexo = urlAnexo;
 
+        // Deletando dados que podem ser enviados mas não devem ser alterados
+        delete req.body.data_realizacao;
+        delete req.body.id_subtarefa;
+
         // Atualizando os dados do projeto
         await prisma.atividade.update({
             where: { id: req.params.id },
@@ -462,7 +466,7 @@ controller.update = async function(req, res) {
 }
 
 
-// Deletando o projeto
+// Deletando a atividade
 controller.delete = async function(req, res) {
     try {
 

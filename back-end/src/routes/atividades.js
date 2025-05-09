@@ -5,6 +5,8 @@ import upload from '../uploads/uploadAneAti.js';
 
 const router = Router();
 
+
+// Validada (08/05)
 // Cadastro de Atividade
 router.post('/', upload.single('anexoAtividade'), controller.create);
 /*
@@ -19,10 +21,12 @@ router.post('/', upload.single('anexoAtividade'), controller.create);
 router.get('/', controller.retrieveAll);
 
 
+// Validada (08/05)
 // Buscar os dados de uma atividade específica
 router.get('/:id', controller.retrieveOne);
 
 
+// Validada (08/05)
 // Buscar todas as atividades de uma subtarefa
 router.get('/subtarefa/:id', controller.retrieveAllSubTarefa);
 
