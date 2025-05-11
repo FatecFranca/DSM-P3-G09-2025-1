@@ -465,7 +465,7 @@ controller.update = async function(req, res) {
     }
 }
 
-
+// Validado (10/05)
 // Deletando a atividade
 controller.delete = async function(req, res) {
     try {
@@ -477,7 +477,7 @@ controller.delete = async function(req, res) {
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
 
-        // Verificando se a subtarefa existe
+        // Verificando se a tarefa existe
         const verificaAtividade = await prisma.atividade.findUnique({
           where: { id: req.params.id }
         });
@@ -486,7 +486,7 @@ controller.delete = async function(req, res) {
             return res.status(400).json({mensagem: "Atividade não Encontrada!"});
         }
 
-        // Verificando se a subtarefa existe
+        // Verificando se a tarefa existe
         const verificaSubTarefa = await prisma.subTarefa.findUnique({
             where: { id: verificaAtividade.id_subtarefa }
         });
@@ -495,7 +495,7 @@ controller.delete = async function(req, res) {
             return res.status(400).json({mensagem: "Subtarefa não Encontrada!"});
         }
 
-        // Verificando se a tarefa existe
+        // Obtendo os dados da tarefa para validação
         const verificaTarefa = await prisma.tarefa.findUnique({
             where: { id: verificaSubTarefa.id_tarefa }
         });
@@ -504,6 +504,7 @@ controller.delete = async function(req, res) {
             return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
         }
 
+        // Obtendo os dados do projeto
         const verificaProjeto = await prisma.projeto.findUnique({
             where: { id: verificaTarefa.id_projeto }
         });
@@ -521,7 +522,7 @@ controller.delete = async function(req, res) {
         }
 
         if (verificaSubTarefa.status === "Concluída"){
-          return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
+            return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
         }
 
         // Verifica se o usuário tem permissão para deletar
@@ -535,7 +536,7 @@ controller.delete = async function(req, res) {
               });
 
               if (!encontrou){
-                  return res.status(400).json({ mensagem: "Você não tem permissão para deletar essa Subtarefa!" });
+                  return res.status(400).json({ mensagem: "Você não tem permissão para deletar essa Atividade!" });
               }
           }
         }

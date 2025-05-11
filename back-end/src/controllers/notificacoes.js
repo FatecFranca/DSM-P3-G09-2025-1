@@ -8,6 +8,7 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
+
 // Desativar posteriormente
 controller.retrieveAll = async function(req, res) {
     try {
@@ -30,6 +31,7 @@ controller.retrieveAll = async function(req, res) {
 }
 
 
+// Validado (10/05)
 // Obtendo uma notifição específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -70,7 +72,7 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-
+// Validado (10/05)
 // Obtendo todas as notificação do usuário 
 controller.retrieveAllUsuario = async function(req, res) {
     try {
@@ -84,7 +86,7 @@ controller.retrieveAllUsuario = async function(req, res) {
 
         // Obtendo os dados da subtarefa
         const notificacao = await prisma.notificacao.findMany({
-            where: { id_usuario: req.params.id }
+            where: { id_usuario: req.session.usuario.id }
         });
 
         if (!notificacao){
@@ -111,7 +113,7 @@ controller.retrieveAllUsuario = async function(req, res) {
     }
 }
 
-
+// Validado (10/05)
 // Deletando a notificação
 controller.delete = async function(req, res) {
     try {
@@ -133,7 +135,7 @@ controller.delete = async function(req, res) {
         }
 
         // Busca a atividade a ser excluída
-        await prisma.atividade.delete({
+        await prisma.notificacao.delete({
             where: { id: req.params.id }
         });
     

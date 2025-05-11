@@ -8,15 +8,17 @@ const router = Router();
 router.get('/', controller.retrieveAll);
 
 
+// Validado (10/05)
 // Buscar os dados de uma notificação específica
 router.get('/:id', controller.retrieveOne);
 
 
-// Buscar todas as atividades de uma subtarefa
-router.get('/usuario/:id', controller.retrieveAllUsuario);
+// Validado (10/05)
+// Buscar todas as notificações de um usuário
+router.get('/usuario/true', controller.retrieveAllUsuario);
 
 
-// Deletar atividade
+// Deletar notificação
 router.delete('/:id', controller.delete);
 
 

@@ -31,6 +31,7 @@ router.get('/:id', controller.retrieveOne);
 router.get('/subtarefa/:id', controller.retrieveAllSubTarefa);
 
 
+// Validada (08/05)
 // Alterar Atividade
 router.put('/:id', upload.single('anexoAtividade'), controller.update);
 /*
@@ -40,6 +41,7 @@ router.put('/:id', upload.single('anexoAtividade'), controller.update);
 */
 
 
+// Validado (10/05)
 // Deletar atividade
 router.delete('/:id', controller.delete);
 

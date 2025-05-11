@@ -739,7 +739,7 @@ controller.updateOrdem = async function(req, res) {
 
 }
 
-// Testar com subtarefas / atividades 
+// Testar com subtarefas / atividades e Notificacao
 // Deletando a tarefa
 controller.delete = async function(req, res) {
     try {
@@ -760,13 +760,21 @@ controller.delete = async function(req, res) {
             return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
         }
 
-        // Verificando se quem está alterando é o gestor do projeto ou um administrador
+        // Obtendo os dados do projeto
         const verificaProjeto = await prisma.projeto.findUnique({
             where: { id: verificaTarefa.id_projeto }
         });
 
         if (!verificaProjeto){
             return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        }
+
+        if (verificaTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
         }
 
         if (verificaProjeto.status === "Concluído"){
@@ -798,7 +806,7 @@ controller.delete = async function(req, res) {
             // SubTarefas a deletar
             for (const subTarefa of subtaresDeletar){
 
-                atividadesDeletar = await prisma.atividade.findMany({
+                const atividadesDeletar = await prisma.atividade.findMany({
                     where: { id_subtarefa: subTarefa.id }
                 });
 
@@ -816,6 +824,26 @@ controller.delete = async function(req, res) {
                             where: { id: atividade.id }
                         });
                     }
+                }
+
+                // Notificações a deletar
+                const notificacoesDeletar = await prisma.notificacao.findMany({
+                    where: { id_subtarefa: subTarefa.id }
+                });
+
+                // Verificando se a lista não voltou vazia
+                if (notificacoesDeletar){
+
+                    // SubTarefas a deletar
+                    for (const notificacao of notificacoesDeletar){
+
+                        // Deletando as subtarefas
+                        await prisma.notificacao.delete({
+                            where: { id: notificacao.id }
+                        });
+            
+                    }
+                    
                 }
 
                 // Deletando o anexo

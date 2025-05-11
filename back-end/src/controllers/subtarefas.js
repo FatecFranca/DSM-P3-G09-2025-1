@@ -1140,7 +1140,7 @@ controller.removeMembro = async function(req, res) {
 }
 
 
-// Testar com atividades 
+// Testar com atividades e Notificacao
 // Deletando a subtarefa
 controller.delete = async function(req, res) {
     try {
@@ -1152,31 +1152,31 @@ controller.delete = async function(req, res) {
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
 
-        // Verificando se a subtarefa existe
+        // Obtendo os dados da subtarefa
         const verificaSubTarefa = await prisma.subTarefa.findUnique({
             where: { id: req.params.id }
         });
 
         if (!verificaSubTarefa){
-            return res.status(400).json({mensagem: "Subtarefa não Encontrada!"});
+            return res.status(400).json({ mensagem: "Subtarefa não encontrada!" });
         }
 
-        // Verificando se a tarefa existe
+        // Obtendo os dados da tarefa
         const verificaTarefa = await prisma.tarefa.findUnique({
             where: { id: verificaSubTarefa.id_tarefa }
         });
 
         if (!verificaTarefa){
-            return res.status(400).json({mensagem: "Tarefa não Encontrada!"});
+            return res.status(400).json({ mensagem: "Tarefa não encontrada!" });
         }
 
-        // Verificando se quem está alterando é o gestor do projeto ou um administrador
+        // Verificando se quem está alterando é o gestor do projeto ou administrador
         const verificaProjeto = await prisma.projeto.findUnique({
             where: { id: verificaTarefa.id_projeto }
         });
 
         if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+            return res.status(400).json({ mensagem: "Projeto não encontrado!" });
         }
 
         if (verificaProjeto.status === "Concluído"){
@@ -1185,6 +1185,14 @@ controller.delete = async function(req, res) {
 
         if (verificaTarefa.status === "Concluída"){
             return res.status(400).json({mensagem: "Tarefa já está Concluída! Não permitido alterações!"});
+        }
+
+        if (verificaSubTarefa.status === "Concluída"){
+            return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
+        }
+
+        if (verificaProjeto.status === "Concluído"){
+            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
         }
 
         // Verifica se o usuário tem permissão para alterar

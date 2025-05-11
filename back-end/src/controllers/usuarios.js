@@ -320,7 +320,7 @@ controller.update = async function(req, res) {
     }
 }
 
-// Testar com projetos / tarefas / subtarefas / atividades 
+// Testar com projetos / tarefas / subtarefas / atividades / e Notificacao
 // Deletando o usuário
 controller.delete = async function(req, res) {
     try {
@@ -360,7 +360,7 @@ controller.delete = async function(req, res) {
             where: { id_gestor: req.session.usuario.id }
         });
 
-        // Verificando se a lsita não voltou vazia
+        // Verificando se a lista não voltou vazia
         if (projetosDeletar){
             let tarefasDeletar;
             let subtaresDeletar;
@@ -411,6 +411,26 @@ controller.delete = async function(req, res) {
                                     }
                                 }
 
+                                // Notificações a deletar
+                                const notificacoesDeletar = await prisma.notificacao.findMany({
+                                    where: { id_subtarefa: subTarefa.id }
+                                });
+
+                                // Verificando se a lista não voltou vazia
+                                if (notificacoesDeletar){
+
+                                    // SubTarefas a deletar
+                                    for (const notificacao of notificacoesDeletar){
+
+                                        // Deletando as subtarefas
+                                        await prisma.notificacao.delete({
+                                            where: { id: notificacao.id }
+                                        });
+                            
+                                    }
+                                    
+                                }
+
                                 // Deletando o anexo
                                 if (subTarefa.anexo){
                                     deletarAnexo(subTarefa.anexo);
@@ -449,6 +469,19 @@ controller.delete = async function(req, res) {
                     where: { id: projeto.id }
                 });
 
+            }
+        }
+
+        // Deletando as notificações pertencentes a esse usuário
+        const notificacoesDeletar = await prisma.notificacao.findMany({
+            where: { id_usuario: req.session.usuario.id }
+        });
+
+        if (notificacoesDeletar){
+            for (const notificacao of notificacoesDeletar){
+                await prisma.notificacao.delete({
+                    where: { id: notificacao.id }
+                });
             }
         }
 
