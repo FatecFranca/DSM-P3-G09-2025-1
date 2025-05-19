@@ -36,9 +36,21 @@ router.post('/email/:email', controller.loginEmail);
 */
 
 
+// Realizar Login com goo
+router.post('/verificar-usuario-google/true', controller.loginGoogle);
+/*
+    Dados a serem informados:
+    senha: String
+*/
+
+
 // Validada (04/05)
 // Encerrar sessão
 router.get('/encerrarSessao/true', controller.encerrarSessao);
+
+
+// Verifica se o usuário está logado
+router.get('/verificaSessao/true', controller.verificaSessao);
 
 
 // Validada (04/05) - Validar Imagem com Front

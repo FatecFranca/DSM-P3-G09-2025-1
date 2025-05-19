@@ -173,6 +173,15 @@ controller.encerrarSessao = async function(req, res) {
     });
 }
 
+// Verifica sessão
+controller.verificaSessao = async function(req, res) {
+    if (req.session.usuario){
+        return res.status(200).json({ result: true, dados: req.session.usuario }); 
+    }else{
+        return res.status(200).json({ result: false }); 
+    }
+}
+
 // Validada (04/05)
 // Obtendo um usuário específico pelo email (Login)
 controller.loginEmail = async function(req, res) {
@@ -183,11 +192,11 @@ controller.loginEmail = async function(req, res) {
         });
     
         if (!verUsuario){
-            return res.status(400).json({mensagem: "Usuário Não Encontrado!"});
+            return res.status(400).json({mensagem: "Usuário não Encontrado!"});
         }
 
         // Verificando se a senha informada é a senha atual do usuario
-        const valSenha = await validaSenha(req.body.senha_atual, verUsuario.id);
+        const valSenha = await validaSenha(req.body.senha, verUsuario.id);
         if (!valSenha){
             return res.status(400).json({ mensagem: "Senha Inválida!"});
         }
@@ -205,9 +214,12 @@ controller.loginEmail = async function(req, res) {
             foto: usuarioCadastrado.foto
         };
 
+        if (!req.session.usuario){
+            return res.status(400).json({mensagem: "Não iniciou a sessão!"});
+        }
+
         // Retornando resultado para redirecionamento no front
-        // console.log(req.session.usuario);
-        return res.status(201).json({result: true});
+        return res.status(200).json({result: true});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -218,6 +230,43 @@ controller.loginEmail = async function(req, res) {
         return res.status(500).send(error);
     }
 }
+
+// Login google
+controller.loginGoogle = async (req, res) => {
+    try {
+        const { token } = req.body;
+
+        if (!token) {
+            return res.status(400).json({ mensagem: "Token do Firebase não fornecido." });
+        }
+
+        // Verifica o token com o Firebase Admin
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        const email = decodedToken.email;
+
+        const usuario = await prisma.usuario.findFirst({
+            where: { email: email }
+        });
+
+        if (!usuario) {
+            return res.status(404).json({ mensagem: "Usuário não encontrado no sistema." });
+        }
+
+        // Cria a sessão
+        req.session.usuario = {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            foto: usuario.foto
+        };
+
+        return res.status(200).json({ mensagem: "Login com Google validado com sucesso." });
+
+    } catch (error) {
+        console.error("Erro na validação do login com Google:", error);
+        return res.status(401).json({ mensagem: "Token inválido ou expirado." });
+    }
+};
 
 // Validada (04/05) - Validar Imagem com Front
 // Atualizando os dados do usuário

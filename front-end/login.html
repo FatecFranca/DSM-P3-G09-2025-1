@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Taskflow</title>
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <span>T</span><span>a</span><span>skflow</span>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav>
+        <a href="sobre.html">Sobre nós</a>
+        <a href="contato.html">Fale conosco</a>
+        <a href="cadastrarUsuario.html" class="register">Cadastre-se</a>
+        </nav>
+  </header>
+  <br><br><br>
+  <div class="login-container">
+    <form class="login-box">
+      <h2>Faça login</h2>
+      <button type="button" class="google-button" onclick="logarGoogle()">
+        <span>Continuar com</span> <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      </button>
+
+      <div class="divider">OU</div>
+
+      <label for="email">Insira seu e-mail</label>
+      <input type="email" id="email" placeholder="exemplo@email.com" maxlength="250" >
+
+      <label for="senha">Insira sua senha</label>
+      <input type="password" id="senha" placeholder="********" maxlength="16" >
+      <p id="msgAviso"></p>
+      <button type="button" class="login-btn" onclick="logarEmail()">Entrar</button>
+
+      <p class="register-link">Não tem uma conta? <a href="cadastrarUsuario.html">Cadastre-se</a></p>
+    </form>
+  </div>
+
+    <!-- Firebase SDK (compat mode para navegador puro) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+
+    <script src="js/login.js"></script>
+    <script>window.onload = sessaoIni();</script>
+
+</body>
+</html>

@@ -11,24 +11,38 @@ import cron from 'node-cron';
 // Importando e atribuindo rotas padrões necessárias
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import cors from 'cors';
 
 // Criando e configurando app
 const app = express();
+
 app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
+app.use(cors({
+    origin: 'http://127.0.0.1:5500',
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+}));
 
 // Configurando a sessão para o usuário ao logar
 app.use(session({
     secret: 'sua_chave_secreta_segura',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 50 } // 50 minutos
+    cookie: {
+        secure: false, // Defina como true se estiver usando HTTPS
+        httpOnly: true, // Recomendar para segurança
+        sameSite: 'lax', // Defina como 'strict' ou 'lax' conforme necessário
+        maxAge: 24 * 60 * 60 * 1000 // Exemplo: 24 horas
+    }
 }));
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 // Configurando servidor para que seja feita a verifcação de projetos vencidos e/ou pendentes de todos os usuários a meia-noite ou quando o servidor for iniciado
 import { atualizaStatus } from './controllers/utils.js';
@@ -91,5 +105,19 @@ app.use('/atividades', atividadesRouter);
 
 import notificacoesRouter from './routes/notificacoes.js';
 app.use('/notificacoes', notificacoesRouter);
+
+import fs from 'fs/promises';
+import admin from 'firebase-admin';
+
+// Resolve o caminho correto do JSON
+const __filename2 = fileURLToPath(import.meta.url);
+const __dirname2 = dirname(__filename2);
+const serviceAccountPath = path.join(__dirname2, '../taskflow-e3792-firebase-adminsdk-fbsvc-aa90328693.json');
+
+const serviceAccountJSON = JSON.parse(await fs.readFile(serviceAccountPath, 'utf8'));
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccountJSON)
+});
 
 export default app;

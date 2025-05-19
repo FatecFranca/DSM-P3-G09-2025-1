@@ -24,3 +24,6 @@ yarn-error.log*
 
 # dotenv
 .env
+
+# dotFireBaseGoogle
+taskflow-e3792-firebase-adminsdk-fbsvc-aa90328693.json

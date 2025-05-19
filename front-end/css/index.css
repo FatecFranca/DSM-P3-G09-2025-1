@@ -1,0 +1,250 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: #111;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  font-weight: bold;
+}
+
+.logo span:first-child { color: #ff4ec9; }
+.logo span:nth-child(2) { color: #49d3f5; }
+.logo span:last-child { color: #4cd964; }
+
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #333;
+}
+
+nav .register {
+  color: #4762ff;
+  font-weight: bold;
+}
+
+.hero {
+  padding: 3rem 2rem;
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background-color: #f9f9f9;
+}
+
+.hero-text {
+  width: 50%;
+}
+
+.hero-image{
+  width: 50%;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.features {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 2rem;
+  gap: 2rem;
+  text-align: center;
+}
+
+.feature img {
+  width: 60px;
+  height: 60px;
+}
+
+.feature{
+  width: 200px;
+}
+
+.cta {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.cta a {
+  display: inline-block;
+  padding: 0.7rem 1.5rem;
+  background-color: #0088ff;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem;
+  width: 100%;
+  padding: 8px;
+}
+
+
+.card-content {
+  width: 50%;
+}
+
+.card-image {
+  align-items: center;
+  text-align: center;
+  width: 50%;
+}
+
+.card img {
+  width: 250px;
+  height: 250px;
+}
+
+.card-content h3 {
+  font-family: monospace;
+  font-size: 35px;
+  margin: 0;
+}
+
+.card-content p {
+  font-family: monospace;
+  margin: 0.5rem 0;
+  font-size: 25px;
+}
+
+.section-blue {
+  background-color: #3c8eff;
+  color: white;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.section-blue a {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: white;
+  color: #3c8eff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+footer a {
+  color: #444;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 850px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero div{
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 750px) {
+  .card-content {
+    width: 100%;
+  }
+
+  .card-image {
+    width: 100%;
+  }
+
+  .card{
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+.logo-footer span:first-child { color: #ff4ec9; }
+.logo-footer span:last-child { color: #4cd964; }
+
+/* Menu Mobile */
+/* Estilo padrão */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #fff;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+}
+
+.register {
+  color: #3366ff;
+  font-weight: bold;
+}
+
+/* Botão do menu só visível no mobile */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 30px;
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  nav.show {
+    display: flex;
+  }
+}

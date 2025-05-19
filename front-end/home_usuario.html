@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taskflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <span>T</span><span>a</span><span>skflow</span>
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+      <a href="login.html">Entrar</a>
+      <a href="cadastrarUsuario.html" class="register">Cadastre-se</a>
+    </nav>
+  </header>
+
+  Logado com sucesso!
+
+  <footer>
+    <div class="logo-footer">
+      <span>Task</span><span>flow</span> — o site completo para gerenciamento de tarefas
+    </div>
+    <div>
+      <a href="politicaUso.html">Termos</a> | <a href="contato.html">Suporte</a>
+    </div>
+  </footer>
+
+  <!-- <script src="js/login.js"></script>
+  <script>window.onload = sessaoIniGeral()</script> -->
+  <script>window.onload = async function sessaoIniGeral(){
+    const resposta = await fetch('http://localhost:8080/usuarios/verificaSessao/true', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    });
+
+    const dados = await resposta.json();
+
+    if(!dados.result){
+        // window.location.href = "login.html";
+        alert("Você não está logado!");
+    }
+        
+}</script>
+</body>
+</html>
