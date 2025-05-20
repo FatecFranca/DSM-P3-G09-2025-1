@@ -32,22 +32,7 @@
     </div>
   </footer>
 
-  <!-- <script src="js/login.js"></script>
-  <script>window.onload = sessaoIniGeral()</script> -->
-  <script>window.onload = async function sessaoIniGeral(){
-    const resposta = await fetch('http://localhost:8080/usuarios/verificaSessao/true', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
-    });
-
-    const dados = await resposta.json();
-
-    if(!dados.result){
-        // window.location.href = "login.html";
-        return alert(dados.result);
-    }
-        
-}</script>
+  <script src="js/login.js"></script>
+  <script>window.onload = sessaoIniGeral()</script>
 </body>
 </html>

@@ -28,6 +28,7 @@ app.use(cors({
     allowedHeaders: 'Content-Type,Authorization',
 }));
 
+
 // Configurando a sessão para o usuário ao logar
 app.use(session({
     secret: 'sua_chave_secreta_segura',
@@ -36,7 +37,6 @@ app.use(session({
     cookie: {
         secure: false, // Defina como true se estiver usando HTTPS
         httpOnly: true, // Recomendar para segurança
-        sameSite: 'lax', // Defina como 'strict' ou 'lax' conforme necessário
         maxAge: 24 * 60 * 60 * 1000 // Exemplo: 24 horas
     }
 }));
@@ -46,6 +46,10 @@ app.use('/users', usersRouter);
 
 // Configurando servidor para que seja feita a verifcação de projetos vencidos e/ou pendentes de todos os usuários a meia-noite ou quando o servidor for iniciado
 import { atualizaStatus } from './controllers/utils.js';
+
+// Resolve o caminho correto do JSON
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
 // Na inicialização do servidor
@@ -69,11 +73,6 @@ cron.schedule('0 0 * * *', async () => {
         console.error('Erro ao atualizar status automático:', err);
     }
 });
-
-
-// Configurando pastas para a adição de anexos e imagens de usuário e projetos
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Tornando todas as pastas de arquivos públicas para o código
 app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoAtividades')));
@@ -109,15 +108,22 @@ app.use('/notificacoes', notificacoesRouter);
 import fs from 'fs/promises';
 import admin from 'firebase-admin';
 
-// Resolve o caminho correto do JSON
-const __filename2 = fileURLToPath(import.meta.url);
-const __dirname2 = dirname(__filename2);
-const serviceAccountPath = path.join(__dirname2, '../taskflow-e3792-firebase-adminsdk-fbsvc-aa90328693.json');
-
+const serviceAccountPath = path.join(__dirname, '../taskflow-e3792-firebase-adminsdk-fbsvc-aa90328693.json');
 const serviceAccountJSON = JSON.parse(await fs.readFile(serviceAccountPath, 'utf8'));
+
+// Serve arquivos estáticos do frontend
+app.use(express.static(path.join(__dirname, '../public')));
+
+app.get("/test-session", (req, res) => {
+  res.json(req.session);
+});
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccountJSON)
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 export default app;
