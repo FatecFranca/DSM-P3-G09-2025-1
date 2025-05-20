@@ -110,8 +110,7 @@ async function sessaoIniGeral(){
     const dados = await resposta.json();
 
     if(!dados.result){
-        // window.location.href = "login.html";
-        return alert(dados.result);
+        window.location.href = "login.html";
     }
         
 }

@@ -112,7 +112,7 @@ const serviceAccountPath = path.join(__dirname, '../taskflow-e3792-firebase-admi
 const serviceAccountJSON = JSON.parse(await fs.readFile(serviceAccountPath, 'utf8'));
 
 // Serve arquivos estáticos do frontend
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../front-end')));
 
 app.get("/test-session", (req, res) => {
   res.json(req.session);
@@ -123,7 +123,7 @@ admin.initializeApp({
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../front-end/index.html'));
 });
 
 export default app;
