@@ -1,0 +1,158 @@
+body {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    background-color: #e4f0f2;
+    color: #000000;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 10px 0;
+}
+
+.header-content {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 1080px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.logo {
+    height: 100px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn.dark {
+    background-color: #162144;
+    color: white;
+}
+
+.btn.status {
+    background-color: #376cfb;
+    color: white;
+}
+
+.btn.download {
+    background-color: transparent;
+    font-size: 18px;
+}
+
+.btn.icon {
+    background-color: transparent;
+    font-size: 18px;
+}
+
+.sidebar {
+    background-color: #f9f9f9;
+    padding: 15px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.projects {
+    padding: 15px;
+}
+
+.section-title {
+    font-family: 'Foda Display', cursive;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.project-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    background-color: #4294ff;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.project-card {
+    background-color: #ffffff;
+    padding: 10px;
+    margin: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 320px;
+    flex: 1 1 calc(33.33% - 16px);
+}
+
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pendente {
+    color: #f39c12;
+}
+
+.concluido {
+    color: #27ae60;
+}
+
+.atrasado {
+    color: #e74c3c;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    margin-top: 30px;
+}
+
+@media(min-width: 768px) {
+    .container {
+        flex-direction: row;
+    }
+    .sidebar {
+        width: 200px;
+        min-height: 100vh;
+    }
+    .projects {
+        flex: 1;
+    }
+}
