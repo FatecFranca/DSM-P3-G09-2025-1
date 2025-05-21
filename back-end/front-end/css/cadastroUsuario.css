@@ -1,0 +1,162 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+}
+
+.left {
+    width: 50%;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.right {
+    width: 50%;
+    background-color: #407BFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+
+.logo span {
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    gap: 1rem;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 2px;
+    font-family: inherit;
+}
+
+button {
+    width: 100%;
+    padding: 9px;
+    background-color: #0d1b4c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #001164;
+}
+
+.terms {
+    font-size: 0.75rem;
+    color: #000000;
+    margin-top: 0.5rem;
+    width: 90%;
+}
+
+.terms a {
+    color: #3366ff;
+    text-decoration: underline;
+}
+
+.login-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.login-link a {
+    text-decoration: none;
+    color: #3366ff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.illustration {
+    max-width: 70%;
+}
+
+@media (max-width: 750px) {
+    body {
+    flex-direction: column;
+    }
+
+    .left, .right {
+    width: 100%;
+    }
+
+    .right {
+    padding: 2rem;
+    }
+}
+
+.google-button {
+    width: 100%;
+    padding: 9px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #000000;
+}
+
+.google-button:hover {
+    background-color: #f0f0f0;
+}
+
+.google-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.divider {
+    margin: 2px;
+    font-weight: bold;
+    text-align: center;
+    color: #070202;
+    letter-spacing: 1px;
+}
+
+#msgAviso{
+    color: #960505;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}

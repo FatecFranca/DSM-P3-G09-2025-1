@@ -38,19 +38,17 @@ function logarGoogle(){
 }
 
 async function logarEmail(){
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
     const msgAviso = document.getElementById("msgAviso");
     msgAviso.innerHTML = "";
 
-    if (!email) {
+    if (email === "") {
         msgAviso.innerHTML = "Preencha o campo de E-mail!";
-        msgAviso.style.color = "red";
         document.getElementById("email").focus();
         return;
-    }else if (!senha) {
+    }else if (email === "") {
         msgAviso.innerHTML = "Preencha o campo de Senha!";
-        msgAviso.style.color = "red";
         document.getElementById("senha").focus();
         return;
     }
@@ -71,10 +69,8 @@ async function logarEmail(){
             // msgAviso.style.color = "green";
         }else if(dados.mensagem){
             msgAviso.innerHTML = dados.mensagem;
-            msgAviso.style.color = "red";
         }else{
             msgAviso.innerHTML = "Erro ao realizar login!";
-            msgAviso.style.color = "red";
         }
     }catch{
         console.error('Erro ao buscar placa:', erro);
