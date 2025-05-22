@@ -1,8 +1,6 @@
-
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background-color: #e4f0f2;
     color: #000000;
 }
 
@@ -12,7 +10,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #fff;
+  background-color: #f9f9f9;
 }
 
 .logo {
@@ -68,6 +66,8 @@ nav a {
 .btn.download {
     background-color: transparent;
     font-size: 18px;
+    margin: 0;
+    padding: 0;
 }
 
 .btn.icon {
@@ -95,25 +95,31 @@ nav a {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 10px;
 }
 
 @media (min-width: 768px) {
     .container {
         flex-direction: row;
-        gap: 16px;
+        gap: 10px; 
     }
 }
 
-.sidebar .btn {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+.sidebar {
+    background-color: #f9f9f9; 
+    padding: 20px;
+    box-sizing: border-box;
+    width: 300px;
+    border-radius: 16px;
 }
-
 
 .projects {
-    padding: 15px;
+    padding: 20px;
+    background-color: #e4f0f2; 
+    border-radius: 16px;
+    flex-grow: 1;
 }
+
 
 .section-title {
     font-family: 'Space Grotesk', sans-serif;
@@ -234,5 +240,6 @@ footer a {
 }
 
 
-.logo-footer span:first-child { color: #ff4ec9; }
-.logo-footer span:last-child { color: #4cd964; }
+.logofooter{
+    height: 11px;
+}
