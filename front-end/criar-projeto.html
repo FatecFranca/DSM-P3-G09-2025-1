@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Criar Projeto</title>
+  <link rel="stylesheet" href="css/criar-projeto.css" />
+</head>
+<body>
+  <div class="container">
+    <form id="formProjeto" class="formulario">
+      <h1>Criar Projeto</h1>
+      <div class="alerta" id="alerta-erro" style="display: none;"></div>
+
+      <label for="titulo">Título</label>
+      <input type="text" id="titulo" name="titulo" required />
+
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" name="descricao" required></textarea>
+
+      <label for="arquivo">Arquivos</label>
+      <input type="file" id="arquivo" name="arquivo" />
+
+      <label for="dataEntrega">Determine a data de entrega</label>
+      <input type="date" id="dataEntrega" name="dataEntrega" required />
+
+      <button type="submit" class="criar-btn">CRIAR</button>
+      <a href="index.html" class="voltar-link">Voltar</a>
+    </form>
+    <footer class="footer">
+      <img src="img/logos/logocolorido.png" alt="Taskflow Logo" class="logo">
+    </footer>
+  </div>
+
+  <script src="js/criar-projeto.js"></script>
+</body>
+</html>
+
