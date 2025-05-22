@@ -50,14 +50,14 @@ nav a {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
+    width: 128px;
 }
 
 .btn.dark {
     background-color: #162144;
     color: white;
     text-decoration: none;
-    width: 122px;
+    width: 135px;
 }
 
 .btn.status {
