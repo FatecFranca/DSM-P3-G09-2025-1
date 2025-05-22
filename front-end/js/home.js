@@ -4,62 +4,34 @@ document.getElementById("sairBtn").addEventListener("click", function () {
     }
 });
 
-document.getElementById("novoProjetoBtn1").addEventListener("click", function () {
-    window.location.href = "novo-projeto.html";
-});
-
-document.getElementById("novoProjetoBtn2").addEventListener("click", function () {
-    window.location.href = "novo-projeto.html";
-});
-
-document.getElementById("notificacoesBtn").addEventListener("click", function () {
-    window.location.href = "notificacoes.html";
-});
-
-
-// botão filtro
 document.getElementById("statusBtn").addEventListener("click", function () {
-    const status = prompt("Filtrar por status: pendente, atrasado ou concluído").toLowerCase();
-    const cards = document.querySelectorAll(".projeto-card");
-    cards.forEach(card => {
-        const cardStatus = card.getAttribute("data-status");
-        if (!status || cardStatus === status) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+    document.getElementById("statusMenu").classList.toggle("hidden");
+});
+
+document.querySelectorAll("#statusMenu li").forEach(function (item) {
+    item.addEventListener("click", function () {
+        const selectedStatus = item.getAttribute("data-status");
+        document.getElementById("statusMenu").classList.add("hidden");
+
+        const cards = document.querySelectorAll(".project-card");
+        cards.forEach(function (card) {
+            const statusSpan = card.querySelector("span");
+            if (!statusSpan) return;
+
+            const status = statusSpan.classList.contains("pendente") ? "pendente" :
+                           statusSpan.classList.contains("concluido") ? "concluido" :
+                           statusSpan.classList.contains("atrasado") ? "atrasado" : "";
+
+
+            if (selectedStatus === "todos" || status === selectedStatus) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
     });
 });
 
-// barra de pesquisa
-document.querySelector(".search-input").addEventListener("input", function (e) {
-    const termo = e.target.value.toLowerCase();
-    const cards = document.querySelectorAll(".projeto-card");
-    cards.forEach(card => {
-        const titulo = card.querySelector(".titulo-projeto");
-        if (titulo && titulo.textContent.toLowerCase().includes(termo)) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
-});
 
 
-window.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".projetos-container"); 
-  const projetos = JSON.parse(localStorage.getItem("projetos")) || [];
 
-  projetos.forEach(proj => {
-    const card = document.createElement("div");
-    card.className = "projeto-card";
-    card.setAttribute("data-status", proj.status);
-    card.innerHTML = `
-      <h3 class="titulo-projeto">${proj.titulo}</h3>
-      <p>${proj.descricao}</p>
-      <p>Entrega: ${proj.dataEntrega}</p>
-      <p>Status: ${proj.status}</p>
-    `;
-    container.appendChild(card);
-  });
-});
