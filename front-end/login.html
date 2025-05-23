@@ -10,7 +10,7 @@
 <body>
     <header>
         <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-        <span>T</span><span>a</span><span>skflow</span>
+          <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
         </div>
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
         <nav>
@@ -28,12 +28,9 @@
       </button>
 
       <div class="divider">OU</div>
+      <input type="email" id="email" placeholder="E-mail" maxlength="250" required>
 
-      <label for="email">Insira seu e-mail</label>
-      <input type="email" id="email" placeholder="exemplo@email.com" maxlength="250" >
-
-      <label for="senha">Insira sua senha</label>
-      <input type="password" id="senha" placeholder="********" maxlength="16" >
+      <input type="password" id="senha" placeholder="Senha" maxlength="16" required>
       <p id="msgAviso"></p>
       <button type="button" class="login-btn" onclick="logarEmail()">Entrar</button>
 

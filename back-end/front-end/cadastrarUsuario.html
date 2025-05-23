@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastre-se - Taskflow</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/index.css" />
   <link rel="stylesheet" href="css/cadastroUsuario.css" />
 </head>
 <body>
@@ -19,12 +18,23 @@
       </button>
 
       <div class="divider">OU</div>
-      <input type="text" placeholder="Nome completo" id="nome" required />
-      <input type="email" placeholder="E-mail" id="email" required />
-      <input type="password" placeholder="Senha" id="senha" required />
-      <input type="password" placeholder="Confirme a senha" id="conSenha" required />
+
+      <!-- Preview opcional da imagem -->
+      <div style="width: 100%; height: auto; justify-items: center;">
+        <img id="imagemPreview" alt="Pré-visualização da imagem" src="img/icones/fotodeperfil.png">
+      </div>
+
+      <!-- Botão estilizado -->
+      <label for="fotoUsuario" class="upload-btn" title="Importar Foto"><img alt="Selecionar Foto Usuário" src="img/icones/uploadfoto.png"></label>
+      <input type="file" id="fotoUsuario" name="foto" accept="image/*" style="display: none;">
+      
+
+      <input type="text" placeholder="Nome completo" id="nome"  />
+      <input type="email" placeholder="E-mail" id="email"  />
+      <input type="password" placeholder="Senha" id="senha"  />
+      <input type="password" placeholder="Confirme a senha" id="conSenha"  />
       <p id="msgAviso"></p>
-      <button onclick="cadastrarEmail()">Cadastrar</button>
+      <button type="button" onclick="cadastrarEmail()">Cadastrar</button>
     </form>
     <div class="terms">
       Ao continuar, você concorda com os <a href="termosUso.html">termos de uso</a> e a <a href="politicaPrivacidade.html">política de privacidade</a>.
@@ -37,5 +47,8 @@
   <div class="right">
     <img class="illustration" src="img/paisagens/engrenagem-arquivos.png" alt="Ilustração" />
   </div>
+
+  <script  src="js/cadastrarUsu.js"></script>
+
 </body>
 </html>

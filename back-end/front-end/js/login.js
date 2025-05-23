@@ -29,7 +29,7 @@ function logarGoogle(){
             return response.json();
         })
         .then(data => {
-            window.location.href = "home_usuario.html";
+            window.location.href = "home.html";
         })
         .catch(err => {
             alert("Erro ao validar login: " + err.message);
@@ -47,7 +47,7 @@ async function logarEmail(){
         msgAviso.innerHTML = "Preencha o campo de E-mail!";
         document.getElementById("email").focus();
         return;
-    }else if (email === "") {
+    }else if (senha === "") {
         msgAviso.innerHTML = "Preencha o campo de Senha!";
         document.getElementById("senha").focus();
         return;
@@ -64,18 +64,15 @@ async function logarEmail(){
         const dados = await resposta.json();
         
         if(dados.result){
-            window.location.href = "home_usuario.html";
-            // msgAviso.innerHTML = "Login realizado com sucesso!";
-            // msgAviso.style.color = "green";
+            window.location.href = "home.html";
         }else if(dados.mensagem){
             msgAviso.innerHTML = dados.mensagem;
         }else{
             msgAviso.innerHTML = "Erro ao realizar login!";
         }
     }catch{
-        console.error('Erro ao buscar placa:', erro);
-        msgAviso.innerHTML = "Erro na consulta dos dados!";
-        return "Erro: " + erro;
+        msgAviso.innerHTML = "Erro na consulta dos Banco de Dados!";
+        return;
     }
     
     
@@ -91,7 +88,7 @@ async function sessaoIni(){
     const dados = await resposta.json();
 
     if(dados.result){
-        window.location.href = "home_usuario.html";
+        window.location.href = "home.html";
     }
         
 }
@@ -106,7 +103,9 @@ async function sessaoIniGeral(){
     const dados = await resposta.json();
 
     if(!dados.result){
-        window.location.href = "login.html";
+        return window.location.href = "login.html";
+    }else{
+        return dados;
     }
         
 }

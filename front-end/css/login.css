@@ -28,7 +28,7 @@ body {
 
 .google-button {
   width: 100%;
-  padding: 10px;
+  padding: 9px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-family: inherit;
@@ -43,6 +43,10 @@ body {
 .google-button img {
   width: 20px;
   height: 20px;
+}
+
+.google-button:hover {
+  background-color: #f0f0f0;
 }
 
 .divider {
@@ -70,13 +74,17 @@ input {
 
 .login-btn {
   width: 100%;
-  padding: 12px;
+  padding: 9px;
   background-color: #0d1b4c;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #001164;
 }
 
 .register-link {
@@ -88,6 +96,7 @@ input {
   text-decoration: none;
   color: #3366ff;
   font-weight: bold;
+  text-decoration: underline;
 }
 
 footer {
@@ -107,4 +116,22 @@ footer {
     .login-box {
         width: 90%;
     }
+}
+
+#msgAviso{
+    color: #960505;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.logo-header {
+  max-height: 20px;
+  height: 20px;
+  width: auto;
+}
+
+.logo-footer{
+  max-height: 10px;
+  width: auto;
 }

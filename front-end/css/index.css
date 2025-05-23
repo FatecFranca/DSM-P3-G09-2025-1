@@ -248,3 +248,14 @@ nav a {
     display: flex;
   }
 }
+
+.logo-header {
+  max-height: 20px;
+  height: 20px;
+  width: auto;
+}
+
+.logo-footer{
+  max-height: 10px;
+  width: auto;
+}

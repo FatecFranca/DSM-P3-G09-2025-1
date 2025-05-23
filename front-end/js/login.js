@@ -29,7 +29,7 @@ function logarGoogle(){
             return response.json();
         })
         .then(data => {
-            window.location.href = "home_usuario.html";
+            window.location.href = "home.html";
         })
         .catch(err => {
             alert("Erro ao validar login: " + err.message);
@@ -38,19 +38,17 @@ function logarGoogle(){
 }
 
 async function logarEmail(){
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
     const msgAviso = document.getElementById("msgAviso");
     msgAviso.innerHTML = "";
 
-    if (!email) {
+    if (email === "") {
         msgAviso.innerHTML = "Preencha o campo de E-mail!";
-        msgAviso.style.color = "red";
         document.getElementById("email").focus();
         return;
-    }else if (!senha) {
+    }else if (senha === "") {
         msgAviso.innerHTML = "Preencha o campo de Senha!";
-        msgAviso.style.color = "red";
         document.getElementById("senha").focus();
         return;
     }
@@ -66,20 +64,15 @@ async function logarEmail(){
         const dados = await resposta.json();
         
         if(dados.result){
-            window.location.href = "home_usuario.html";
-            // msgAviso.innerHTML = "Login realizado com sucesso!";
-            // msgAviso.style.color = "green";
+            window.location.href = "home.html";
         }else if(dados.mensagem){
             msgAviso.innerHTML = dados.mensagem;
-            msgAviso.style.color = "red";
         }else{
             msgAviso.innerHTML = "Erro ao realizar login!";
-            msgAviso.style.color = "red";
         }
     }catch{
-        console.error('Erro ao buscar placa:', erro);
-        msgAviso.innerHTML = "Erro na consulta dos dados!";
-        return "Erro: " + erro;
+        msgAviso.innerHTML = "Erro na consulta dos Banco de Dados!";
+        return;
     }
     
     
@@ -95,7 +88,7 @@ async function sessaoIni(){
     const dados = await resposta.json();
 
     if(dados.result){
-        window.location.href = "home_usuario.html";
+        window.location.href = "home.html";
     }
         
 }
@@ -110,7 +103,9 @@ async function sessaoIniGeral(){
     const dados = await resposta.json();
 
     if(!dados.result){
-        window.location.href = "login.html";
+        return window.location.href = "login.html";
+    }else{
+        return dados;
     }
         
 }
