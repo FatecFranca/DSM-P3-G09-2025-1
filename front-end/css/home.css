@@ -48,7 +48,8 @@ nav a {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 128px;
+    margin: 5px;
+    width: 150px;
 }
 
 .btn.dark {
@@ -79,7 +80,7 @@ nav a {
     width: auto;
     height: 35px;
     vertical-align: middle;
-    margin-right: 8px;
+    margin-right: ;
 }
 
 
