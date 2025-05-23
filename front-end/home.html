@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taskflow - Meus Projetos</title>
+    <link rel="icon" href="img/icones/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/home.css">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 </head>
-<body>
 
-    <header class="header">
-        <div class="header-top">
+<body>
+    <header>
+        <div class="logo" onclick="window.location.href='home.html'" style="cursor: pointer;">
             <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="logo">
-            <input type="text" placeholder="Pesquisar..." class="search-input">
-            <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
         </div>
-        <div class="header-bottom">
-            <button class="btn status" id="statusBtn">STATUS ▾</button>
-            <button class="btn icon" id="notificacoesBtn">
-                <img src="img/icones/sino-de-notificacao.png" alt="Notificações" class="icon-img">
-            </button>
-        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav>
+            <a href="sobre.html">Sobre nós</a>
+            <a href="contato.html">Fale conosco</a>
+        </nav>
     </header>
 
     <main class="container">
         <aside class="sidebar">
+<<<<<<< HEAD
             <button class="btn perfil" id="perfilBtn" onclick="window.location.href='alterarDadosUsuario.html'">
                 <img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img"> Meu Perfil
+=======
+            <button class="btn perfil" id="perfilBtn">
+                <img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img"> Minha Conta
+>>>>>>> 5ef96c396a1271a641ebce4e177fa58c8c1bee1a
             </button>
             <button class="btn sair" id="sairBtn">
                 <img src="img/icones/sair.png" alt="Sair" class="icon-img"> Sair
@@ -39,8 +43,33 @@
         <section class="projects">
             <h2 class="section-title">Meus projetos</h2>
 
+            <div class="project-controls">
+                <div class="status-filter">
+                    <button class="btn status" id="statusBtn">STATUS ▾</button>
+                    <ul id="statusMenu" class="dropdown hidden">
+                        <li data-status="todos">Todos</li>
+                        <li data-status="pendente">Pendente</li>
+                        <li data-status="concluido">Concluído</li>
+                        <li data-status="atrasado">Atrasado</li>
+                    </ul>
+                </div>
+                <button class="btn icon" onclick="window.location.href='notificacoes.html'">🔔</button>
+            </div>
+
             <div class="project-group">
                 <h3 class="category-title">› GESTOR</h3>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h4>PROJETO A</h4>
+                        <span class="actions">✎ 👤 ➕</span>
+                    </div>
+                    <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
+                    <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
+                    <p class="descricao">Descrição breve do projeto.</p> 
+                    <button class="btn download">⬇</button>
+                </div>
+
                 <div class="project-card">
                     <div class="project-header">
                         <h4>PROJETO A</h4>
@@ -51,16 +80,7 @@
                     <p class="descricao">Descrição breve do projeto.</p>
                     <button class="btn download">⬇</button>
                 </div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <h4>PROJETO A</h4>
-                        <span class="actions">✎ 👤 ➕</span>
-                    </div>
-                    <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                    <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
-                </div>
+
                 <div class="project-card">
                     <div class="project-header">
                         <h4>PROJETO A</h4>
@@ -75,6 +95,7 @@
 
             <div class="project-group">
                 <h3 class="category-title">› ADMINISTRADOR</h3>
+
                 <div class="project-card">
                     <h4>PROJETO B</h4>
                     <p><strong>Data máxima de entrega:</strong> 20/04/2025</p>
@@ -86,6 +107,7 @@
 
             <div class="project-group">
                 <h3 class="category-title">› MEMBRO</h3>
+
                 <div class="project-card">
                     <h4>PROJETO C</h4>
                     <p><strong>Data máxima de entrega:</strong> 15/05/2025</p>
@@ -93,6 +115,7 @@
                     <p class="descricao">Descrição breve do projeto.</p>
                     <button class="btn download">⬇</button>
                 </div>
+
                 <div class="project-card">
                     <h4>PROJETO C</h4>
                     <p><strong>Data máxima de entrega:</strong> 15/05/2025</p>
@@ -104,26 +127,23 @@
         </section>
     </main>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="footer-logo">
-                <p>O site completo para gerenciamento de tarefas.</p>
-            </div>
-            <div class="footer-links">
-                <a href="#">Sobre Nós</a>
-                <a href="#">Fale Conosco</a>
-                <a href="#">Termos de Uso</a>
-                <a href="#">Política de Privacidade</a>
-            </div>
+    <script src="js/home.js"></script>
+
+    <footer>
+        <div class="logo-footer">
+            <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="logofooter"> — o site completo para gerenciamento de tarefas
         </div>
-        <div class="footer-bottom">
-            <p>© 2025 Taskflow</p>
+        <div>
+            <a href="politicaUso.html">Termos</a> | <a href="contato.html">Suporte</a>
         </div>
     </footer>
 
+<<<<<<< HEAD
     <script src="js/home.js"></script>
     <script src="js/login.js"></script>
     <script>window.onload = sessaoIniGeral()</script>
+=======
+>>>>>>> 5ef96c396a1271a641ebce4e177fa58c8c1bee1a
 </body>
+
 </html>
