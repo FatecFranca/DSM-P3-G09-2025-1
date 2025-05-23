@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alterar Dados - Taskflow</title>
+  <link rel="stylesheet" href="css/index.css"/>
+  <!-- <link rel="stylesheet" href="css/cadastroUsuario.css"/> -->
+  <link rel="stylesheet" href="css/alterarDadosUsuario.css"/>
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+          <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav>
+        <a href="home.html">Home</a>
+        <a href="sobre.html">Sobre nós</a>
+        <a href="contato.html">Fale conosco</a>
+        <a onclick="encerrarSessao()">Sair</a>
+        </nav>
+    </header>
+  <div class="container">
+    <div class="form-box">
+      <a href="home.html" title="Voltar"><img src="img/icones/voltar.png" alt="Voltar" class="btn-voltar"></a>
+      <br><br>
+
+      <div id="mensagemStatus" class="msg-status">
+        <em id="msgAviso">Altere os Dados do Cadastro ...</em>
+      </div>
+
+      <form class="form-alterar">
+
+        <div class="left">
+          <div class="form-group">
+            <input type="text" id="nome" name="nome" placeholder="Nome" required/>
+          </div>
+
+          <div class="form-group">
+            <input type="email" id="email" name="email" placeholder="E-mail" required/>
+          </div>
+
+          <div class="form-group">
+            <input type="password" id="senhaAtual" name="senhaAtual" placeholder="Senha Atual" required/>
+          </div>
+
+          <div class="form-group">
+            <input type="password" id="novaSenha" name="novaSenha" placeholder="Nova Senha (Opcional)"/>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="foto-container">
+            <img alt="Foto do usuário" id="imagemPreview" />
+          </div>
+          <br>
+          <div style="text-align: center; align-items: center; display: flex; justify-content: center;">
+            <label for="fotoUsuario" class="upload-btn" title="Importar Foto"><img alt="Selecionar Foto Usuário" src="img/icones/uploadfoto.png"></label>
+            <input type="file" id="fotoUsuario" name="foto" accept="image/*" style="display: none;">
+          </div>
+          <br>
+          <div style="text-align: center;">
+            <button type="button" class="btn-salvar" onclick="alterarDados()">Salvar</button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn-cancelar">Cancelar</button>
+          </div>
+
+        </div>
+        
+      </form>
+
+      <div class="logo-taskflow">
+        <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-footer">
+      </div>
+    </div>
+  </div>
+
+  <script src="js/cadastrarUsu.js"></script>
+  <script src="js/alterarDadosUsuario.js"></script>
+  <script>window.onload = buscarDados()</script>
+</body>
+</html>

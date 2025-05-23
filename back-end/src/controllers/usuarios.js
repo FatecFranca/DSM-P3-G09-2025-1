@@ -58,7 +58,7 @@ controller.create = async function(req, res) {
         });
 
         if(emailCadastrado) {
-            return res.status(400).json({ mensagem: "Email já está em uso!" });
+            return res.status(400).json({ mensagem: "E-mail já está em uso!" });
         }
 
         // Criptografando a senha antes de cadastrar
@@ -81,10 +81,10 @@ controller.create = async function(req, res) {
 
         // Criando a sessão no navegador
         req.session.usuario = {
-            id_usuario: usuarioCadastrado.id,
-            nome_usuario: usuarioCadastrado.nome,
-            email_usuario: usuarioCadastrado.email,
-            foto_usuario: usuarioCadastrado.foto
+            id: usuarioCadastrado.id,
+            nome: usuarioCadastrado.nome,
+            email: usuarioCadastrado.email,
+            foto: usuarioCadastrado.foto
         };
 
         // Retornando resultado para redirecionamento no front
@@ -302,7 +302,7 @@ controller.update = async function(req, res) {
             });
 
             if(emailCadastrado) {
-                return res.status(400).json({ mensagem: "Email já está em uso!" });
+                return res.status(400).json({ mensagem: "E-mail já está em uso!" });
             }
         }
 

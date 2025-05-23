@@ -124,3 +124,14 @@ footer {
     margin-top: 10px;
     text-align: center;
 }
+
+.logo-header {
+  max-height: 20px;
+  height: 20px;
+  width: auto;
+}
+
+.logo-footer{
+  max-height: 10px;
+  width: auto;
+}
