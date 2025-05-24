@@ -12,13 +12,15 @@ import { validarSessao } from './utils.js';
 
 const controller = {};
 
-// Validada
 // Função para validar senha do usuário
 async function validaSenha(senhaAtual, idUsuario){
+
+    // Obtendo os dados do usuário
     const verificaUsuario = await prisma.usuario.findFirst({
         where: { id: idUsuario }
     }); 
     
+    // Comprando a senha informada com a senha do banco
     let verSenha = await bcrypt.compare(senhaAtual, verificaUsuario.senha);
     if(verSenha){
         return true;
@@ -27,11 +29,11 @@ async function validaSenha(senhaAtual, idUsuario){
     }
 }
 
-// Testar com o front
 // Função para excluir uma imagem da pasta
 async function deletarImagem(nomeArquivo) {
+
     // Caminho absoluto do arquivo
-    const caminhoImagem = path.join(process.cwd(), '..', 'uploads', 'imgUsuarios', nomeArquivo);
+    const caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'imgUsuarios', nomeArquivo);
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoImagem)) {
@@ -47,7 +49,6 @@ async function deletarImagem(nomeArquivo) {
     }
 }
 
-// Validada (04/05) - Validar Imagem com Front
 // Criando um novo usuário
 controller.create = async function(req, res) {
     try {
@@ -57,6 +58,7 @@ controller.create = async function(req, res) {
             where: { email: req.body.email }
         });
 
+        // Vefificando se o email já está cadastrado
         if(emailCadastrado) {
             return res.status(400).json({ mensagem: "E-mail já está em uso!" });
         }
@@ -71,8 +73,10 @@ controller.create = async function(req, res) {
         // Ajustando a url da imagem para a inserção no BD
         req.body.foto = urlImagem;
 
+        // Deletando os dados que não serão inseridos no banco
         delete req.body.fotoUsuario;
 
+        // Inserindo os dados do usuário no banco
         await prisma.usuario.create({ data: req.body });
 
         // Recuperando os dados do recem criado usuário para iniciar a sessão no vanegador
@@ -89,15 +93,10 @@ controller.create = async function(req, res) {
         };
 
         // Retornando resultado para redirecionamento no front
-        // console.log(req.session.usuario);
         return res.status(201).json({result: true});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
         console.error(error);
-
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
         return res.status(500).send(error);
     }
 }
@@ -128,14 +127,12 @@ controller.retrieveAll = async function(req, res) {
     }
 }
 
-// Validada (04/05)
-// Obtendo um usuário específico pelo id
+// Obtendo um usuário específico pelo ID
 controller.retrieveOne = async function(req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
-
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
@@ -145,6 +142,7 @@ controller.retrieveOne = async function(req, res) {
             where: {id: req.params.id}
         });
 
+        // Verificando se o usuário existe
         if (!result){
             return res.status(400).json({mensagem: "Nenhum Usuário Encontrado!"});
         }
@@ -153,18 +151,15 @@ controller.retrieveOne = async function(req, res) {
         res.send(result);
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
         console.error(error);
-
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
         res.status(500).send(error);
     }
 }
 
-// Validada (04/05)
 // Encerrar sessão
 controller.encerrarSessao = async function(req, res) {
+
+    // Destruindo a sessão
     req.session.destroy(err => {
         if (err) {
             return res.status(400).json({ result: false }); 
@@ -176,6 +171,8 @@ controller.encerrarSessao = async function(req, res) {
 
 // Verifica sessão
 controller.verificaSessao = async function(req, res) {
+
+    // Verificando se a sessão foi iniciada para retonar o status para o front
     if (req.session.usuario){
         return res.status(200).json({ result: true, dados: req.session.usuario }); 
     }else{
@@ -183,31 +180,27 @@ controller.verificaSessao = async function(req, res) {
     }
 }
 
-// Validada (04/05)
-// Obtendo um usuário específico pelo email (Login)
+// Logando com email e senha
 controller.loginEmail = async function(req, res) {
     try {
+
         // Buscando os dados de um usuário específico
-        const verUsuario = await prisma.usuario.findFirst({
+        const usuarioCadastrado = await prisma.usuario.findFirst({
             where: {email: req.params.email}
         });
     
-        if (!verUsuario){
+        // Verificando se o usuário existe
+        if (!usuarioCadastrado){
             return res.status(400).json({mensagem: "Usuário não Encontrado!"});
         }
 
         // Verificando se a senha informada é a senha atual do usuario
-        const valSenha = await validaSenha(req.body.senha, verUsuario.id);
+        const valSenha = await validaSenha(req.body.senha, usuarioCadastrado.id);
         if (!valSenha){
             return res.status(400).json({ mensagem: "Senha Inválida!"});
         }
 
-        // Recuperando os dados alterados do usuário para iniciar a sessão no vanegador
-        const usuarioCadastrado = await prisma.usuario.findFirst({
-            where: { email: req.params.email }
-        });
-
-        // Alterando os dados da sessão
+        // Criando a sessão no navegador
         req.session.usuario = {
             id: usuarioCadastrado.id,
             nome: usuarioCadastrado.nome,
@@ -215,6 +208,7 @@ controller.loginEmail = async function(req, res) {
             foto: usuarioCadastrado.foto
         };
 
+        // Verificando se a sessão foi iniciada corretamente
         if (!req.session.usuario){
             return res.status(400).json({mensagem: "Não iniciou a sessão!"});
         }
@@ -223,16 +217,12 @@ controller.loginEmail = async function(req, res) {
         return res.status(200).json({result: true});
     }
     catch(error) {
-        // Deu errado: exibe o erro no terminal
         console.error(error);
-
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
         return res.status(500).send(error);
     }
 }
 
-// Login google
+// Logando com Google
 controller.loginGoogle = async (req, res) => {
     try {
         const { token } = req.body;
@@ -269,39 +259,34 @@ controller.loginGoogle = async (req, res) => {
     }
 };
 
-// Validada (04/05) - Validar Imagem com Front
 // Atualizando os dados do usuário
 controller.update = async function(req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
-
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
-
 
         // Verificando se o usuário a ser alterado é o que esta com a sessão ativa
         if (req.params.id !== req.session.usuario.id){
             return res.status(400).json({ mensagem: "Usuário não pode alterar dados de outro!" });
         }
 
-        // Verificando se o email a ser atualizado é o mesmo que o email atual
+        // Obtendo os dados do usuário
         const verUsuario = await prisma.usuario.findFirst({
             where: { id: req.params.id }
         });
-
         if (!verUsuario){
             return res.status(400).json({ mensagem: "Usuário não encontrado!" });
         }
 
+        // Verificando se o email informado já não está em uso
         if(verUsuario.email !== req.body.email){
-            // Verificando se o email informado já não está em uso
             const emailCadastrado = await prisma.usuario.findFirst({
                 where: { email: req.body.email }
             });
-
             if(emailCadastrado) {
                 return res.status(400).json({ mensagem: "E-mail já está em uso!" });
             }
@@ -312,11 +297,9 @@ controller.update = async function(req, res) {
         if (!valSenha){
             return res.status(400).json({ mensagem: "Senha Inválida!"});
         }
-        delete req.body.senha_atual;
 
         // Criptografando a senha antes de ser alterados os dados
         const senhaCriptografada = await bcrypt.hash(req.body.senha, 10);
-
         req.body.senha = senhaCriptografada;
 
         // Monta a URL da imagem
@@ -326,10 +309,16 @@ controller.update = async function(req, res) {
         req.body.foto = urlImagem;
         console.log("Foto:" + req.body.foto);
 
-        // Deletando a foto antiga do usuário
+        // Deletando a foto antiga do usuário caso tenha sido alterada
         if (verUsuario.foto){
-            deletarImagem(verUsuario.foto);
+            if (verUsuario.foto !== req.body.foto && verUsuario.foto !== null){
+                deletarImagem(verUsuario.foto);
+            }
         }
+
+        // Deletando os dados que não serão inseridos no banco
+        delete req.body.fotoUsuario;
+        delete req.body.senha_atual;
 
         // Atualizando os dados do usuário
         await prisma.usuario.update({
@@ -337,7 +326,7 @@ controller.update = async function(req, res) {
             data: req.body
         });
 
-        // Recuperando os dados alterados do usuário para iniciar a sessão no vanegador
+        // Recuperando os dados alterados do usuário para atualizar a sessão no vanegador
         const usuarioCadastrado = await prisma.usuario.findFirst({
             where: { email: req.body.email }
         });
@@ -354,30 +343,23 @@ controller.update = async function(req, res) {
         return res.status(201).json({result: true});
     }
     catch(error) {
-        // P2025: erro do Prisma referente a objeto não encontrado
+        // Caso o usuário não seja encontrado
         if(error?.code === 'P2025' || error?.code === 'P2023') {
-            // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
             res.status(400).json({mensagem: "Usuário Não Encontrado!"});
-            }
-            else {    // Outros tipos de erro
-            // Deu errado: exibe o erro no terminal
+        }else {
             console.error(error);
-
-            // Envia o erro ao front-end, com status de erro
-            // HTTP 500: Internal Server Error
             res.status(500).send(error);
         }
     }
 }
 
-// Testar com projetos / tarefas / subtarefas / atividades / e Notificacao
+
 // Deletando o usuário
 controller.delete = async function(req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
-
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }

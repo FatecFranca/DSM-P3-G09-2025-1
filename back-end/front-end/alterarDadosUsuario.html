@@ -6,6 +6,7 @@
   <title>Alterar Dados - Taskflow</title>
   <link rel="stylesheet" href="css/index.css"/>
   <link rel="stylesheet" href="css/alterarDadosUsuario.css"/>
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
 </head>
 <body>
   <header>
@@ -56,8 +57,9 @@
           <br>
           <div style="text-align: center; align-items: center; display: flex; justify-content: center;">
             <label for="fotoUsuario" class="upload-btn" title="Importar Foto"><img alt="Selecionar Foto Usuário" src="img/icones/uploadfoto.png"></label>
+            <input type="file" id="fotoUsuario" name="foto" accept="image/*" style="display: none;">
             &nbsp;&nbsp;
-            <label class="lixeira-btn" title="Importar Foto"><img alt="Deletar Foto Usuário" src="img/icones/lixeira.svg"></label>
+            <label class="lixeira-btn" title="Deletar Foto"><img alt="Deletar Foto Usuário" src="img/icones/lixeira.svg" onclick="deletarFoto()"></label>
           </div>
           <br>
           <div style="text-align: center;">

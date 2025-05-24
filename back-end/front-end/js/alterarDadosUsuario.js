@@ -44,7 +44,7 @@ async function alterarDados(){
     const email = document.getElementById("email").value.trim();
     const senhaAtual = document.getElementById("senhaAtual").value;
     const msgAviso = document.getElementById("msgAviso");
-    const fotoUsuario = document.getElementById('fotoUsuario').files[0];
+    let fotoUsuario = document.getElementById('fotoUsuario').files[0];
     let novaSenha = document.getElementById("novaSenha").value;
 
     msgAviso.innerHTML = "Altere os Dados do Cadastro ...";
@@ -82,10 +82,8 @@ async function alterarDados(){
 
     if (deletarImagem) {
         fotoUsuario = null;
-    }else if (fotoUsuario !== null) {
-        if (imagemAtual !== null) {
-            fotoUsuario = imagemAtual;
-        }
+    }else if (!fotoUsuario) {
+        fotoUsuario = imagemAtual;
     }
 
     const formData = new FormData();
@@ -95,7 +93,7 @@ async function alterarDados(){
     formData.append('senha', novaSenha);
     formData.append('senha_atual', senhaAtual);
 
-    const resposta = await fetch('http://localhost:8080/usuarios/', {
+    const resposta = await fetch('http://localhost:8080/usuarios/' + dadosSessao.dados.id, {
         method: 'PUT',
         credentials: 'include',
         body: formData
@@ -133,7 +131,6 @@ async function encerrarSessao() {
 function deletarFoto() {
     const imagemPreview = document.getElementById("imagemPreview");
     imagemPreview.src = "img/icones/fotodeperfil.png";
-    imagemAtual = null;
     deletarImagem = true;
 }
 
