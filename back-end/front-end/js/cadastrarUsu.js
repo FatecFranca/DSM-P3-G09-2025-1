@@ -3,6 +3,7 @@ async function cadastrarEmail(){
     const nome = document.getElementById("nome").value.trim();
     const senha = document.getElementById("senha").value;
     const conSenha = document.getElementById("conSenha").value;
+    let fotoUsuario = document.getElementById('fotoUsuario').files[0]
     const msgAviso = document.getElementById("msgAviso");
     msgAviso.innerHTML = "";
 
@@ -28,11 +29,20 @@ async function cadastrarEmail(){
     }
 
     try{
+
+        if (!fotoUsuario) {
+            fotoUsuario = null;
+        }
+
+        const formData = new FormData();
+        formData.append('fotoUsuario', fotoUsuario);
+        formData.append('nome', nome);
+        formData.append('email', email);
+        formData.append('senha', senha);
         const resposta = await fetch('http://localhost:8080/usuarios/', {
             method: 'POST',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome, email, senha })
+            body: formData
         });
 
         const dados = await resposta.json();
@@ -45,7 +55,7 @@ async function cadastrarEmail(){
             msgAviso.innerHTML = "Erro ao realizar Cadastro!";
         }
     }catch{
-        msgAviso.innerHTML = "Erro na consulta dos Banco de Dados!";
+        msgAviso.innerHTML = "Erro na consulta do Banco de Dados!";
         return;
     }
     

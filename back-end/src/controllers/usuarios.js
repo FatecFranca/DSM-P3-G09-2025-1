@@ -70,7 +70,8 @@ controller.create = async function(req, res) {
 
         // Ajustando a url da imagem para a inserção no BD
         req.body.foto = urlImagem;
-        console.log("Foto:" + req.body.foto);
+
+        delete req.body.fotoUsuario;
 
         await prisma.usuario.create({ data: req.body });
 

@@ -247,6 +247,10 @@ nav a {
   nav.show {
     display: flex;
   }
+
+  footer{
+    display: block;
+  }
 }
 
 .logo-header {

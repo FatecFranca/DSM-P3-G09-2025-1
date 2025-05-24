@@ -74,16 +74,23 @@ cron.schedule('0 0 * * *', async () => {
     }
 });
 
+// Aumentar o limite do tamanho do corpo da requisição
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 // Tornando todas as pastas de arquivos públicas para o código
-app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoAtividades')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoAtividades')));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoProjetos')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoProjetos')));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoSubTarefas')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoSubTarefas')));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoTarefas')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'anexoTarefas')));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'imgUsuarios')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'imgUsuarios')));
+
+// Permitir acesso à pasta 'uploads' publicamente
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Sessão de Rotas
