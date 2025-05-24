@@ -4,37 +4,52 @@ document.getElementById("sairBtn").addEventListener("click", function () {
     }
 });
 
-document.getElementById("statusBtn").addEventListener("click", function () {
-    document.getElementById("statusMenu").classList.toggle("hidden");
+document.getElementById("novoProjetoBtn1").addEventListener("click", function () {
+    window.location.href = "novo-projeto.html";
 });
 
-document.querySelectorAll("#statusMenu li").forEach(function (item) {
-    item.addEventListener("click", function () {
-        const selectedStatus = item.getAttribute("data-status");
-        document.getElementById("statusMenu").classList.add("hidden");
+document.getElementById("novoProjetoBtn2").addEventListener("click", function () {
+    window.location.href = "novo-projeto.html";
+});
 
-        const cards = document.querySelectorAll(".project-card");
-        cards.forEach(function (card) {
-            const statusSpan = card.querySelector("span");
-            if (!statusSpan) return;
-
-            const status = statusSpan.classList.contains("pendente") ? "pendente" :
-                           statusSpan.classList.contains("concluido") ? "concluido" :
-                           statusSpan.classList.contains("atrasado") ? "atrasado" : "";
+document.getElementById("notificacoesBtn").addEventListener("click", function () {
+    window.location.href = "notificacoes.html";
+});
 
 
-            if (selectedStatus === "todos" || status === selectedStatus) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        });
+// botão filtro
+document.getElementById("statusBtn").addEventListener("click", function () {
+    const status = prompt("Filtrar por status: pendente, atrasado ou concluído").toLowerCase();
+    const cards = document.querySelectorAll(".projeto-card");
+    cards.forEach(card => {
+        const cardStatus = card.getAttribute("data-status");
+        if (!status || cardStatus === status) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+});
+
+// barra de pesquisa
+document.querySelector(".search-input").addEventListener("input", function (e) {
+    const termo = e.target.value.toLowerCase();
+    const cards = document.querySelectorAll(".projeto-card");
+    cards.forEach(card => {
+        const titulo = card.querySelector(".titulo-projeto");
+        if (titulo && titulo.textContent.toLowerCase().includes(termo)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
     });
 });
 
 
+window.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector(".projetos-container"); 
+  const projetos = JSON.parse(localStorage.getItem("projetos")) || [];
 
-<<<<<<< HEAD
   projetos.forEach(proj => {
     const card = document.createElement("div");
     card.className = "projeto-card";
@@ -61,6 +76,3 @@ async function encerrarSessao() {
         window.location.href = "login.html";
     }
 }
-=======
-
->>>>>>> 5ef96c396a1271a641ebce4e177fa58c8c1bee1a

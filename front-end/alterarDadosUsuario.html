@@ -5,22 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Alterar Dados - Taskflow</title>
   <link rel="stylesheet" href="css/index.css"/>
-  <!-- <link rel="stylesheet" href="css/cadastroUsuario.css"/> -->
   <link rel="stylesheet" href="css/alterarDadosUsuario.css"/>
 </head>
 <body>
-    <header>
-        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-          <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
-        </div>
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-        <nav>
-        <a href="home.html">Home</a>
-        <a href="sobre.html">Sobre nós</a>
-        <a href="contato.html">Fale conosco</a>
-        <a onclick="encerrarSessao()">Sair</a>
-        </nav>
-    </header>
+  <header>
+      <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
+      </div>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+      <a href="cadastrarUsuario.html" class="register">Cadastre-se</a>
+      </nav>
+  </header>
   <div class="container">
     <div class="form-box">
       <a href="home.html" title="Voltar"><img src="img/icones/voltar.png" alt="Voltar" class="btn-voltar"></a>
@@ -57,13 +55,14 @@
           <br>
           <div style="text-align: center; align-items: center; display: flex; justify-content: center;">
             <label for="fotoUsuario" class="upload-btn" title="Importar Foto"><img alt="Selecionar Foto Usuário" src="img/icones/uploadfoto.png"></label>
-            <input type="file" id="fotoUsuario" name="foto" accept="image/*" style="display: none;">
+            &nbsp;&nbsp;
+            <label class="lixeira-btn" title="Importar Foto"><img alt="Deletar Foto Usuário" src="img/icones/lixeira.svg"></label>
           </div>
           <br>
           <div style="text-align: center;">
             <button type="button" class="btn-salvar" onclick="alterarDados()">Salvar</button>
             &nbsp;&nbsp;
-            <button type="button" class="btn-cancelar">Cancelar</button>
+            <button type="button" class="btn-cancelar" onclick="window.location.href = 'home.html'">Cancelar</button>
           </div>
 
         </div>
@@ -76,8 +75,26 @@
     </div>
   </div>
 
-  <script src="js/cadastrarUsu.js"></script>
+  <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="footer-logo">
+                <p>O site completo para gerenciamento de tarefas.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Sobre Nós</a>
+                <a href="#">Fale Conosco</a>
+                <a href="#">Termos de Uso</a>
+                <a href="#">Política de Privacidade</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Taskflow</p>
+        </div>
+    </footer>
+
   <script src="js/alterarDadosUsuario.js"></script>
+  <script src="js/menuMobile.js"></script>
   <script>window.onload = buscarDados()</script>
 </body>
 </html>

@@ -12,7 +12,7 @@ body {
 }
 
 .form-box {
-  background-color: #f4f4f4;
+  background-color: #caeeff;
   border-radius: 10px;
   padding: 2rem;
   max-width: 700px;
@@ -86,8 +86,12 @@ input[type="password"] {
   max-width: 125px;
 }
 
+.btn-salvar:hover {
+  background-color: #001164;
+}
+
 .btn-cancelar {
-  background-color: white;
+  background-color: #fafafa;
   color: #0d1b4c;
   border: none;
   padding: 10px 20px;
@@ -96,6 +100,10 @@ input[type="password"] {
   font-size: 1rem;
   width: 48%;
   max-width: 125px;
+}
+
+.btn-cancelar:hover {
+  background-color: #ffffff;
 }
 
 .logo-taskflow {
@@ -110,22 +118,47 @@ input[type="password"] {
 }
 
 .upload-btn {
-    padding: 5px;
-    background-color: #eee7e7;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #1e00c5;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    width: 55px;
+    width: 32px;
     text-align: center;
 }
 
 .upload-btn img {
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
 }
 
 .upload-btn:hover {
-    background-color: #ddcdcd;
+    background-color: #170097;
+}
+
+.lixeira-btn {
+  padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #da0000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 32px;
+    text-align: center;
+}
+
+.lixeira-btn img {
+    width: 25px;
+    height: 25px;
+}
+
+.lixeira-btn:hover {
+    background-color: #be0000;
 }
 
 #imagemPreview {
@@ -135,7 +168,7 @@ input[type="password"] {
     height: auto;
     display: block;
     border-radius: 300px;
-    border: 2px solid #0c0a55;
+    border: 1px solid #010016;
     aspect-ratio: 1 / 1;
     object-fit: cover;   
 }
@@ -182,4 +215,165 @@ input[type="password"] {
 .btn-voltar{
   height: 15px;
   width: 15px;
+}
+
+.icon-sair {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.footer {
+    background-color: #ffffff;
+    display: block;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.footer-logo {
+    height: 16px;
+}
+
+.footer-left p {
+    font-weight: bold;
+    color: #162144;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #162144;
+    font-weight: 400; 
+}
+
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
+}
+/* 
+@media (max-width: 750px) {
+  .right{
+    width: 100%;
+  }
+
+  .left{
+    width: 100%;
+  } 
+  
+  .form-alterar{
+    display: block;
+  }
+
+  .msg-status{
+    width: 100%;
+  }
+
+  .footer-left{
+    display: block;
+  }
+
+  .container{
+    height: auto;
+  }
+
+  
+} */
+
+/* Botão do menu só visível no mobile */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+    z-index: 10;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 30px;
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  .right{
+    width: 100%;
+  }
+
+  .left{
+    width: 100%;
+  } 
+  
+  .form-alterar{
+    display: block;
+  }
+
+  .msg-status{
+    width: 100%;
+  }
+
+  .footer-left{
+    display: block;
+  }
+
+  .container{
+    height: auto;
+    z-index: 1;
+  }
+}
+
+.logo-header {
+  max-height: 20px;
+  height: 20px;
+  width: auto;
+}
+
+.logo-footer{
+  max-height: 10px;
+  width: auto;
 }

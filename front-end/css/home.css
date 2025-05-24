@@ -1,62 +1,62 @@
+
 body {
     margin: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Raleway', sans-serif;
+    background-color: #e4f0f2;
     color: #000000;
 }
 
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #f9f9f9;
+.header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    box-sizing: border-box;
 }
 
-.logo {
-    height: 20px;
-}
-
-nav a {
-  margin: 0 1rem;
-  text-decoration: none;
-  color: #333;
-}
-
-.logo {
-    height: 20px;
-}
-
-
-.actions {
+.header-top {
     display: flex;
     align-items: center;
+    justify-content: center;
+    max-width: 1080px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.header-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    max-width: 1080px;
+    margin: 8px auto 0 auto;
     gap: 12px;
 }
 
-.menu-toggle {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    display: none;
+.logo {
+    height: 20px;
 }
 
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
 
 .btn {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px;
-    width: 150px;
+    font-weight: bold;
 }
 
 .btn.dark {
     background-color: #162144;
     color: white;
     text-decoration: none;
-    width: 135px;
+    width: 122px;
 }
 
 .btn.status {
@@ -67,8 +67,6 @@ nav a {
 .btn.download {
     background-color: transparent;
     font-size: 18px;
-    margin: 0;
-    padding: 0;
 }
 
 .btn.icon {
@@ -77,16 +75,16 @@ nav a {
 }
 
 .icon-img {
-    width: auto;
-    height: 35px;
+    width: 20px;
+    height: 20px;
     vertical-align: middle;
-    margin-right: ;
+    margin-right: 8px;
 }
 
 
 .sidebar {
     background-color: #f9f9f9;
-    padding: 20px;
+    padding: 15px;
     box-sizing: border-box;
     width: 300px;
 }
@@ -96,34 +94,28 @@ nav a {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 10px;
 }
 
 @media (min-width: 768px) {
     .container {
         flex-direction: row;
-        gap: 10px; 
+        gap: 16px;
     }
 }
 
-.sidebar {
-    background-color: #f9f9f9; 
-    padding: 20px;
-    box-sizing: border-box;
-    width: 300px;
-    border-radius: 16px;
+.sidebar .btn {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
+
 
 .projects {
-    padding: 20px;
-    background-color: #e4f0f2; 
-    border-radius: 16px;
-    flex-grow: 1;
+    padding: 15px;
 }
 
-
 .section-title {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Foda Display', cursive;
     font-size: 24px;
     margin-bottom: 10px;
 }
@@ -186,61 +178,58 @@ nav a {
     cursor: pointer;
 }
 
-.project-controls {
+
+.footer {
+    background-color: #ffffff;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.footer-content {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
     gap: 10px;
-    margin-bottom: 10px;
+    text-align: center;
 }
 
-.status-filter {
-    position: relative;
+.footer-logo {
+    height: 16px;
 }
 
-.dropdown {
-    position: absolute;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    list-style: none;
-    padding: 5px 0;
-    margin: 5px 0 0 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    width: 140px;
+.footer-left p {
+    font-weight: bold;
+    color: #162144;
 }
 
-.dropdown li {
-    padding: 8px 12px;
-    cursor: pointer;
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-.dropdown li:hover {
-    background-color: #f0f0f0;
-}
-
-.hidden {
-    display: none;
+.footer-links a {
+    text-decoration: none;
+    color: #162144;
+    font-weight: 400; 
 }
 
 
-footer {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: #fff;
-  font-size: 0.8rem;
-  color: #666;
+.footer-links a:hover {
+    text-decoration: underline;
 }
 
-footer a {
-  color: #444;
-  text-decoration: none;
-  margin-left: 0.5rem;
-}
-
-
-.logofooter{
-    height: 11px;
+.footer-bottom {
+    text-align: center;
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
 }

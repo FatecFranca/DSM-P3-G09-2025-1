@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
 }
 
@@ -25,7 +25,7 @@ body {
 }
 
 .formulario h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Lobster Two', cursive;
   font-size: 2rem;
   margin-bottom: 10px;
 }
@@ -87,7 +87,6 @@ textarea {
   font-size: 0.9rem;
 }
 
-.logofooter {
-  margin-top: 30px;
-  height: 11px;
+.logo {
+    height: 100px;
 }

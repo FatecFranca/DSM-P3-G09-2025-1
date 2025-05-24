@@ -13,9 +13,9 @@ header {
   font-weight: bold;
 }
 
-.logo {
-    height: 20px;
-}
+.logo span:first-child { color: #ff4ec9; }
+.logo span:nth-child(2) { color: #49d3f5; }
+.logo span:last-child { color: #4cd964; }
 
 nav a {
   margin: 0 1rem;
