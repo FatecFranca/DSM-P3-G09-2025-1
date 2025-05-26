@@ -1,128 +1,138 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taskflow - Meus Projetos</title>
-    <link rel="stylesheet" href="css/home.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskflow - Meus Projetos</title>
+  <link rel="stylesheet" href="css/home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon" />
 </head>
+
 <body>
-    
-<header>
+  
+  <header>
     <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-        <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     <nav id="menuNav">
-        <a href="sobre.html">Sobre nós</a>
-        <a href="contato.html">Fale conosco</a>
-        <a href="alterarDadosUsuario.html" class="mobile-only">Meu Perfil</a>
-        <a href="#" id="sairMenu" class="mobile-only">Sair</a>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+      <button class="menu-btn" id="meuPerfilBtn" aria-label="Meu Perfil" title="Meu Perfil">
+        <img src="img/icones/meu-perfil.png" alt="Meu Perfil" />
+      </button>
+      <button class="menu-btn" id="sairMenu" aria-label="Sair" title="Sair">
+        <img src="img/icones/sair.png" alt="Sair" />
+      </button>
     </nav>
-</header>
+  </header>
 
-<main class="container">
-    <aside class="sidebar">
-        <button class="btn perfil" id="perfilBtn" onclick="window.location.href='alterarDadosUsuario.html'">
-            <img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img"> Meu Perfil
-        </button>
-        <button class="btn sair" id="sairBtn">
-            <img src="img/icones/sair.png" alt="Sair" class="icon-img"> Sair
-        </button>
-        <div style="margin-top: 30px;">
-            <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
-        </div>
-    </aside>
-
+ 
+  <main class="container">
     <section class="projects">
-        <h2 class="section-title">Meus projetos</h2>
-        <div class="header-bottom">
-            <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
-            <button class="btn status" id="statusBtn">STATUS ▾</button>
-            <button class="btn icon" id="notificacoesBtn">
-                <img src="img/icones/sino-de-notificacao.png" alt="Notificações" class="icon-img">
-            </button>
-        </div>
-        <br><br>
+      <h2 class="section-title">Meus projetos</h2>
 
-        <!-- PROJETOS GESTOR -->
-        <div class="project-group">
-            <h3 class="category-title"> GESTOR</h3>
-            <div class="project-card">
-                <div class="project-header">
-                    <h4>PROJETO A</h4>
-                    <span class="actions">✎ 👤 ➕</span>
-                </div>
-                <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                <p class="descricao">Descrição breve do projeto.</p>
-                <button class="btn download">⬇</button>
-            </div>
-            <div class="project-card">
-                <div class="project-header">
-                    <h4>PROJETO A</h4>
-                    <span class="actions">✎ 👤 ➕</span>
-                </div>
-                <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                <p class="descricao">Descrição breve do projeto.</p>
-                <button class="btn download">⬇</button>
-            </div>
-            <div class="project-card">
-                <div class="project-header">
-                    <h4>PROJETO A</h4>
-                    <span class="actions">✎ 👤 ➕</span>
-                </div>
-                <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                <p class="descricao">Descrição breve do projeto.</p>
-                <button class="btn download">⬇</button>
-            </div>
-            <!-- Copie mais cards conforme necessário -->
+     
+      <div class="header-bottom">
+        <div class="btn-group">
+          <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
+          <select class="btn status" id="statusSelect">
+            <option disabled selected>STATUS ▾</option>
+            <option value="pendente">Pendente</option>
+            <option value="atrasado">Atrasado</option>
+            <option value="concluido">Concluído</option>
+            <option value="todos">Todos</option>
+          </select>
+        </div>
+        <a href="gerenciarnotificacoes.html" class="btn icon" id="notificacoesBtn">
+          <img src="img/icones/sino-de-notificacao.png" alt="Notificações" class="icon-img" />
+        </a>
+      </div>
+
+      <br><br>
+
+      
+      <div class="project-group">
+        <h3 class="category-title">GESTOR</h3>
+
+        <div class="project-card">
+          <div class="project-header">
+            <h4>PROJETO A</h4>
+            <span class="actions">✎ 👤 ➕</span>
+          </div>
+          <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
+          <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
+          <p class="descricao">Descrição breve do projeto.</p>
+          <button class="btn download">⬇</button>
         </div>
 
-        <!-- PROJETOS ADMINISTRADOR -->
-        <div class="project-group">
-            <h3 class="category-title"> ADMINISTRADOR</h3>
-            <div class="project-card">
-                <h4>PROJETO B</h4>
-                <p><strong>Data máxima de entrega:</strong> 20/04/2025</p>
-                <p><strong>Status:</strong> <span class="atrasado">Atrasado</span></p>
-                <p class="descricao">Descrição breve do projeto.</p>
-                <button class="btn download">⬇</button>
-            </div>
+        <div class="project-card">
+          <div class="project-header">
+            <h4>PROJETO A</h4>
+            <span class="actions">✎ 👤 ➕</span>
+          </div>
+          <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
+          <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
+          <p class="descricao">Descrição breve do projeto.</p>
+          <button class="btn download">⬇</button>
         </div>
 
-        <!-- PROJETOS MEMBRO -->
-        <div class="project-group">
-            <h3 class="category-title"> MEMBRO</h3>
-            <div class="project-card">
-                <h4>PROJETO C</h4>
-                <p><strong>Data máxima de entrega:</strong> 15/05/2025</p>
-                <p><strong>Status:</strong> <span class="concluido">Concluído</span></p>
-                <p class="descricao">Descrição breve do projeto.</p>
-                <button class="btn download">⬇</button>
-            </div>
+        <div class="project-card">
+          <div class="project-header">
+            <h4>PROJETO A</h4>
+            <span class="actions">✎ 👤 ➕</span>
+          </div>
+          <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
+          <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
+          <p class="descricao">Descrição breve do projeto.</p>
+          <button class="btn download">⬇</button>
         </div>
+      </div>
+
+      
+      <div class="project-group">
+        <h3 class="category-title">ADMINISTRADOR</h3>
+        <div class="project-card">
+          <h4>PROJETO B</h4>
+          <p><strong>Data máxima de entrega:</strong> 20/04/2025</p>
+          <p><strong>Status:</strong> <span class="atrasado">Atrasado</span></p>
+          <p class="descricao">Descrição breve do projeto.</p>
+          <button class="btn download">⬇</button>
+        </div>
+      </div>
+
+      
+      <div class="project-group">
+        <h3 class="category-title">MEMBRO</h3>
+        <div class="project-card">
+          <h4>PROJETO C</h4>
+          <p><strong>Data máxima de entrega:</strong> 15/05/2025</p>
+          <p><strong>Status:</strong> <span class="concluido">Concluído</span></p>
+          <p class="descricao">Descrição breve do projeto.</p>
+          <button class="btn download">⬇</button>
+        </div>
+      </div>
     </section>
-</main>
+  </main>
 
-<footer>
+  
+  <footer>
     <div class="logo-footer">
-        <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
-        <span>— O site completo para gerenciamento de tarefas</span>
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg" />
+      <span>— O site completo para gerenciamento de tarefas</span>
     </div>
     <div class="footer-links">
-        <a href="termosUso.html">Termos</a> |
-        <a href="politicaPrivacidade.html">Privacidade</a> |
-        <a href="contato.html">Suporte</a>
+      <a href="termosUso.html">Termos</a> |
+      <a href="politicaPrivacidade.html">Privacidade</a> |
+      <a href="contato.html">Suporte</a>
     </div>
-</footer>
+  </footer>
 
-<script src="js/home.js"></script>
-<script src="js/login.js"></script>
-<script>window.onload = sessaoIniGeral()</script>
+  
+  <script src="js/home.js"></script>
+  <script src="js/login.js"></script>
+  <script>window.onload = sessaoIniGeral()</script>
 </body>
+
 </html>

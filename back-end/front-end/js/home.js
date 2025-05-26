@@ -1,82 +1,54 @@
-document.getElementById("sairBtn").addEventListener("click", function () {
-    if (confirm("Tem certeza que deseja sair?")) {
-        encerrarSessao();
-    }
-});
-
-document.getElementById("novoProjetoBtn1").addEventListener("click", function () {
-    window.location.href = "novo-projeto.html";
-});
-
-document.getElementById("novoProjetoBtn2").addEventListener("click", function () {
-    window.location.href = "novo-projeto.html";
-});
-
-document.getElementById("notificacoesBtn").addEventListener("click", function () {
-    window.location.href = "notificacoes.html";
-});
-
-
-// botão filtro
-document.getElementById("statusBtn").addEventListener("click", function () {
-    const status = prompt("Filtrar por status: pendente, atrasado ou concluído").toLowerCase();
-    const cards = document.querySelectorAll(".projeto-card");
-    cards.forEach(card => {
-        const cardStatus = card.getAttribute("data-status");
-        if (!status || cardStatus === status) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
-});
-
-// barra de pesquisa
-document.querySelector(".search-input").addEventListener("input", function (e) {
-    const termo = e.target.value.toLowerCase();
-    const cards = document.querySelectorAll(".projeto-card");
-    cards.forEach(card => {
-        const titulo = card.querySelector(".titulo-projeto");
-        if (titulo && titulo.textContent.toLowerCase().includes(termo)) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
-});
-
-
-window.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".projetos-container"); 
-  const projetos = JSON.parse(localStorage.getItem("projetos")) || [];
-
-  projetos.forEach(proj => {
-    const card = document.createElement("div");
-    card.className = "projeto-card";
-    card.setAttribute("data-status", proj.status);
-    card.innerHTML = `
-      <h3 class="titulo-projeto">${proj.titulo}</h3>
-      <p>${proj.descricao}</p>
-      <p>Entrega: ${proj.dataEntrega}</p>
-      <p>Status: ${proj.status}</p>
-    `;
-    container.appendChild(card);
-  });
-});
-
-async function encerrarSessao() {
-    const resposta = await fetch('http://localhost:8080/usuarios/encerrarSessao/true', {
-        method: 'GET',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' }
-    });
-
-    const dados = await resposta.json();
-    if (dados.result) {
-        window.location.href = "login.html";
-    }
-}
 function toggleMenu() {
-      const nav = document.querySelector('nav');
-      nav.classList.toggle('show');
+  const menu = document.getElementById('menuNav');
+  menu.classList.toggle('show');
+}
+
+document.getElementById('meuPerfilBtn').addEventListener('click', () => {
+  window.location.href = 'alterarDadosUsuario.html';
+});
+
+document.getElementById('sairMenu').addEventListener('click', (e) => {
+  e.preventDefault();
+  const confirmar = confirm("Tem certeza de que deseja sair?");
+  if (confirmar) {
+    window.location.href = 'index.html';
+  }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const statusSelect = document.getElementById('statusSelect');
+    const todosProjetos = document.querySelectorAll('.project-card');
+
+    function filtrarProjetos(status) {
+        todosProjetos.forEach(projeto => {
+            const statusProjeto = projeto.querySelector('.pendente, .concluido, .atrasado');
+
+            if (status === 'todos') {
+                projeto.style.display = 'block';
+            } else if (statusProjeto && statusProjeto.classList.contains(status)) {
+                projeto.style.display = 'block';
+            } else {
+                projeto.style.display = 'none';
+            }
+        });
     }
+
+    statusSelect.addEventListener('change', function () {
+        const valorSelecionado = this.value;
+        filtrarProjetos(valorSelecionado);
+    });
+
+    filtrarProjetos('todos');
+});
+
+// Confirmação sair
+document.getElementById('sairMenu').addEventListener('click', function (e) {
+    e.preventDefault();
+    const confirmar = confirm("Tem certeza de que deseja sair?");
+    if (confirmar) {
+        window.location.href = 'index.html';
+    }
+});
+
+
