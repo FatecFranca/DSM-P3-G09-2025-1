@@ -2,13 +2,26 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Criar Projeto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taskflow - Criar Projeto</title>
   <link rel="stylesheet" href="css/criar-projeto.css" />
-  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <div class="container">
+
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+    </nav>
+  </header>
+
+  <main class="container">
     <form id="formProjeto" class="formulario">
       <h1>Criar Projeto</h1>
       <div class="alerta" id="alerta-erro" style="display: none;"></div>
@@ -28,12 +41,25 @@
       <button type="submit" class="criar-btn">CRIAR</button>
       <a href="home.html" class="voltar-link">Voltar</a>
     </form>
-    <footer class="footer">
-      <img src="img/logos/logocolorido.png" alt="Taskflow Logo" class="logo">
-    </footer>
-  </div>
+  </main>
 
-  <script src="js/criar-projeto.js"></script>
+  <footer>
+    <div class="logo-footer" style="display: flex; vertical-align: middle;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">&nbsp;&nbsp;&nbsp; — &nbsp;&nbsp; O
+      site completo para gerenciamento de tarefas
+    </div>
+    <div>
+      <a href="termosUso.html">Termos</a> | <a href="politicaPrivacidade.html">Privacidade</a> | <a
+        href="contato.html">Suporte</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector('nav');
+      nav.classList.toggle('show');
+    }
+  </script>
 </body>
 </html>
 

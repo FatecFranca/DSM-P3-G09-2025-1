@@ -145,16 +145,35 @@ nav .register {
 footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   padding: 1rem 2rem;
   background-color: #fff;
   font-size: 0.8rem;
   color: #666;
+  border-top: 1px solid #eee;
 }
 
 footer a {
   color: #444;
   text-decoration: none;
   margin-left: 0.5rem;
+}
+
+.logoimg {
+  height: 12px;
+}
+
+@media (max-width: 750px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  footer div {
+    margin: 5px 0;
+  }
 }
 
 @media (max-width: 850px) {
@@ -252,7 +271,3 @@ nav a {
   width: auto;
 }
 
-.logo-footer{
-  max-height: 10px;
-  width: auto;
-}
