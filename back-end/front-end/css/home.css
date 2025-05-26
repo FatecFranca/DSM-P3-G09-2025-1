@@ -1,16 +1,91 @@
-
 body {
     margin: 0;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     background-color: #e4f0f2;
     color: #000000;
 }
 
+/* HEADER PADRÃO */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
 
-.header {
-    background-color: #ffffff;
-    padding: 10px 20px;
-    box-sizing: border-box;
+
+.logo-header {
+    height: 20px;
+    cursor: pointer;
+}
+
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+
+nav a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 20px;
+    transition: color 0.3s ease;
+}
+
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Itens adicionais no menu mobile */
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 2rem;
+        flex-direction: column;
+        background: #fff;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        z-index: 1000;
+    }
+
+    nav.show {
+        display: flex;
+    }
+
+    nav a {
+        margin: 10px 0;
+    }
+
+    /* Esconde a sidebar no mobile */
+    .sidebar {
+        display: none;
+    }
+
+   
+    .mobile-only {
+        display: block;
+    }
 }
 
 .header-top {
@@ -81,14 +156,12 @@ body {
     margin-right: 8px;
 }
 
-
 .sidebar {
     background-color: #f9f9f9;
     padding: 15px;
     box-sizing: border-box;
     width: 300px;
 }
-
 
 .container {
     display: flex;
@@ -109,17 +182,15 @@ body {
     margin-bottom: 10px;
 }
 
-
 .projects {
     padding: 15px;
+    flex: 1;
 }
 
 .section-title {
-    font-family: 'Foda Display', cursive;
-    font-size: 24px;
+    font-size: 30px;
     margin-bottom: 10px;
 }
-
 
 .category-title {
     width: 100%;
@@ -128,7 +199,6 @@ body {
     color: white;
     font-weight: bold;
 }
-
 
 .project-group {
     display: flex;
@@ -141,15 +211,26 @@ body {
     align-items: flex-start;
 }
 
-
 .project-card {
     background-color: #ffffff;
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 320px;
-    flex: 1 1 calc(33.33% - 16px);
+    max-width: 400px;
+    flex: 1 1 100%;
+}
+
+@media (min-width: 600px) {
+    .project-card {
+        flex: 1 1 calc(50% - 16px);
+    }
+}
+
+@media (min-width: 1000px) {
+    .project-card {
+        flex: 1 1 calc(33.33% - 16px);
+    }
 }
 
 .project-header {
@@ -178,58 +259,36 @@ body {
     cursor: pointer;
 }
 
-
-.footer {
-    background-color: #ffffff;
-    padding: 20px;
-    border-top: 1px solid #ccc;
-}
-
-.footer-content {
+footer {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    max-width: 1080px;
-    margin: 0 auto;
-    gap: 20px;
-}
-
-.footer-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-}
-
-.footer-logo {
-    height: 16px;
-}
-
-.footer-left p {
-    font-weight: bold;
-    color: #162144;
-}
-
-.footer-links {
-    display: flex;
-    gap: 20px;
     flex-wrap: wrap;
-}
-
-.footer-links a {
-    text-decoration: none;
-    color: #162144;
-    font-weight: 400; 
-}
-
-
-.footer-links a:hover {
-    text-decoration: underline;
-}
-
-.footer-bottom {
-    text-align: center;
-    margin-top: 10px;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    font-size: 0.8rem;
     color: #666;
-    font-size: 14px;
+    border-top: 1px solid #eee;
+}
+
+footer a {
+    color: #444;
+    text-decoration: none;
+    margin-left: 0.5rem;
+}
+
+.logoimg {
+    height: 12px;
+}
+
+@media (max-width: 750px) {
+    footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    footer div {
+        margin: 5px 0;
+    }
 }

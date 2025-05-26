@@ -76,3 +76,7 @@ async function encerrarSessao() {
         window.location.href = "login.html";
     }
 }
+function toggleMenu() {
+      const nav = document.querySelector('nav');
+      nav.classList.toggle('show');
+    }
