@@ -1,104 +1,126 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefas</title>
-    <link rel="icon" href="img/icones/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/tarefas.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskflow - Tarefas</title>
+  <link rel="stylesheet" href="css/tarefas.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon" />
 </head>
 <body>
-    <header>
-        <div class="topo">
-            <a href="home.html" id="voltar" aria-label="Voltar">⭠</a>
-            <h1>Nome Projeto</h1>
+  <!-- HEADER PADRÃO -->
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="topo">
+      <a href="home.html" id="voltar" aria-label="Voltar">⭠</a>
+      <h1>Nome Projeto</h1>
+    </div>
+    <hr />
+    <button id="add-task">ADICIONAR TAREFA</button>
+
+    <section class="categoria">
+      <h2>&rsaquo; GESTOR</h2>
+      <div class="tarefas">
+        <div class="tarefa concluida">
+          <div class="drag"></div>
+          <h3>PROTOTIPAÇÃO TELA TAREFAS</h3>
+          <p class="data">Entregue em 17/05/2025</p>
+          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+          <span class="status verde">Concluída</span>
+          <div class="acoes">
+            <button class="editar" aria-label="Editar tarefa">✎</button>
+            <button class="mover" aria-label="Mover tarefa">⭳</button>
+          </div>
         </div>
-        <hr>
-        <button id="add-task">ADICIONAR TAREFA</button>
-    </header>
-
-    <main>
-        <section class="categoria">
-            <h2>&rsaquo; GESTOR</h2>
-            <div class="tarefas">
-                <div class="tarefa concluida">
-                    <div class="drag"></div>
-                    <h3>PROTOTIPAÇÃO TELA TAREFAS</h3>
-                    <p class="data">Entregue em 17/05/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status verde">Concluída</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-                <div class="tarefa pendente">
-                    <div class="drag"></div>
-                    <h3>TAREFA UM</h3>
-                    <p class="data">Data máxima para entrega 01/06/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status azul">Pendente</span>
-                    <div class="acoes">
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="categoria">
-            <h2>&rsaquo; ADMINISTRADOR</h2>
-            <div class="tarefas">
-                <div class="tarefa atrasada">
-                    <div class="drag"></div>
-                    <h3>DOCUMENTAÇÃO</h3>
-                    <p class="data">Data máxima para entrega 15/05/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status vermelho">Atrasada</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="categoria">
-            <h2>&rsaquo; MEMBRO</h2>
-            <div class="tarefas">
-                <div class="tarefa pendente">
-                    <div class="drag"></div>
-                    <h3>TAREFA DOIS</h3>
-                    <p class="data">Data máxima para entrega 01/06/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status azul">Pendente</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-                <div class="tarefa pendente">
-                    <div class="drag"></div>
-                    <h3>TAREFA TRÊS</h3>
-                    <p class="data">Data máxima para entrega 01/06/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status azul">Pendente</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="logo-footer">
-            <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="logofooter">
+        <div class="tarefa pendente">
+          <div class="drag"></div>
+          <h3>TAREFA UM</h3>
+          <p class="data">Data máxima para entrega 01/06/2025</p>
+          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+          <span class="status azul">Pendente</span>
+          <div class="acoes">
+            <button class="mover" aria-label="Mover tarefa">⭳</button>
+          </div>
         </div>
-    </footer>
+      </div>
+    </section>
 
-    <script src="js/script.js"></script>
+    <section class="categoria">
+      <h2>&rsaquo; ADMINISTRADOR</h2>
+      <div class="tarefas">
+        <div class="tarefa atrasada">
+          <div class="drag"></div>
+          <h3>DOCUMENTAÇÃO</h3>
+          <p class="data">Data máxima para entrega 15/05/2025</p>
+          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+          <span class="status vermelho">Atrasada</span>
+          <div class="acoes">
+            <button class="editar" aria-label="Editar tarefa">✎</button>
+            <button class="mover" aria-label="Mover tarefa">⭳</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="categoria">
+      <h2>&rsaquo; MEMBRO</h2>
+      <div class="tarefas">
+        <div class="tarefa pendente">
+          <div class="drag"></div>
+          <h3>TAREFA DOIS</h3>
+          <p class="data">Data máxima para entrega 01/06/2025</p>
+          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+          <span class="status azul">Pendente</span>
+          <div class="acoes">
+            <button class="editar" aria-label="Editar tarefa">✎</button>
+            <button class="mover" aria-label="Mover tarefa">⭳</button>
+          </div>
+        </div>
+        <div class="tarefa pendente">
+          <div class="drag"></div>
+          <h3>TAREFA TRÊS</h3>
+          <p class="data">Data máxima para entrega 01/06/2025</p>
+          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+          <span class="status azul">Pendente</span>
+          <div class="acoes">
+            <button class="editar" aria-label="Editar tarefa">✎</button>
+            <button class="mover" aria-label="Mover tarefa">⭳</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER PADRÃO -->
+  <footer>
+    <div class="logo-footer">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
+      <span>— O site completo para gerenciamento de tarefas</span>
+    </div>
+    <div class="footer-links">
+      <a href="termosUso.html">Termos</a> |
+      <a href="politicaPrivacidade.html">Privacidade</a> |
+      <a href="contato.html">Suporte</a>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector("header nav");
+      nav.classList.toggle("show");
+    }
+  </script>
 </body>
 </html>
