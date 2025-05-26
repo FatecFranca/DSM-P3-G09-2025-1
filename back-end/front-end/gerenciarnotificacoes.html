@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskflow - Notificações</title>
+  <link rel="stylesheet" href="css/gerenciarnotificacoes.css" />
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+    </nav>
+  </header>
+  <main>
+    <section class="notificacoes-container">
+      <h2>Notificações</h2>
+      <div class="actions">
+        <label><input type="checkbox" id="selectAll" /> Selecionar todas</label>
+        <button id="deleteSelected"><img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="Marcar como lidas" /> Marcar como lidas</button>
+      </div>
+      <ul id="notificationList">
+        <!-- As notificações serão adicionadas aqui via JS -->
+      </ul>
+    </section>
+  </main>
+  <script src="js/gerenciarnotificacoes.js"></script>
+  <footer>
+    <div class="logo-footer" style="display: flex; vertical-align: middle;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">&nbsp;&nbsp;&nbsp; — &nbsp;&nbsp; O
+      site completo para gerenciamento de tarefas
+    </div>
+    <br><br><br>
+    <div>
+      <a href="termosUso.html">Termos</a> | <a href="politicaPrivacidade.html">Privacidade</a> | <a
+        href="contato.html">Suporte</a>
+    </div>
+  </footer>
+</body>
+</html>

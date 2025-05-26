@@ -13,10 +13,6 @@ header {
   font-weight: bold;
 }
 
-.logo span:first-child { color: #ff4ec9; }
-.logo span:nth-child(2) { color: #49d3f5; }
-.logo span:last-child { color: #4cd964; }
-
 nav a {
   margin: 0 1rem;
   text-decoration: none;
@@ -188,9 +184,6 @@ footer a {
   }
 }
 
-
-.logo-footer span:first-child { color: #ff4ec9; }
-.logo-footer span:last-child { color: #4cd964; }
 
 /* Menu Mobile */
 /* Estilo padrão */

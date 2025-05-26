@@ -1,0 +1,157 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: white;
+  padding: 0;
+}
+/* Header padrão */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+}
+
+/* Logo */
+.logo-header {
+  max-height: 20px;
+  height: 20px;
+  width: auto;
+  cursor: pointer;
+}
+
+/* Navegação */
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #000;
+  font-weight: normal; /* Removido o negrito */
+}
+
+/* Botão do menu (visível no mobile) */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsividade do header */
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 30px;
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  nav.show {
+    display: flex;
+  }
+}
+.back-btn {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: black;
+}
+.logo {
+  height: 15px;
+  width: auto;
+}
+main {
+  padding: 1rem;
+}
+.notificacoes-container h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #4057f1;
+  margin-bottom: 1rem;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #e6efef;
+  padding: 0.5rem;
+}
+.actions label {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.actions button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+.actions button img {
+  width: 16px;
+  height: 16px;
+}
+ul#notificationList {
+  list-style: none;
+  margin-top: 1rem;
+}
+ul#notificationList li {
+  border-bottom: 1px solid #ccc;
+  padding: 1rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+ul#notificationList li input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  font-size: 0.8rem;
+  color: #666;
+}
+footer a {
+  color: #444;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+.logoimg{
+  height: 12px;
+}
+@media (min-width: 768px) {
+  header {
+    padding: 1rem 2rem;
+  }
+  main {
+    padding: 2rem;
+  }
+  .notificacoes-container h2 {
+    font-size: 2rem;
+  }
+}
