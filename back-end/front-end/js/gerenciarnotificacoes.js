@@ -1,3 +1,8 @@
+function toggleMenu() {
+  const nav = document.querySelector('nav');
+  nav.classList.toggle('show');
+}
+
 const notifications = [
   "📌 Atualização: Seu projeto 'Organização de Estudos' foi compartilhado com João.",
   "🛠️ A tarefa 'Revisar resumo de biologia' venceu ontem.",

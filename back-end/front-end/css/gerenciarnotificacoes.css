@@ -9,46 +9,55 @@ body {
   background: white;
   padding: 0;
 }
-/* Header padrão */
+/* HEADER PADRÃO */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 /* Logo */
 .logo-header {
-  max-height: 20px;
   height: 20px;
-  width: auto;
   cursor: pointer;
 }
 
-/* Navegação */
+/* Navegação desktop */
 nav {
   display: flex;
   gap: 20px;
 }
 
+/* Links do menu */
 nav a {
-  margin: 0 1rem;
   text-decoration: none;
   color: #000;
-  font-weight: normal; /* Removido o negrito */
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 20px;
+  transition: color 0.3s ease;
 }
 
-/* Botão do menu (visível no mobile) */
+nav a:hover {
+  color: #3f5fff;
+}
+
+/* Botão menu hamburger - só aparece no mobile */
 .menu-toggle {
   display: none;
-  font-size: 24px;
   background: none;
   border: none;
+  font-size: 1.8rem;
   cursor: pointer;
 }
 
-/* Responsividade do header */
+/* Responsividade para telas menores que 750px */
 @media (max-width: 750px) {
   .menu-toggle {
     display: block;
@@ -56,19 +65,26 @@ nav a {
 
   nav {
     display: none;
-    flex-direction: column;
     position: absolute;
-    top: 70px;
-    right: 30px;
+    top: 60px;
+    right: 2rem;
+    flex-direction: column;
     background: #fff;
-    padding: 15px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    z-index: 1000;
   }
 
   nav.show {
     display: flex;
   }
+
+  nav a {
+    margin: 10px 0;
+  }
 }
+
 .back-btn {
   font-size: 1.5rem;
   text-decoration: none;
@@ -131,27 +147,33 @@ ul#notificationList li input[type="checkbox"] {
 footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   padding: 1rem 2rem;
   background-color: #fff;
   font-size: 0.8rem;
   color: #666;
+  border-top: 1px solid #eee;
 }
+
 footer a {
   color: #444;
   text-decoration: none;
   margin-left: 0.5rem;
 }
-.logoimg{
+
+.logoimg {
   height: 12px;
 }
-@media (min-width: 768px) {
-  header {
-    padding: 1rem 2rem;
+
+@media (max-width: 750px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
   }
-  main {
-    padding: 2rem;
-  }
-  .notificacoes-container h2 {
-    font-size: 2rem;
+
+  footer div {
+    margin: 5px 0;
   }
 }
