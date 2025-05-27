@@ -22,7 +22,7 @@
         <nav>
             <a href="sobre.html">Sobre nós</a>
             <a href="contato.html">Fale conosco</a>
-            <a href="notificacoes.html" title="Notificações"><img src="img/icones/sino-de-notificacao.png"
+            <a href="gerenciarnotificacoes.html" title="Notificações"><img src="img/icones/sino-de-notificacao.png"
                     alt="Notificações" class="icon-img" id="img-not"><label id="txt-not">Notificações</label></a>
             <a onclick="encerrarSessao()" title="Sair"><img src="img/icones/sair.png" alt="Sair" class="icon-sair"
                     id="img-sair"><label id="txt-sair">Sair</label></a>
@@ -121,8 +121,8 @@
 
                 <!-- Ceder cargo de gestor -->
                 <h3>Ceder Cargo de Gestor</h3>
-                <select id="novoGestor">
-                    <!-- Opções adicionadas dinamicamente com JS -->
+                <select id="novoGestor" class="select-gestor">
+                    <option value=""></option>
                 </select>
                 <button type="button" onclick="cederCargoGestor()">Ceder Cargo</button>
 

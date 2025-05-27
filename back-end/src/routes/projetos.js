@@ -79,7 +79,7 @@ router.put('/removeMembro/:id', controller.removeMembro);
 router.put('/addAdministrador/:id', controller.addAdministrador);
 /*
     Dados a serem informados:
-    id_administrador: String
+    email_usuario: String
 */
 
 

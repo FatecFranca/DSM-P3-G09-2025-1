@@ -647,7 +647,7 @@ controller.addMembro = async function (req, res) {
         }
 
         // Obtendo o id do usuário pelo email
-        const usuario = await prisma.usuario.findUnique({
+        const usuario = await prisma.usuario.findFirst({
             where: { email: req.body.email_usuario }
         });
 
@@ -839,6 +839,13 @@ controller.addAdministrador = async function (req, res) {
             return res.status(400).json({ mensagem: "Você não tem permissão para adicionar membros nesse Projeto!" });
         }
 
+        // Obtendo o id do usuário pelo email
+        const usuario = await prisma.usuario.findFirst({
+            where: { email: req.body.email_usuario }
+        });
+
+        req.body.id_administrador = usuario.id;
+
         // Verificando se o usuário a ser inserido já não esta cadastrado em membros ou em adminitradores ou é o próprio gestor (Não permitir adcionar)
         if (req.session.usuario.id === req.body.id_administrador) {
             return res.status(400).json({ mensagem: "Você é o gestor do projeto, não pode ser membro!" });
@@ -852,7 +859,7 @@ controller.addAdministrador = async function (req, res) {
         });
 
         if (encontrou) {
-            return res.status(400).json({ mensagem: "Membro já está no projeto!" });
+            return res.status(400).json({ mensagem: "Usuário já é membro do projeto, remova-o e adicione-o como Administrador!" });
         } else {
             verificaProjeto.ids_administradores.forEach(adm => {
                 if (req.body.id_administrador === adm) {
@@ -862,7 +869,7 @@ controller.addAdministrador = async function (req, res) {
         }
 
         if (encontrou) {
-            return res.status(400).json({ mensagem: "Membro já está no projeto!" });
+            return res.status(400).json({ mensagem: "Usuário já é Administrador!" });
         }
 
         // Atualizando os administradores do projeto

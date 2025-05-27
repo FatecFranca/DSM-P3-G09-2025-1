@@ -411,15 +411,15 @@ async function editarPojeto(idProjeto) {
 
     const dadosProjeto = await buscarProjeto.json();
 
-    if (!dadosProjeto.mensagem) {
-        document.getElementById("idProjeto").value = dadosProjeto.id;
-        document.getElementById("titulo").value = dadosProjeto.titulo;
-        document.getElementById("descricao").value = dadosProjeto.descricao;
-        const data = new Date(dadosProjeto.data_limite);
+    if (dadosProjeto.result) {
+        document.getElementById("idProjeto").value = dadosProjeto.projeto.id;
+        document.getElementById("titulo").value = dadosProjeto.projeto.titulo;
+        document.getElementById("descricao").value = dadosProjeto.projeto.descricao;
+        const data = new Date(dadosProjeto.projeto.data_limite);
         const dataFormatada = data.toISOString().split('T')[0];
         document.getElementById("dataLimite").value = dataFormatada;
     } else {
-        alert("Erro ao buscar o projeto: " + dadosProjeto.mensagem);
+        alert("Erro ao buscar o projeto: " + dadosProjeto.projeto.mensagem);
     }
 }
 
@@ -435,6 +435,7 @@ async function editarMembros(idProjeto) {
     document.getElementById("idProjetoGestaoMembros").value = idProjeto;
 
     buscarMembros(idProjeto);
+    buscarAdmins(idProjeto);
     
 }
 
@@ -450,6 +451,7 @@ async function adicionarMembro() {
 
     if (emailUsu === "") {
         alert("Preencha o campo Email!");
+        document.getElementById("emailNovoMembro").focus();
         return;
     }
 
@@ -464,6 +466,31 @@ async function adicionarMembro() {
 
     if (dados.result){
         alert('Membro adicionado com sucesso!');
+        window.location.reload();
+        return
+    }else{
+        return alert('Erro: ' + dados.mensagem);
+    }
+
+}
+
+async function excluirMembro(idMembro, idProjeto) {
+
+    if (!confirm("Tem certeza que deseja remover este membro?")) {
+        return;
+    }
+
+    const resposta = await fetch('http://localhost:8080/projetos/removeMembro/' + idProjeto, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_membro: idMembro })
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.result){
+        alert('Membro removido com sucesso!');
         window.location.reload();
         return
     }else{
@@ -487,21 +514,117 @@ async function buscarMembros(idProjeto) {
     
     if (projeto.result) {
 
+        if (projeto.membros.length === 0) {
+            listaMembros.innerHTML = "<p class='nadaEncontrado'>Nenhum membro adicionado a este projeto</p>";
+        }
+
         for (let i = 0; i < projeto.membros.length; i++) {
     
             const membro = projeto.membros[i];
             const card = document.createElement("div");
 
             card.innerHTML = `
-                <a class="descricao">${membro.nome}</a><img src="img/icones/x-exlcuir.svg" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.email}', '${idProjeto}')">
+                <a class="descricao">${membro.nome}</a><img src="img/icones/x-exlcuir.svg" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.id}', '${idProjeto}')">
             `;
             listaMembros.appendChild(card);
         }
     }
 }
 
-function adicionarAdmin(){
-    const emailUsu = document.getElementById("emailNovoAdmin").style.value;
+async function adicionarAdmin(){
+    const emailUsu = document.getElementById("emailNovoAdmin").value;
+    const idProjeto = document.getElementById("idProjetoGestaoMembros").value;
+
+    if (emailUsu === "") {
+        alert("Preencha o campo Email!");
+        document.getElementById("emailNovoAdmin").focus();
+        return;
+    }
+
+    const resposta = await fetch('http://localhost:8080/projetos/addAdministrador/' + idProjeto, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email_usuario: emailUsu })
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.result){
+        alert('Administrador adicionado com sucesso!');
+        window.location.reload();
+        return
+    }else{
+        return alert('Erro: ' + dados.mensagem);
+    }
+}
+
+async function excluirAdministrador(idMembro, idProjeto) {
+
+    if (!confirm("Tem certeza que deseja remover este administrador?")) {
+        return;
+    }
+
+    const resposta = await fetch('http://localhost:8080/projetos/removeAdministrador/' + idProjeto, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_administrador: idMembro })
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.result){
+        alert('Administrador removido com sucesso!');
+        window.location.reload();
+        return
+    }else{
+        return alert('Erro: ' + dados.mensagem);
+    }
+
+}
+
+async function buscarAdmins(idProjeto) {
+
+    const listaAdmins = document.getElementById("listaAdmins");
+    listaAdmins.innerHTML = "";
+
+    const listaGestores = document.getElementById("novoGestor");
+    listaGestores.innerHTML = "";
+    
+    const buscarProjeto = await fetch('http://localhost:8080/projetos/' + idProjeto, {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const projeto = await buscarProjeto.json();
+    
+    if (projeto.result) {
+
+        if (projeto.administradores.length === 0) {
+            listaAdmins.innerHTML = "<p class='nadaEncontrado'>Nenhum administrador adicionado a este projeto</p>";
+        }
+
+        for (let i = 0; i < projeto.administradores.length; i++) {
+    
+            // Inserindo nos administradores
+            const administrador = projeto.administradores[i];
+            const card = document.createElement("div");
+
+            card.innerHTML = `
+                <a class="descricao">${administrador.nome}</a><img src="img/icones/x-exlcuir.svg" class="btn-excluir-membro" title="Excluir Administrador" onclick="excluirAdministrador('${administrador.id}', '${idProjeto}')">
+            `;
+            listaAdmins.appendChild(card);
+
+            // Inserindo nos possiveis gestores
+            const option = document.createElement("option");
+            option.value = administrador.id;
+            option.textContent = administrador.nome;
+            listaGestores.appendChild(option);
+            
+        }
+    }
 }
 
 function cederCargoGestor(){

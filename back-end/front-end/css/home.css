@@ -501,6 +501,8 @@ footer a {
 
 .lista-usuarios div a{
   width: 90%;
+  font-size: 15px;
+  margin-top: 0px;
 }
 
 .lista-usuarios button {
@@ -528,4 +530,22 @@ footer a {
   height: 15px;
   cursor: pointer;
   max-width: 10%;
+}
+
+.nadaEncontrado{
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  margin: 8px;
+}
+
+.select-gestor{
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background-color: #fff;
+  color: #333;
 }
