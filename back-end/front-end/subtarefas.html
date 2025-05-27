@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskflow - Subtarefas</title>
+  <link rel="stylesheet" href="css/subtarefas.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+    </nav>
+  </header>
+
+  <div id="form-container" style="display: none;">
+    <form id="task-form">
+      <h3 id="form-title">NOVA SUBTAREFA</h3>
+      <input type="text" id="titulo" placeholder="Título" required />
+      <input type="date" id="data" required />
+      <select id="status" required>
+        <option value="">Status</option>
+        <option value="pendente">Pendente</option>
+        <option value="concluida">Concluída</option>
+        <option value="atrasada">Atrasada</option>
+      </select>
+      <textarea id="descricao" placeholder="Descrição" required></textarea>
+      <input type="file" id="arquivo" />
+      <button type="submit">Salvar</button>
+      <button type="button" onclick="fecharFormulario()">Cancelar</button>
+    </form>
+  </div>
+
+  <main>
+    <div class="topo">
+      <a href="#" id="voltar" aria-label="Voltar">⭠</a>
+      <h1>Nome Tarefa</h1>
+    </div>
+    <hr />
+    <button id="add-task">ADICIONAR SUBTAREFA</button>
+
+    <section class="categoria">
+      <h2>GESTOR</h2>
+      <div class="tarefas"></div>
+    </section>
+
+    <section class="categoria">
+      <h2>ADM</h2>
+      <div class="tarefas"></div>
+    </section>
+
+    <section class="categoria">
+      <h2>MEMBRO</h2>
+      <div class="tarefas"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="logo-footer">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
+      <span>— O site completo para gerenciamento de tarefas</span>
+    </div>
+    <div class="footer-links">
+       <a href="termosUso.html">Termos</a> | 
+       <a href="politicaPrivacidade.html">Privacidade</a> | 
+       <a href="contato.html">Suporte</a>
+    </div>
+  </footer>
+
+  <script src="js/subtarefas.js"></script>
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector("header nav");
+      nav.classList.toggle("show");
+    }
+  </script>
+</body>
+</html>
