@@ -1,0 +1,33 @@
+[33mc72e136[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: commit: Comunicação com Front-Back | Criar, Alterar, Concluir, Reabrir, Baixar Anexo de Projetos
+[33md94ce5f[m HEAD@{1}: commit: Alterar Dados Usuário | Alteração de Imagens na pasta do servidor
+[33m0e590cf[m HEAD@{2}: commit: Criação das Páginas (Privacidade|Termos|Contato) - Organização de páginas Front exibindo pelo Server Back
+[33m66700f8[m HEAD@{3}: commit: Criação das Páginas (Privacidade|Termos|Contato) - Organização de páginas Front exibindo pelo Server Back
+[33m9eaedac[m HEAD@{4}: pull: Fast-forward
+[33ma3528b8[m HEAD@{5}: commit (merge): Criação da página de Alterar Dados Usuário - Falta Implementar a Compilação de Foto
+[33m69b1265[m HEAD@{6}: commit: Criação da página de Alterar Dados Usuário - Falta Implementar a Compilação de Foto
+[33m4c130ef[m HEAD@{7}: pull: Fast-forward
+[33m30afe0d[m HEAD@{8}: commit: Criação da Página de Cadastrar-se
+[33m3e7351f[m HEAD@{9}: commit: Atualização Front
+[33m24bfd10[m HEAD@{10}: commit: Correção de Sessão de Login - Back e Front rodando no mesmo servidor
+[33m82a7072[m HEAD@{11}: commit: Criação da página Index.html - Criação da página Logon.html, falta vincular corretamente com o back
+[33m8535034[m HEAD@{12}: pull: Fast-forward
+[33med2302c[m HEAD@{13}: pull: Fast-forward
+[33med3b7ec[m HEAD@{14}: commit: Atualização do README para uma melhor apresentação do Projeto - Ainda não finalizado
+[33mbfbb4c5[m HEAD@{15}: commit: Finalização da Revisão dos controllers - Aguardando front para a implementação
+[33m09f90d1[m HEAD@{16}: commit: Inicio de Validações de Funções de Atividades
+[33m7c6d901[m HEAD@{17}: commit: Validação em Subtarefas e alteração de rotina de Notificações automáticas ao iniciar servidor
+[33m740f21c[m HEAD@{18}: commit: Validação de Subtarefas - Faltar Delete e Update - Ajuste em função addMembro e removeMembro
+[33md063228[m HEAD@{19}: commit: Termino de Validação de Funções de Projetos e Tarefas
+[33m6a6fb58[m HEAD@{20}: commit: Inicio de Validações. Validados: usuarios e projetos (Validar integração delete de ambos)
+[33m7d68d0b[m HEAD@{21}: commit: Finalização de Componentes do Back (Falta testar todos em Conjunto) - Revisão de Documentos e estretégias
+[33m2757610[m HEAD@{22}: commit: Início de funções Subtarefa - Revisar em breve
+[33m2923a6e[m HEAD@{23}: commit: Criação e finalização das Tarefas - Faltará testar o Anexo com Front e Delete (Subtarefas e Atividades)
+[33m8131ca9[m HEAD@{24}: commit: Finalização parcial (Projetos) - Faltará revisar exclusão de anexo e exclusão conjunta com tarefas, subtarefa e atividades
+[33mc663d98[m HEAD@{25}: commit: Revisão das funções (Back) Usuários - Falta implemetar imagens de usuários com front
+[33mcbb55b9[m HEAD@{26}: commit: Atualização da Documentação (Correção de BPMN's) - Funções de Projetos e usuários
+[33m9fae10c[m HEAD@{27}: commit: Atualização do Diagrama NoAM depois do FeadBack - Mudança na realação da notificação com subtarefa
+[33mc7d7bc0[m HEAD@{28}: commit: Criação das Routes e Controller (Usuarios e Administradores)
+[33m4351a2a[m HEAD@{29}: commit: Estrutura das Transações (schema.prisma) - Arquivos (Controllers e Routes
+[33mf8d51e6[m HEAD@{30}: commit: Criação de Conograma e Conclusão de Parte da Documentação (Aguardando Protótipo para Conclusão)
+[33m56100d2[m HEAD@{31}: commit: Entrega da Atividade de BDR e Criação da Doumentação do Peojeto
+[33m8ccdfc7[m HEAD@{32}: clone: from https://github.com/FatecFranca/DSM-P3-G09-2025-1.git

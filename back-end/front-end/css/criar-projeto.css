@@ -1,94 +1,226 @@
-body {
+/* Reset básico */
+* {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
+  box-sizing: border-box;
 }
 
+/* Body e fonte */
+body, html {
+  font-family: 'Montserrat', 'Space Grotesk', Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+/* HEADER PADRÃO */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-header {
+  height: 20px;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 20px; /* Alinha texto verticalmente */
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #3f5fff;
+}
+
+/* Botão menu hamburger - só aparece no mobile */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Responsividade do header */
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    flex-direction: column;
+    background: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 8px;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  nav a {
+    margin: 10px 0;
+  }
+}
+
+/* CONTAINER CENTRALIZADO */
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
+  padding: 3rem 1rem;
+  min-height: calc(100vh - 72px - 80px); /* altura da header e footer */
 }
 
+/* FORMULÁRIO */
 .formulario {
   background-color: #fafafa;
-  padding: 40px;
+  padding: 40px 30px;
   border-radius: 24px;
   border: 1px solid #ccc;
   max-width: 600px;
-  width: 90%;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
 }
 
 .formulario h1 {
-  font-family: 'Lobster Two', cursive;
   font-size: 2rem;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .alerta {
   margin-bottom: 20px;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 12px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #444;
   background-color: #fff;
   align-self: flex-end;
-}
-
-
-.erro {
-  color: red;
+  display: none; /* inicialmente escondido */
 }
 
 label {
-  margin: 10px 0 4px;
-  font-weight: normal;
+  margin: 12px 0 6px;
+  font-weight: 400;
+  color: #555;
 }
 
 input[type="text"],
+input[type="date"],
 textarea,
 input[type="file"] {
   width: 100%;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: 1px solid #aaa;
   border-radius: 12px;
   font-size: 1rem;
-  margin-bottom: 12px;
   background-color: #fff;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+  resize: none;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+input[type="file"]:focus {
+  outline: none;
+  border-color: #3f5fff;
 }
 
 textarea {
   height: 80px;
-  resize: none;
 }
 
 .criar-btn {
-  margin-top: 10px;
+  margin-top: 20px;
   background-color: #3f5fff;
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 10px;
-  font-size: 1rem;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+}
+
+.criar-btn:hover {
+  background-color: #3351cc;
 }
 
 .voltar-link {
-  margin-top: 10px;
+  margin-top: 12px;
   text-align: center;
   color: #3f5fff;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  display: block;
+  transition: text-decoration 0.3s ease;
 }
 
-.logo {
-    height: 100px;
+.voltar-link:hover {
+  text-decoration: underline;
+}
+
+/* RODAPÉ */
+footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  font-size: 0.8rem;
+  color: #666;
+}
+footer a {
+  color: #444;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+.logoimg{
+  height: 12px;
+}
+
+@media (max-width: 750px) {
+  footer {
+    display: block;
+    text-align: center;
+  }
+
+  footer .logo-footer {
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  footer div a {
+    display: inline-block;
+    margin: 0.2rem;
+  }
 }
 
 .msgAviso{

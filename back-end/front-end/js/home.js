@@ -1,19 +1,18 @@
-document.getElementById("sairBtn").addEventListener("click", function () {
-    if (confirm("Tem certeza que deseja sair?")) {
-        encerrarSessao();
-    }
+function toggleMenu() {
+  const menu = document.getElementById('menuNav');
+  menu.classList.toggle('show');
+}
+
+document.getElementById('meuPerfilBtn').addEventListener('click', () => {
+  window.location.href = 'alterarDadosUsuario.html';
 });
 
-document.getElementById("novoProjetoBtn1").addEventListener("click", function () {
-    window.location.href = "novo-projeto.html";
-});
-
-document.getElementById("novoProjetoBtn2").addEventListener("click", function () {
-    window.location.href = "novo-projeto.html";
-});
-
-document.getElementById("notificacoesBtn").addEventListener("click", function () {
-    window.location.href = "notificacoes.html";
+document.getElementById('sairMenu').addEventListener('click', (e) => {
+  e.preventDefault();
+  const confirmar = confirm("Tem certeza de que deseja sair?");
+  if (confirmar) {
+    window.location.href = 'index.html';
+  }
 });
 
 

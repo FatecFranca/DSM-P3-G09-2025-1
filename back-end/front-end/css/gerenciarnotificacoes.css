@@ -1,0 +1,179 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: white;
+  padding: 0;
+}
+/* HEADER PADRÃO */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo */
+.logo-header {
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Navegação desktop */
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+/* Links do menu */
+nav a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 20px;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #3f5fff;
+}
+
+/* Botão menu hamburger - só aparece no mobile */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Responsividade para telas menores que 750px */
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    flex-direction: column;
+    background: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  nav a {
+    margin: 10px 0;
+  }
+}
+
+.back-btn {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: black;
+}
+.logo {
+  height: 15px;
+  width: auto;
+}
+main {
+  padding: 1rem;
+}
+.notificacoes-container h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #4057f1;
+  margin-bottom: 1rem;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #e6efef;
+  padding: 0.5rem;
+}
+.actions label {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.actions button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+.actions button img {
+  width: 16px;
+  height: 16px;
+}
+ul#notificationList {
+  list-style: none;
+  margin-top: 1rem;
+}
+ul#notificationList li {
+  border-bottom: 1px solid #ccc;
+  padding: 1rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+ul#notificationList li input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  font-size: 0.8rem;
+  color: #666;
+  border-top: 1px solid #eee;
+}
+
+footer a {
+  color: #444;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+.logoimg {
+  height: 12px;
+}
+
+@media (max-width: 750px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  footer div {
+    margin: 5px 0;
+  }
+}

@@ -13,10 +13,6 @@ header {
   font-weight: bold;
 }
 
-.logo span:first-child { color: #ff4ec9; }
-.logo span:nth-child(2) { color: #49d3f5; }
-.logo span:last-child { color: #4cd964; }
-
 nav a {
   margin: 0 1rem;
   text-decoration: none;
@@ -149,16 +145,35 @@ nav .register {
 footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   padding: 1rem 2rem;
   background-color: #fff;
   font-size: 0.8rem;
   color: #666;
+  border-top: 1px solid #eee;
 }
 
 footer a {
   color: #444;
   text-decoration: none;
   margin-left: 0.5rem;
+}
+
+.logoimg {
+  height: 12px;
+}
+
+@media (max-width: 750px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  footer div {
+    margin: 5px 0;
+  }
 }
 
 @media (max-width: 850px) {
@@ -188,9 +203,6 @@ footer a {
   }
 }
 
-
-.logo-footer span:first-child { color: #ff4ec9; }
-.logo-footer span:last-child { color: #4cd964; }
 
 /* Menu Mobile */
 /* Estilo padrão */
