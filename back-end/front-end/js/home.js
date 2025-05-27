@@ -15,7 +15,6 @@ document.getElementById('sairMenu').addEventListener('click', (e) => {
   }
 });
 
-
 // botão filtro
 document.getElementById("statusBtn").addEventListener("click", function () {
     const status = prompt("Filtrar por status: pendente, atrasado ou concluído").toLowerCase();
@@ -29,21 +28,6 @@ document.getElementById("statusBtn").addEventListener("click", function () {
         }
     });
 });
-
-// barra de pesquisa
-document.querySelector(".search-input").addEventListener("input", function (e) {
-    const termo = e.target.value.toLowerCase();
-    const cards = document.querySelectorAll(".projeto-card");
-    cards.forEach(card => {
-        const titulo = card.querySelector(".titulo-projeto");
-        if (titulo && titulo.textContent.toLowerCase().includes(termo)) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
-});
-
 
 window.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".projetos-container");
@@ -166,7 +150,7 @@ async function carregarProjetos() {
             card.innerHTML = `
                 <div class="project-header">
                     <h4>${projeto.titulo}</h4>
-                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros()">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
+                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
@@ -192,7 +176,7 @@ async function carregarProjetos() {
             card.innerHTML = `
                 <div class="project-header">
                     <h4>${projeto.titulo}</h4>
-                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros()">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
+                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
@@ -444,9 +428,14 @@ function fecharPopup() {
     document.body.style.overflow = "";
 }
 
-function editarMembros() {
+async function editarMembros(idProjeto) {
     document.getElementById("gestaoPopup").style.display = "flex";
     document.body.style.overflow = "hidden";
+
+    document.getElementById("idProjetoGestaoMembros").value = idProjeto;
+
+    buscarMembros(idProjeto);
+    
 }
 
 function fecharPopupGestao() {
@@ -454,8 +443,11 @@ function fecharPopupGestao() {
     document.body.style.overflow = "";
 }
 
-async function adicionarMembro(){
-    const emailUsu = document.getElementById("emailNovoMembro").style.value.trim();
+async function adicionarMembro() {
+    
+    const emailUsu = document.getElementById("emailNovoMembro").value.trim();
+    const idProjeto = document.getElementById("idProjetoGestaoMembros").value;
+
     if (emailUsu === "") {
         alert("Preencha o campo Email!");
         return;
@@ -465,18 +457,25 @@ async function adicionarMembro(){
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo_alteracao: "Concluir" })
+        body: JSON.stringify({ email_usuario: emailUsu })
     });
 
-    if (resposta.result){
-        return alert('Membro adicionado com sucesso!');
+    const dados = await resposta.json();
+
+    if (dados.result){
+        alert('Membro adicionado com sucesso!');
+        window.location.reload();
+        return
     }else{
-        return alert('Erro: ' + resposta.mensagem);
+        return alert('Erro: ' + dados.mensagem);
     }
 
 }
 
 async function buscarMembros(idProjeto) {
+
+    const listaMembros = document.getElementById("listaMembros");
+    listaMembros.innerHTML = "";
     
     const buscarProjeto = await fetch('http://localhost:8080/projetos/' + idProjeto, {
         method: 'GET',
@@ -485,23 +484,19 @@ async function buscarMembros(idProjeto) {
     });
 
     const projeto = await buscarProjeto.json();
+    
     if (projeto.result) {
-        for (let i = 0; i < projeto.ids_membros.length; i++) {
 
-            const membro = projeto.ids_membros[i];
+        for (let i = 0; i < projeto.membros.length; i++) {
+    
+            const membro = projeto.membros[i];
             const card = document.createElement("div");
 
-            card.className = "project-card";
             card.innerHTML = `
-                <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
-                <p class="descricao">${projeto.descricao}</p>
-                ${exibirAnexo}
+                <a class="descricao">${membro.nome}</a><img src="img/icones/x-exlcuir.svg" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.email}', '${idProjeto}')">
             `;
-            containerGestor.appendChild(card);
-
+            listaMembros.appendChild(card);
         }
-
     }
 }
 

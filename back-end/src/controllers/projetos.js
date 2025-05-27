@@ -165,8 +165,20 @@ controller.retrieveOne = async function (req, res) {
             return res.status(400).json({ mensagem: "Você não tem permissão para obter os dados desse projeto!" });
         }
 
+        // Obtendo a listagem de todos os membros do projeto
+        const membros = await prisma.usuario.findMany({
+            where: { id: { in: projeto.ids_membros } },
+            orderBy: [{ nome: 'asc' }]
+        });
+
+        // Obtendo a listagem de todos os administradores do projeto
+        const administradores = await prisma.usuario.findMany({
+            where: { id: { in: projeto.ids_administradores } },
+            orderBy: [{ nome: 'asc' }]
+        });
+
         // Retorna os dados obtidos
-        return res.send(projeto);
+        return res.status(200).json({ projeto: projeto, membros: membros, administradores: administradores, result: true });
     }
     catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -636,7 +648,7 @@ controller.addMembro = async function (req, res) {
 
         // Obtendo o id do usuário pelo email
         const usuario = await prisma.usuario.findUnique({
-            where: { id: req.body.email_usuario }
+            where: { email: req.body.email_usuario }
         });
 
         req.body.id_membro = usuario.id;
