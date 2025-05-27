@@ -1,40 +1,41 @@
-// data mínima de entrega para hoje
-const hoje = new Date().toISOString().split("T")[0];
-document.getElementById("dataEntrega").setAttribute("min", hoje);
-
-function mostrarErro(mensagem) {
-  const alerta = document.getElementById('alerta-erro');
-  alerta.textContent = mensagem;
-  alerta.style.display = 'block';
-}
-
-document.getElementById("formProjeto").addEventListener("submit", function (e) {
-  e.preventDefault();
-
+async function criarProjeto() {
   const titulo = document.getElementById("titulo").value.trim();
   const descricao = document.getElementById("descricao").value.trim();
   const dataEntrega = document.getElementById("dataEntrega").value;
+  let arquivo = document.getElementById("arquivo").files[0];
+  const msgAviso = document.getElementById("msgAviso");
+  msgAviso.innerHTML = "";
 
-  if (!titulo || !descricao || !dataEntrega) {
-    mostrarErro('Preencha todos os campos obrigatórios.');
+  if (titulo === "") {
+    msgAviso.innerHTML = "Preencha o campo Título!";
+    return;
+  } else if (descricao === "") {
+    msgAviso.innerHTML = "Preencha o campo Descrição!";
+    return;
+  } else if (!dataEntrega || dataEntrega === "" || dataEntrega === undefined || dataEntrega === null) {
+    msgAviso.innerHTML = "Preencha o campo Data de Entrega!";
     return;
   }
 
-  try {
-    const projeto = {
-      titulo,
-      descricao,
-      dataEntrega
-    };
+  const formData = new FormData();
+  formData.append('anexoProjeto', arquivo);
+  formData.append('titulo', titulo);
+  formData.append('descricao', descricao);
+  formData.append('data_limite', dataEntrega);
 
-    const projetos = JSON.parse(localStorage.getItem("projetos")) || [];
-    projetos.push(projeto);
-    localStorage.setItem("projetos", JSON.stringify(projetos));
+  const resposta = await fetch('http://localhost:8080/projetos/', {
+    method: 'POST',
+    credentials: 'include',
+    body: formData
+  });
 
-    window.location.href = "index.html";
+  const dados = await resposta.json();
 
-  } catch (err) {
-    mostrarErro('Houve um erro, tente novamente mais tarde.');
-    console.error(err);
+  if (dados.result) {
+    alert("Projeto criado com sucesso!");
+    window.location.href = "home.html";
+  } else {
+    msgAviso.innerHTML = dados.mensagem;
   }
-});
+
+}

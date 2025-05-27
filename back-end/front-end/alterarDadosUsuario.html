@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alterar Dados - Taskflow</title>
-  <link rel="stylesheet" href="css/index.css"/>
-  <link rel="stylesheet" href="css/alterarDadosUsuario.css"/>
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/alterarDadosUsuario.css" />
   <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
 </head>
+
 <body>
   <header>
-      <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-        <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
-      </div>
-      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-      <nav>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
       <a href="home.html">Home</a>
       <a href="sobre.html">Sobre nós</a>
       <a href="contato.html">Fale conosco</a>
-      <a onclick="encerrarSessao()" title="Sair"><img src="img/icones/sair.png" alt="Sair" class="icon-sair"></a>
-      </nav>
+      <a href="notificacoes.html" title="Notificações"><img src="img/icones/sino-de-notificacao.png" alt="Notificações"
+          class="icon-img" id="img-not"><label id="txt-not">Notificações</label></a>
+      <a onclick="encerrarSessao()" title="Sair"><img src="img/icones/sair.png" alt="Sair" class="icon-sair"
+          id="img-sair"><label id="txt-sair">Sair</label></a>
+    </nav>
   </header>
   <div class="container">
     <div class="form-box">
@@ -27,26 +32,26 @@
       <br><br>
 
       <div id="mensagemStatus" class="msg-status">
-        <em id="msgAviso">Altere os Dados do Cadastro ...</em>
+        <a id="msgAviso">Gerencie sua Conta ...</a>
       </div>
 
       <form class="form-alterar">
 
         <div class="left">
           <div class="form-group">
-            <input type="text" id="nome" name="nome" placeholder="Nome" required/>
+            <input type="text" id="nome" name="nome" placeholder="Nome" required />
           </div>
 
           <div class="form-group">
-            <input type="email" id="email" name="email" placeholder="E-mail" required/>
+            <input type="email" id="email" name="email" placeholder="E-mail" required />
           </div>
 
           <div class="form-group">
-            <input type="password" id="senhaAtual" name="senhaAtual" placeholder="Senha Atual" required/>
+            <input type="password" id="senhaAtual" name="senhaAtual" placeholder="Senha Atual" required />
           </div>
 
           <div class="form-group">
-            <input type="password" id="novaSenha" name="novaSenha" placeholder="Nova Senha (Opcional)"/>
+            <input type="password" id="novaSenha" name="novaSenha" placeholder="Nova Senha (Opcional)" />
           </div>
         </div>
 
@@ -56,20 +61,22 @@
           </div>
           <br>
           <div style="text-align: center; align-items: center; display: flex; justify-content: center;">
-            <label for="fotoUsuario" class="upload-btn" title="Importar Foto"><img alt="Selecionar Foto Usuário" src="img/icones/uploadfoto.png"></label>
+            <label for="fotoUsuario" class="upload-btn" title="Importar Foto"><img alt="Selecionar Foto Usuário"
+                src="img/icones/uploadfoto.png"></label>
             <input type="file" id="fotoUsuario" name="foto" accept="image/*" style="display: none;">
             &nbsp;&nbsp;
-            <label class="lixeira-btn" title="Deletar Foto"><img alt="Deletar Foto Usuário" src="img/icones/lixeira.svg" onclick="deletarFoto()"></label>
+            <label class="lixeira-btn" title="Deletar Foto"><img alt="Deletar Foto Usuário" src="img/icones/lixeira.svg"
+                onclick="deletarFoto()"></label>
           </div>
           <br>
           <div style="text-align: center;">
             <button type="button" class="btn-salvar" onclick="alterarDados()">Salvar</button>
             &nbsp;&nbsp;
-            <button type="button" class="btn-cancelar" onclick="window.location.href = 'home.html'">Cancelar</button>
+            <button type="button" class="btn-cancelar" onclick="deletarConta()">Deletar Conta</button>
           </div>
 
         </div>
-        
+
       </form>
 
       <div class="logo-taskflow">
@@ -79,25 +86,26 @@
   </div>
 
   <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="footer-logo">
-                <p>O site completo para gerenciamento de tarefas.</p>
-            </div>
-            <br><br>
-            <div class="footer-links">
-                <a href="termosUso.html">Termos</a>
-                <a href="politicaPrivacidade.html">Privacidade</a>
-                <a href="contato.html">Contato</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 Taskflow</p>
-        </div>
-    </footer>
+    <div class="footer-content">
+      <div class="footer-left">
+        <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="footer-logo">
+        <p>O site completo para gerenciamento de tarefas.</p>
+      </div>
+      <br><br>
+      <div class="footer-links">
+        <a href="termosUso.html">Termos</a>
+        <a href="politicaPrivacidade.html">Privacidade</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Taskflow</p>
+    </div>
+  </footer>
 
   <script src="js/alterarDadosUsuario.js"></script>
   <script src="js/menuMobile.js"></script>
   <script>window.onload = buscarDados()</script>
 </body>
+
 </html>

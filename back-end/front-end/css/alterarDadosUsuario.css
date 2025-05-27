@@ -35,7 +35,7 @@ body {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #fff;;
 }
 
 .erro {
@@ -81,7 +81,7 @@ input[type="password"] {
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 13px;
   width: 48%;
   max-width: 125px;
 }
@@ -97,7 +97,7 @@ input[type="password"] {
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 13px;
   width: 48%;
   max-width: 125px;
 }
@@ -122,7 +122,7 @@ input[type="password"] {
     padding-right: 8px;
     padding-top: 3px;
     padding-bottom: 3px;
-    background-color: #1e00c5;
+    background-color: none;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -135,16 +135,12 @@ input[type="password"] {
     height: 25px;
 }
 
-.upload-btn:hover {
-    background-color: #170097;
-}
-
 .lixeira-btn {
   padding-left: 8px;
     padding-right: 8px;
     padding-top: 3px;
     padding-bottom: 3px;
-    background-color: #da0000;
+    background-color: none;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -153,13 +149,10 @@ input[type="password"] {
 }
 
 .lixeira-btn img {
-    width: 25px;
-    height: 25px;
+    width: 22px;
+    height: 22px;
 }
 
-.lixeira-btn:hover {
-    background-color: #be0000;
-}
 
 #imagemPreview {
     max-width: 150px;
@@ -167,7 +160,7 @@ input[type="password"] {
     width: 50%;
     height: auto;
     display: block;
-    border-radius: 300px;
+    border-radius: 20px;
     border: 1px solid #010016;
     aspect-ratio: 1 / 1;
     object-fit: cover;   
@@ -218,6 +211,14 @@ input[type="password"] {
 }
 
 .icon-sair {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.icon-img {
     width: 20px;
     height: 20px;
     vertical-align: middle;

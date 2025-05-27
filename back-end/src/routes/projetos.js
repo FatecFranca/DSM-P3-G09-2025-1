@@ -45,7 +45,7 @@ router.get('/membro/true', controller.retrieveAllMembro);
 
 // Validada (04/05)
 // Alterar projeto
-router.put('/:id', upload.single('anexoProjeto'), controller.update);
+router.put('/:id', upload.single('anexo'), controller.update);
 /*
     Dados a serem informados:
     titulo: String
@@ -61,7 +61,7 @@ router.put('/:id', upload.single('anexoProjeto'), controller.update);
 router.put('/addMembro/:id', controller.addMembro);
 /*
     Dados a serem informados:
-    id_membro: String
+    email_usuario: String
 */
 
 

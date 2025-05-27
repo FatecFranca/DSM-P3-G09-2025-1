@@ -227,6 +227,25 @@ nav a {
   cursor: pointer;
 }
 
+.logo-header {
+  max-height: 20px;
+  height: 20px;
+  width: auto;
+}
+
+.logo-footer{
+  max-height: 10px;
+  width: auto;
+}
+
+#txt-not{
+  display: none;
+}
+
+#txt-sair{
+  display: none;
+}
+
 /* Responsividade */
 @media (max-width: 750px) {
   .menu-toggle {
@@ -251,15 +270,20 @@ nav a {
   footer{
     display: block;
   }
-}
 
-.logo-header {
-  max-height: 20px;
-  height: 20px;
-  width: auto;
-}
+  #txt-not{
+    display: block;
+  }
 
-.logo-footer{
-  max-height: 10px;
-  width: auto;
+  #txt-sair{
+    display: block;
+  }
+
+  #img-sair{
+    display: none;
+  }
+
+  #img-not{
+    display: none;
+  }
 }

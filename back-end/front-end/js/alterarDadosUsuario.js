@@ -2,7 +2,7 @@ let dadosSessao = null;
 let imagemAtual = null;
 let deletarImagem = false;
 
-async function buscarDados(){
+async function buscarDados() {
 
     const resposta = await fetch('http://localhost:8080/usuarios/verificaSessao/true', {
         method: 'GET',
@@ -12,7 +12,7 @@ async function buscarDados(){
 
     dadosSessao = await resposta.json();
 
-    if(!dadosSessao.result){
+    if (!dadosSessao.result) {
         return window.location.href = "login.html";
     }
 
@@ -24,22 +24,22 @@ async function buscarDados(){
 
     const dadosUsuario = await obterDadosUsuario.json();
 
-    if(dadosUsuario){
+    if (dadosUsuario) {
         document.getElementById("nome").value = dadosUsuario.nome;
         document.getElementById("email").value = dadosUsuario.email;
 
         if (dadosUsuario.foto === null) {
             document.getElementById("imagemPreview").src = "img/icones/fotodeperfil.png";
-        }else{
+        } else {
             imagemAtual = dadosUsuario.foto;
-            document.getElementById("imagemPreview").src = "http://localhost:8080/uploads/imgUsuarios/"+dadosUsuario.foto;
+            document.getElementById("imagemPreview").src = "http://localhost:8080/uploads/imgUsuarios/" + dadosUsuario.foto;
         }
-    }else{
+    } else {
         return window.location.href = "login.html";
     }
 }
 
-async function alterarDados(){
+async function alterarDados() {
     const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
     const senhaAtual = document.getElementById("senhaAtual").value;
@@ -57,12 +57,12 @@ async function alterarDados(){
         document.getElementById("nome").focus();
         msgAviso.style.color = "red";
         return;
-    }else if (email === "") {
+    } else if (email === "") {
         msgAviso.innerHTML = "Preencha o campo de E-mail!";
         document.getElementById("email").focus();
         msgAviso.style.color = "red";
         return;
-    }else if (senhaAtual === "") {
+    } else if (senhaAtual === "") {
         msgAviso.innerHTML = "Preencha o campo de Senha!";
         document.getElementById("senhaAtual").focus();
         msgAviso.style.color = "red";
@@ -76,13 +76,13 @@ async function alterarDados(){
             msgAviso.style.color = "red";
             return;
         }
-    }else{
+    } else {
         novaSenha = senhaAtual;
     }
 
     if (deletarImagem) {
         fotoUsuario = null;
-    }else if (!fotoUsuario) {
+    } else if (!fotoUsuario) {
         fotoUsuario = imagemAtual;
     }
 
@@ -101,12 +101,12 @@ async function alterarDados(){
 
     respostaDados = await resposta.json();
 
-    if(respostaDados.result){
+    if (respostaDados.result) {
         msgAviso.innerHTML = "Dados alterados com sucesso!";
         msgAviso.style.color = "green";
         document.getElementById("senhaAtual").value = "";
         document.getElementById("novaSenha").value = "";
-    }else if(respostaDados.mensagem){
+    } else if (respostaDados.mensagem) {
         msgAviso.innerHTML = respostaDados.mensagem;
         msgAviso.style.color = "red";
     }
@@ -134,19 +134,49 @@ function deletarFoto() {
     deletarImagem = true;
 }
 
+async function deletarConta() {
+    if (!confirm("Deseja realmente deletar a conta?")) {
+        return;
+    }
+
+    const senhaAtual = document.getElementById("senhaAtual").value;
+
+    if (senhaAtual === "") {
+        msgAviso.innerHTML = "Preencha o campo de Senha!";
+        document.getElementById("senhaAtual").focus();
+        msgAviso.style.color = "red";
+        return;
+    }
+
+    const resposta = await fetch('http://localhost:8080/usuarios/' + dadosSessao.dados.id, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha_atual: senhaAtual })
+    });
+
+    const dados = await resposta.json();
+    if (dados.result) {
+        window.location.href = "login.html";
+    } else {
+        msgAviso.innerHTML = dados.mensagem;
+        msgAviso.style.color = "red";
+    }
+}
+
 // Importação de Foto
 const inputFoto = document.getElementById('fotoUsuario');
 const preview = document.getElementById('imagemPreview');
 
 inputFoto.addEventListener('change', function () {
-const file = inputFoto.files[0];
-if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-    preview.src = e.target.result;
-    preview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-    deletarImagem = false;
-}
+    const file = inputFoto.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        deletarImagem = false;
+    }
 });

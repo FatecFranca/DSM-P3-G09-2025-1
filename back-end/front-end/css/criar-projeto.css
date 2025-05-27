@@ -90,3 +90,9 @@ textarea {
 .logo {
     height: 100px;
 }
+
+.msgAviso{
+  text-align: center;
+  color: red;
+  font-size: 18px;
+}

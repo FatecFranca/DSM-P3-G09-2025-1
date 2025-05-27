@@ -8,6 +8,7 @@
   <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
 </head>
 <body>
+  <br><br>
   <div class="container">
     <form id="formProjeto" class="formulario">
       <h1>Criar Projeto</h1>
@@ -20,12 +21,14 @@
       <textarea id="descricao" name="descricao" required></textarea>
 
       <label for="arquivo">Arquivos</label>
-      <input type="file" id="arquivo" name="arquivo" />
+      <input type="file" id="arquivo" name="arquivo" accept=".txt,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.ods,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,image/*" />
 
       <label for="dataEntrega">Determine a data de entrega</label>
       <input type="date" id="dataEntrega" name="dataEntrega" required />
 
-      <button type="submit" class="criar-btn">CRIAR</button>
+      <p id="msgAviso" class="msgAviso"></p>
+
+      <button type="button" class="criar-btn" onclick="criarProjeto()">CRIAR</button>
       <a href="home.html" class="voltar-link">Voltar</a>
     </form>
     <footer class="footer">
@@ -34,6 +37,8 @@
   </div>
 
   <script src="js/criar-projeto.js"></script>
+  <script src="js/login.js"></script>
+  <script>window.onload = sessaoIniGeral()</script>
 </body>
 </html>
 

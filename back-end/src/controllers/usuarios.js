@@ -353,7 +353,6 @@ controller.update = async function(req, res) {
     }
 }
 
-
 // Deletando o usuário
 controller.delete = async function(req, res) {
     try {
@@ -374,6 +373,8 @@ controller.delete = async function(req, res) {
         if (!valSenha){
             return res.status(400).json({ mensagem: "Senha Inválida!"});
         }
+
+        // Deletando os dados para não haver conflitos no body
         delete req.body.senha_atual;
 
         // Busca o usuário a ser excluído
@@ -387,41 +388,42 @@ controller.delete = async function(req, res) {
             deletarImagem(usuarioDeletar.foto);
         }
 
-        // Deletando os projetos em que ele é gestor
+        // buscando os projetos em que o usuário é gestor para excluí-los
         const projetosDeletar = await prisma.projeto.findMany({
             where: { id_gestor: req.session.usuario.id }
         });
 
-        // Verificando se a lista não voltou vazia
         if (projetosDeletar){
+
+            // Variáveis para armazenar as tarefas, subtarefas e atividades a serem deletadas
             let tarefasDeletar;
             let subtaresDeletar;
             let atividadesDeletar;
 
-            // Tarefas a deletar
+            // Projetos a deletar
             for (const projeto of projetosDeletar){
 
-                // Deletando as tarefas
+                // Buscando as tarefas do projeto
                 tarefasDeletar = await prisma.tarefa.findMany({
                     where: { id_projeto: projeto.id }
                 });
 
-                // Verificando se a lsita não voltou vazia
                 if (tarefasDeletar){
 
                     // Tarefas a deletar
                     for (const tarefa of tarefasDeletar){
 
+                        // Buscando as subtarefas da tarefa
                         subtaresDeletar = await prisma.subTarefa.findMany({
                             where: { id_tarefa: tarefa.id }
                         });
 
-                        // Verificando se a lista não voltou vazio
                         if (subtaresDeletar){
 
                             // SubTarefas a deletar
                             for (const subTarefa of subtaresDeletar){
 
+                                // Buscando as atividades da subtarefa
                                 atividadesDeletar = await prisma.atividade.findMany({
                                     where: { id_subtarefa: subTarefa.id }
                                 });
@@ -431,7 +433,7 @@ controller.delete = async function(req, res) {
                                     // Atividades a deletar
                                     for (const atividade of atividadesDeletar){
 
-                                        // Deletando o anexo
+                                        // Deletando o anexo da atividade caso exista
                                         if (atividade.anexo){
                                             deletarAnexo(atividade.anexo);
                                         }
@@ -443,18 +445,17 @@ controller.delete = async function(req, res) {
                                     }
                                 }
 
-                                // Notificações a deletar
+                                // Notificações a deletar de cada subtarefa
                                 const notificacoesDeletar = await prisma.notificacao.findMany({
                                     where: { id_subtarefa: subTarefa.id }
                                 });
 
-                                // Verificando se a lista não voltou vazia
                                 if (notificacoesDeletar){
 
-                                    // SubTarefas a deletar
+                                    // notificações a deletar
                                     for (const notificacao of notificacoesDeletar){
 
-                                        // Deletando as subtarefas
+                                        // Deletando as notificações
                                         await prisma.notificacao.delete({
                                             where: { id: notificacao.id }
                                         });
@@ -463,12 +464,12 @@ controller.delete = async function(req, res) {
                                     
                                 }
 
-                                // Deletando o anexo
+                                // Deletando o anexo da subtarefa caso exista
                                 if (subTarefa.anexo){
                                     deletarAnexo(subTarefa.anexo);
                                 }
 
-                                // Deletando as subtarefas
+                                // Deletando a subtarefa
                                 await prisma.subTarefa.delete({
                                     where: { id: subTarefa.id }
                                 });
@@ -477,12 +478,12 @@ controller.delete = async function(req, res) {
                             
                         }
 
-                        // Deletando o anexo
+                        // Deletando o anexo da tarefa caso exista
                         if (tarefa.anexo){
                             deletarAnexo(tarefa.anexo);
                         }
 
-                        // Deletando as tarefas
+                        // Deletando a tarefa
                         await prisma.tarefa.delete({
                             where: { id: tarefa.id }
                         });
@@ -491,12 +492,12 @@ controller.delete = async function(req, res) {
 
                 }
 
-                // Deletando o anexo
+                // Deletando o anexo do projeto caso exista
                 if (projeto.anexo){
                     deletarAnexo(projeto.anexo);
                 }
 
-                // Deletando os projetos
+                // Deletando o projeto
                 await prisma.projeto.delete({
                     where: { id: projeto.id }
                 });
@@ -504,11 +505,12 @@ controller.delete = async function(req, res) {
             }
         }
 
-        // Deletando as notificações pertencentes a esse usuário
+        // Obtendo as notificações do usuário a serem deletadas
         const notificacoesDeletar = await prisma.notificacao.findMany({
             where: { id_usuario: req.session.usuario.id }
         });
 
+        // Deletando as notificações do usuário
         if (notificacoesDeletar){
             for (const notificacao of notificacoesDeletar){
                 await prisma.notificacao.delete({
@@ -517,7 +519,7 @@ controller.delete = async function(req, res) {
             }
         }
 
-        // Exclui o usuário
+        // Excluir o usuário
         await prisma.usuario.delete({
             where: { id: req.params.id }
         });
@@ -528,24 +530,18 @@ controller.delete = async function(req, res) {
                 res.status(500).json({ mensagem: 'Erro ao encerrar sessão' });
             } else {
                 console.log('Logout realizado com sucesso');
-                // Envia resultado confirmando a exclusão
                 res.status(201).json({result: true});
             }
         });
 
     }
     catch(error) {
-        // P2025: erro do Prisma referente a objeto não encontrado
+        //Caso o usuário não seja encontrado
         if(error?.code === 'P2025' || error?.code === 'P2023') {
-        // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
         res.status(400).json({mensagem: "Usuário Não Encontrado!"});
-        }
-        else {    // Outros tipos de erro
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
 
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
+        }else {
+        console.error(error);
         res.status(500).send(error);
         }
     }

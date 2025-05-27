@@ -4,22 +4,25 @@
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 import bcrypt from 'bcrypt';
+import path from 'path';
+import fs from 'fs';
 const controller = {};
 
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
+import { url } from 'inspector';
 
 // Validada
 // Função para validar senha do gestor
-async function validaSenha(senhaNova, idGestor){
+async function validaSenha(senhaNova, idGestor) {
     const verificaGestor = await prisma.usuario.findUnique({
         where: { id: idGestor }
-    }); 
-    
+    });
+
     let verSenha = await bcrypt.compare(senhaNova, verificaGestor.senha);
-    if(verSenha){
+    if (verSenha) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
@@ -28,16 +31,16 @@ async function validaSenha(senhaNova, idGestor){
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), '..', 'uploads', 'anexoProjetos', nomeArquivo);
+    const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo);
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoAnexo)) {
         fs.unlink(caminhoAnexo, (err) => {
-        if (err) {
-            console.error('Erro ao deletar o anexo:', err);
-        } else {
-            console.log('Anexo deletada com sucesso!');
-        }
+            if (err) {
+                console.error('Erro ao deletar o anexo:', err);
+            } else {
+                console.log('Anexo deletado com sucesso!');
+            }
         });
     } else {
         console.log('Anexo não encontrado:', caminhoAnexo);
@@ -46,14 +49,14 @@ async function deletarAnexo(nomeArquivo) {
 
 // Validada (04/05) - Validar Anexo com Front
 // Criando um novo projeto
-controller.create = async function(req, res) {
+controller.create = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         req.body.status = "Pendente";
@@ -61,12 +64,12 @@ controller.create = async function(req, res) {
         req.body.id_gestor = req.session.usuario.id;
 
         // Verificando se a data foi informada para converte-la em um formato aceitavel
-        if (req.body.data_limite){
+        if (req.body.data_limite) {
             req.body.data_limite = new Date(req.body.data_limite);
 
             // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
-            if (req.body.data_limite < new Date()){
-                return res.status(400).json({mensagem: "Data de Limite não pode ser Menor que a data Atual!"});
+            if (req.body.data_limite < new Date()) {
+                return res.status(400).json({ mensagem: "Data de Limite não pode ser Menor que a data Atual!" });
             }
 
         }
@@ -77,12 +80,15 @@ controller.create = async function(req, res) {
         // Ajustando a url do anexo para a inserção no BD
         req.body.anexo = urlAnexo;
 
+        //  Deletando dados não serem armazenados no banco
+        delete req.body.anexoProjeto;
+
         await prisma.projeto.create({ data: req.body });
 
         // Retornando mensagem de sucesso
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // Deu errado: exibe o erro no terminal
         console.error(error);
 
@@ -94,17 +100,17 @@ controller.create = async function(req, res) {
 
 
 // Desativar posteriormente
-controller.retrieveAll = async function(req, res) {
+controller.retrieveAll = async function (req, res) {
     try {
         // Buscando todos os projetos cadastrados
         const result = await prisma.projeto.findMany({
-            orderBy: [ { data_criacao: 'asc' } ]
+            orderBy: [{ data_criacao: 'asc' }]
         });
-    
+
         // Retorna os dados obtidos
         return res.send(result);
     }
-    catch(error) {
+    catch (error) {
         // Deu errado: exibe o erro no terminal
         console.error(error);
 
@@ -116,14 +122,14 @@ controller.retrieveAll = async function(req, res) {
 
 // Validada (04/05)
 // Obtendo um projeto específico pelo id
-controller.retrieveOne = async function(req, res) {
+controller.retrieveOne = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Obtendo os dados do projeto
@@ -131,47 +137,47 @@ controller.retrieveOne = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!projeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!projeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
         // Verificando se o usuário que está consultando os dados é pelo menos um membro ou administrador do projeto
         let encontrou = false;
-        if (req.session.usuario.id !== projeto.id_gestor){
+        if (req.session.usuario.id !== projeto.id_gestor) {
             projeto.ids_membros.forEach(membro => {
-                if (membro === req.session.usuario.id){
+                if (membro === req.session.usuario.id) {
                     encontrou = true;
                 }
             });
 
-            if (!encontrou){
+            if (!encontrou) {
                 projeto.ids_administradores.forEach(adm => {
-                    if (adm === req.session.usuario.id){
+                    if (adm === req.session.usuario.id) {
                         encontrou = true;
                     }
                 });
             }
-        }else{
+        } else {
             encontrou = true;
         }
 
-        if (!encontrou){
-            return res.status(400).json({mensagem: "Você não tem permissão para obter os dados desse projeto!"});
+        if (!encontrou) {
+            return res.status(400).json({ mensagem: "Você não tem permissão para obter os dados desse projeto!" });
         }
-        
+
         // Retorna os dados obtidos
         return res.send(projeto);
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -181,35 +187,35 @@ controller.retrieveOne = async function(req, res) {
 
 // Validada (04/05)
 // Obtendo todos os projetos pelo gestor
-controller.retrieveAllGestor = async function(req, res) {
+controller.retrieveAllGestor = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Todos os projetos finalizados
         const projetosConcluidos = await prisma.projeto.findMany({
-            where: {id_gestor: req.session.usuario.id, status: "Concluído"}
+            where: { id_gestor: req.session.usuario.id, status: "Concluído" }
         });
-    
+
         // Todos os projetos pendentes
         const projetosPendentes = await prisma.projeto.findMany({
-            where: {id_gestor: req.session.usuario.id, status: "Pendente"}
+            where: { id_gestor: req.session.usuario.id, status: "Pendente" }
         });
 
         // Todos os projetos atrasados
         const projetosAtrasados = await prisma.projeto.findMany({
-            where: {id_gestor: req.session.usuario.id, status: "Atrasado"}
+            where: { id_gestor: req.session.usuario.id, status: "Atrasado" }
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
+        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes, result: true });
     }
-    catch(error) {
+    catch (error) {
         // Deu errado: exibe o erro no terminal
         console.error(error);
 
@@ -221,14 +227,14 @@ controller.retrieveAllGestor = async function(req, res) {
 
 // Validada (04/05)
 // Obtendo todos os projetos pelo administrador
-controller.retrieveAllAdministrador = async function(req, res) {
+controller.retrieveAllAdministrador = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Buscando todos os projetos do administrador
@@ -249,7 +255,7 @@ controller.retrieveAllAdministrador = async function(req, res) {
                 status: "Concluído"
             }
         });
-    
+
         // Todos os projetos pendentes
         const projetosPendentes = await prisma.projeto.findMany({
             where: {
@@ -271,9 +277,9 @@ controller.retrieveAllAdministrador = async function(req, res) {
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
+        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes });
     }
-    catch(error) {
+    catch (error) {
         // Deu errado: exibe o erro no terminal
         console.error(error);
 
@@ -285,14 +291,14 @@ controller.retrieveAllAdministrador = async function(req, res) {
 
 // Validada (04/05)
 // Obtendo todos os projetos pelo membro
-controller.retrieveAllMembro = async function(req, res) {
+controller.retrieveAllMembro = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Buscando todos os projetos do administrador
@@ -313,7 +319,7 @@ controller.retrieveAllMembro = async function(req, res) {
                 status: "Concluído"
             }
         });
-    
+
         // Todos os projetos pendentes
         const projetosPendentes = await prisma.projeto.findMany({
             where: {
@@ -335,9 +341,9 @@ controller.retrieveAllMembro = async function(req, res) {
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes});
+        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes });
     }
-    catch(error) {
+    catch (error) {
         // Deu errado: exibe o erro no terminal
         console.error(error);
 
@@ -349,14 +355,14 @@ controller.retrieveAllMembro = async function(req, res) {
 
 // Validada (04/05)
 // Atualizando os dados do projeto
-controller.update = async function(req, res) {
+controller.update = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -364,68 +370,65 @@ controller.update = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!verificaProjeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
             return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!" });
         }
 
-        // Verificando se a senha informada é a senha atual do usuario
-        const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
-        if (!valSenha){
-            return res.status(400).json({ mensagem: "Senha Inválida!"});
-        }
-        delete req.body.senha_gestor;
-
         // Verificando se a data foi informada para converte-la em um formato aceitavel
-        if (req.body.data_limite){
+        if (req.body.data_limite) {
             req.body.data_limite = new Date(req.body.data_limite);
 
             // Verificando se a data infrmada é menor ou maior que a data atual, para atribuir o status correto
-            if (req.body.data_limite < new Date()){
+            if (req.body.data_limite < new Date()) {
                 req.body.status = "Atrasado"
-            }else{
+            } else {
                 req.body.status = "Pendente"
             }
 
         }
 
-        // Deletando o anexo
-        if (verificaProjeto.anexo){
-            deletarAnexo(verificaProjeto.anexo);
-        }
-
         // Monta a URL da anexo
         const urlAnexo = req.file ? `${req.file.filename}` : null;
 
+        if (urlAnexo !== null && urlAnexo !== verificaProjeto.anexo) {
+            // Deletando o anexo
+            if (verificaProjeto.anexo) {
+                deletarAnexo(verificaProjeto.anexo);
+            }
+        }
+
         // Ajustando a url do anexo para a inserção no BD
-        req.body.anexo = urlAnexo;
+        if (urlAnexo !== null) {
+            req.body.anexo = urlAnexo;
+        }
 
         // Atualizando os dados do projeto
         await prisma.projeto.update({
             where: { id: req.params.id },
             data: req.body
         });
-    
+
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -435,14 +438,14 @@ controller.update = async function(req, res) {
 
 // Validada (04/05)
 // Atualizando o gestor do projeto
-controller.updateGestor = async function(req, res) {
+controller.updateGestor = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -450,22 +453,22 @@ controller.updateGestor = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!verificaProjeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
-            return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!"});
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
+            return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!" });
         }
 
         // Verificando se a senha informada é a senha atual do usuario
         const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
-        if (!valSenha){
-            return res.status(400).json({ mensagem: "Senha Inválida!"});
+        if (!valSenha) {
+            return res.status(400).json({ mensagem: "Senha Inválida!" });
         }
 
         // Verificando se os id do novo gestor existe
@@ -473,8 +476,8 @@ controller.updateGestor = async function(req, res) {
             where: { id: req.body.id_gestorNovo }
         });
 
-        if (!verificaGestor){
-            return res.status(400).json({ mensagem: "Novo Gestor não Existe!"});
+        if (!verificaGestor) {
+            return res.status(400).json({ mensagem: "Novo Gestor não Existe!" });
         }
 
         // Removendo o novo gestor das suas outras funções, se tiver (ADM/Membro)
@@ -507,20 +510,20 @@ controller.updateGestor = async function(req, res) {
                 id_gestor: req.body.id_gestorNovo
             }
         });
-    
+
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true, mensagem: "Gestor alterado com Sucesso! Você cedeu sua posição e não tem mais acesso ao Projeto!"});
+        return res.status(201).json({ result: true, mensagem: "Gestor alterado com Sucesso! Você cedeu sua posição e não tem mais acesso ao Projeto!" });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -530,14 +533,14 @@ controller.updateGestor = async function(req, res) {
 
 // Validada (04/05)
 // Finalizando/Reabrindo o projeto (Mudando Status e Data Entrega)
-controller.updateStatus = async function(req, res) {
+controller.updateStatus = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -546,22 +549,16 @@ controller.updateStatus = async function(req, res) {
         });
 
 
-        if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!verificaProjeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
-            return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!"});
-        }
-
-        // Verificando se a senha informada é a senha atual do usuario
-        const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
-        if (!valSenha){
-            return res.status(400).json({ mensagem: "Senha Inválida!"});
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
+            return res.status(400).json({ mensagem: "Você não tem permissão para alterar esse Projeto!" });
         }
 
         // Verificando qual o tipo de alteração (Conclusão do Projeto ou reabertura do Projeto)
-        if (req.body.tipo_alteracao === "Concluir"){
+        if (req.body.tipo_alteracao === "Concluir") {
             // Atualizando o status e data de entrega do projeto
             await prisma.projeto.update({
                 where: { id: req.params.id },
@@ -570,11 +567,11 @@ controller.updateStatus = async function(req, res) {
                     data_entrega: new Date()
                 }
             });
-        
-            // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({result: true, mensagem: "Projeto Concluído!"});
 
-        }else if (req.body.tipo_alteracao === "Reabrir"){
+            // Retornando mensagem de sucessao caso tenha atualizado
+            return res.status(201).json({ result: true, mensagem: "Projeto Concluído!" });
+
+        } else if (req.body.tipo_alteracao === "Reabrir") {
             // Atualizando o status e data de entrega do projeto
             await prisma.projeto.update({
                 where: { id: req.params.id },
@@ -583,23 +580,23 @@ controller.updateStatus = async function(req, res) {
                     data_entrega: null
                 }
             });
-        
+
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({result: true, mensagem: "Projeto Reaberto!"});
-        }else{
-            return res.status(400).json({ mensagem: "Função Inválida!"});
+            return res.status(201).json({ result: true, mensagem: "Projeto Reaberto!" });
+        } else {
+            return res.status(400).json({ mensagem: "Função Inválida!" });
         }
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -609,14 +606,14 @@ controller.updateStatus = async function(req, res) {
 
 // Validada (04/05) 
 // Adicionando um membro no projeto
-controller.addMembro = async function(req, res) {
+controller.addMembro = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -624,42 +621,49 @@ controller.addMembro = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
+        if (!verificaProjeto) {
             return res.status(400).json({ mensagem: "Projeto não encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
         // Verificando se é o gestor que está tentando adicionar um membro
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
             return res.status(400).json({ mensagem: "Você não tem permissão para adicionar membros nesse Projeto!" });
         }
 
+        // Obtendo o id do usuário pelo email
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: req.body.email_usuario }
+        });
+
+        req.body.id_membro = usuario.id;
+
         // Verificando se o usuário a ser inserido já não esta cadastrado em membros ou em adminitradores ou é o próprio gestor (Não permitir adcionar)
-        if(req.session.usuario.id === req.body.id_membro){
+        if (req.session.usuario.id === req.body.id_membro) {
             return res.status(400).json({ mensagem: "Você é o gestor do projeto, não pode ser membro!" });
         }
 
         let encontrou = false;
         verificaProjeto.ids_membros.forEach(membro => {
-            if(req.body.id_membro === membro){
+            if (req.body.id_membro === membro) {
                 encontrou = true;
             }
-        }); 
+        });
 
-        if (encontrou){
+        if (encontrou) {
             return res.status(400).json({ mensagem: "Membro já está no projeto!" });
-        }else{
+        } else {
             verificaProjeto.ids_administradores.forEach(adm => {
-                if(req.body.id_membro === adm){
+                if (req.body.id_membro === adm) {
                     encontrou = true;
                 }
-            }); 
+            });
         }
 
-        if (encontrou){
+        if (encontrou) {
             return res.status(400).json({ mensagem: "Membro já está no projeto!" });
         }
 
@@ -672,20 +676,20 @@ controller.addMembro = async function(req, res) {
                 }
             }
         });
-    
+
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -695,14 +699,14 @@ controller.addMembro = async function(req, res) {
 
 // Validada (04/05) 
 // Removendo um membro do projeto
-controller.removeMembro = async function(req, res) {
+controller.removeMembro = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -710,18 +714,18 @@ controller.removeMembro = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!verificaProjeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
-        
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
+
             return res.status(400).json({ mensagem: "Você não tem permissão para remover membros nesse Projeto!" });
-        
+
         }
 
         // Obtendo os membros que permaneceram no projeto
@@ -759,7 +763,7 @@ controller.removeMembro = async function(req, res) {
 
         for (const subtarefa of subtarefas) {
             if (subtarefa.ids_membros.includes(usuarioId)) {
-                
+
                 // Remove o usuário da lista
                 const novosMembros = subtarefa.ids_membros.filter(id => id !== usuarioId);
 
@@ -772,20 +776,20 @@ controller.removeMembro = async function(req, res) {
                 });
             }
         }
-    
+
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -795,14 +799,14 @@ controller.removeMembro = async function(req, res) {
 
 // Validada (04/05) 
 // Adicionando um adminstrador no projeto
-controller.addAdministrador = async function(req, res) {
+controller.addAdministrador = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -810,42 +814,42 @@ controller.addAdministrador = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
+        if (!verificaProjeto) {
             return res.status(400).json({ mensagem: "Projeto não encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
         // Verificando se é o gestor que está tentando adicionar um membro
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
             return res.status(400).json({ mensagem: "Você não tem permissão para adicionar membros nesse Projeto!" });
         }
 
         // Verificando se o usuário a ser inserido já não esta cadastrado em membros ou em adminitradores ou é o próprio gestor (Não permitir adcionar)
-        if(req.session.usuario.id === req.body.id_administrador){
+        if (req.session.usuario.id === req.body.id_administrador) {
             return res.status(400).json({ mensagem: "Você é o gestor do projeto, não pode ser membro!" });
         }
 
         let encontrou = false;
         verificaProjeto.ids_membros.forEach(membro => {
-            if(req.body.id_administrador === membro){
+            if (req.body.id_administrador === membro) {
                 encontrou = true;
             }
-        }); 
+        });
 
-        if (encontrou){
+        if (encontrou) {
             return res.status(400).json({ mensagem: "Membro já está no projeto!" });
-        }else{
+        } else {
             verificaProjeto.ids_administradores.forEach(adm => {
-                if(req.body.id_administrador === adm){
+                if (req.body.id_administrador === adm) {
                     encontrou = true;
                 }
-            }); 
+            });
         }
 
-        if (encontrou){
+        if (encontrou) {
             return res.status(400).json({ mensagem: "Membro já está no projeto!" });
         }
 
@@ -858,20 +862,20 @@ controller.addAdministrador = async function(req, res) {
                 }
             }
         });
-    
+
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -881,14 +885,14 @@ controller.addAdministrador = async function(req, res) {
 
 // Validada (04/05)
 // Removendo um administrador do projeto
-controller.removeAdministrador = async function(req, res) {
+controller.removeAdministrador = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -896,15 +900,15 @@ controller.removeAdministrador = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!verificaProjeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
             return res.status(400).json({ mensagem: "Você não tem permissão para remover membros nesse Projeto!" });
         }
 
@@ -922,20 +926,20 @@ controller.removeAdministrador = async function(req, res) {
                 ids_administradores: administradoresManter
             }
         });
-    
+
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
@@ -945,14 +949,14 @@ controller.removeAdministrador = async function(req, res) {
 
 // Testar com tarefas / subtarefas / atividades e Notificacao
 // Deletando o projeto
-controller.delete = async function(req, res) {
+controller.delete = async function (req, res) {
     try {
 
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
-        if (!valSes){
-            return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        if (!valSes) {
+            return res.status(400).json({ mensagem: "Sessão não iniciada!" });
         }
 
         // Verificando se quem está alterando é o gestor do projeto
@@ -960,32 +964,32 @@ controller.delete = async function(req, res) {
             where: { id: req.params.id }
         });
 
-        if (!verificaProjeto){
-            return res.status(400).json({mensagem: "Projeto não Encontrado!"});
+        if (!verificaProjeto) {
+            return res.status(400).json({ mensagem: "Projeto não Encontrado!" });
         }
 
-        if (verificaProjeto.status === "Concluído"){
-            return res.status(400).json({mensagem: "Projeto já está Concluído! Não permitido alterações!"});
+        if (verificaProjeto.status === "Concluído") {
+            return res.status(400).json({ mensagem: "Projeto já está Concluído! Não permitido alterações!" });
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
-        
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
+
             return res.status(400).json({ mensagem: "Você não tem permissão para remover membros nesse Projeto!" });
-        
+
         }
 
-        if(req.session.usuario.id !== verificaProjeto.id_gestor){
+        if (req.session.usuario.id !== verificaProjeto.id_gestor) {
             return res.status(400).json({ mensagem: "Você não tem permissão para excluir esse Projeto!" });
         }
 
         // Verificando se a senha informada é a senha atual do usuario
         const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
-        if (!valSenha){
-            return res.status(400).json({ mensagem: "Senha Inválida!"});
+        if (!valSenha) {
+            return res.status(400).json({ mensagem: "Senha Inválida!" });
         }
 
         // Deletando o anexo
-        if (verificaProjeto.anexo){
+        if (verificaProjeto.anexo) {
             deletarAnexo(verificaProjeto.anexo);
         }
 
@@ -998,32 +1002,32 @@ controller.delete = async function(req, res) {
         let atividadesDeletar;
 
         // Verificando se a lsita não voltou vazia
-        if (tarefasDeletar){
+        if (tarefasDeletar) {
 
             // Tarefas a deletar
-            for (const tarefa of tarefasDeletar){
+            for (const tarefa of tarefasDeletar) {
 
                 subtaresDeletar = await prisma.subTarefa.findMany({
                     where: { id_tarefa: tarefa.id }
                 });
 
                 // Verificando se a lsita não voltou vazio
-                if (subtaresDeletar){
+                if (subtaresDeletar) {
 
                     // SubTarefas a deletar
-                    for (const subTarefa of subtaresDeletar){
+                    for (const subTarefa of subtaresDeletar) {
 
                         atividadesDeletar = await prisma.atividade.findMany({
                             where: { id_subtarefa: subTarefa.id }
                         });
 
-                        if (atividadesDeletar){
+                        if (atividadesDeletar) {
 
                             // Atividades a deletar
-                            for (const atividade of atividadesDeletar){
+                            for (const atividade of atividadesDeletar) {
 
                                 // Deletando o anexo
-                                if (atividade.anexo){
+                                if (atividade.anexo) {
                                     deletarAnexo(atividade.anexo);
                                 }
 
@@ -1040,22 +1044,22 @@ controller.delete = async function(req, res) {
                         });
 
                         // Verificando se a lista não voltou vazia
-                        if (notificacoesDeletar){
+                        if (notificacoesDeletar) {
 
                             // SubTarefas a deletar
-                            for (const notificacao of notificacoesDeletar){
+                            for (const notificacao of notificacoesDeletar) {
 
                                 // Deletando as subtarefas
                                 await prisma.notificacao.delete({
                                     where: { id: notificacao.id }
                                 });
-                    
+
                             }
-                            
+
                         }
 
                         // Deletando o anexo
-                        if (subTarefa.anexo){
+                        if (subTarefa.anexo) {
                             deletarAnexo(subTarefa.anexo);
                         }
 
@@ -1063,13 +1067,13 @@ controller.delete = async function(req, res) {
                         await prisma.subTarefa.delete({
                             where: { id: subTarefa.id }
                         });
-            
+
                     }
-                    
+
                 }
 
                 // Deletando o anexo
-                if (tarefa.anexo){
+                if (tarefa.anexo) {
                     deletarAnexo(tarefa.anexo);
                 }
 
@@ -1077,7 +1081,7 @@ controller.delete = async function(req, res) {
                 await prisma.tarefa.delete({
                     where: { id: tarefa.id }
                 });
-    
+
             }
 
         }
@@ -1086,20 +1090,20 @@ controller.delete = async function(req, res) {
         await prisma.projeto.delete({
             where: { id: req.params.id }
         });
-    
+
         // Envia mensagem confirmando a exclusão
-        return res.status(201).json({result: true});
+        return res.status(201).json({ result: true });
     }
-    catch(error) {
+    catch (error) {
         // P2025: erro do Prisma referente a objeto não encontrado
-        if(error?.code === 'P2025' || error?.code === 'P2023') {
+        if (error?.code === 'P2025' || error?.code === 'P2023') {
             // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-            res.status(400).json({mensagem: "Projeto Não Encontrado!"});
+            res.status(400).json({ mensagem: "Projeto Não Encontrado!" });
         }
         else {    // Outros tipos de erro
             // Deu errado: exibe o erro no terminal
             console.error(error);
-    
+
             // Envia o erro ao front-end, com status de erro
             // HTTP 500: Internal Server Error
             res.status(500).send(error);
