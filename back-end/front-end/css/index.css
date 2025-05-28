@@ -225,6 +225,10 @@ nav a {
   font-weight: 500;
 }
 
+nav a:hover {
+  color: #3f5fff;
+}
+
 .register {
   color: #3366ff;
   font-weight: bold;

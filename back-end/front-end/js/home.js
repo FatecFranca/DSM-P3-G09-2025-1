@@ -125,9 +125,17 @@ async function reabrirProjeto(idProjeto) {
 
 async function carregarProjetos() {
 
-    const containerGestor = document.getElementById("projetosGestor");
-    const containerAdiministrador = document.getElementById("projetosAdministrador");
-    const containerMembro = document.getElementById("projetosMembro");
+    const containerGestorAtrasados = document.getElementById("projetosGestorAtrasados");
+    const containerGestorPendentes = document.getElementById("projetosGestorPendentes");
+    const containerGestorConcluidos = document.getElementById("projetosGestorConcluidos");
+
+    const containerAdmAtrasados = document.getElementById("projetosAdmAtrasados");
+    const containerAdmPendentes = document.getElementById("projetosAdmPendentes");
+    const containerAdmConcluidos = document.getElementById("projetosAdmConcluidos");
+
+    const containerMembroAtrasados = document.getElementById("projetosMembroAtrasados");
+    const containerMembroPendentes = document.getElementById("projetosMembroPendentes");
+    const containerMembroConcluidos = document.getElementById("projetosMembroConcluidos");
 
     // Buscar projetos em que o usuário é gestor
     const buscaProjetosGestor = await fetch('http://localhost:8080/projetos/gestor/true', {
@@ -154,7 +162,7 @@ async function carregarProjetos() {
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
@@ -162,7 +170,7 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerGestor.appendChild(card);
+            containerGestorAtrasados.appendChild(card);
         }
         for (let i = 0; i < projetosGestor.projetosPendentes.length; i++) {
             const projeto = projetosGestor.projetosPendentes[i];
@@ -180,7 +188,7 @@ async function carregarProjetos() {
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
@@ -188,7 +196,7 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerGestor.appendChild(card);
+            containerGestorPendentes.appendChild(card);
         }
         for (let i = 0; i < projetosGestor.projetosConcluidos.length; i++) {
             const projeto = projetosGestor.projetosConcluidos[i];
@@ -209,7 +217,7 @@ async function carregarProjetos() {
 
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
@@ -217,7 +225,7 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerGestor.appendChild(card);
+            containerGestorConcluidos.appendChild(card);
         }
     }
   
@@ -246,14 +254,14 @@ async function carregarProjetos() {
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerAdiministrador.appendChild(card);
+            containerAdmAtrasados.appendChild(card);
         }
         for (let i = 0; i < projetosAdminsitrador.projetosPendentes.length; i++) {
             const projeto = projetosAdminsitrador.projetosPendentes[i];
@@ -271,14 +279,14 @@ async function carregarProjetos() {
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerAdiministrador.appendChild(card);
+            containerAdmPendentes.appendChild(card);
         }
         for (let i = 0; i < projetosAdminsitrador.projetosConcluidos.length; i++) {
             const projeto = projetosAdminsitrador.projetosConcluidos[i];
@@ -299,14 +307,14 @@ async function carregarProjetos() {
 
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerAdiministrador.appendChild(card);
+            containerAdmConcluidos.appendChild(card);
         }
     }
 
@@ -337,14 +345,14 @@ async function carregarProjetos() {
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerMembro.appendChild(card);
+            containerMembroAtrasados.appendChild(card);
         }
         for (let i = 0; i < projetosMembro.projetosPendentes.length; i++) {
             const projeto = projetosMembro.projetosPendentes[i];
@@ -362,14 +370,14 @@ async function carregarProjetos() {
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerMembro.appendChild(card);
+            containerMembroPendentes.appendChild(card);
         }
         for (let i = 0; i < projetosMembro.projetosConcluidos.length; i++) {
             const projeto = projetosMembro.projetosConcluidos[i];
@@ -391,14 +399,14 @@ async function carregarProjetos() {
 
             card.innerHTML = `
                 <div class="project-header">
-                    <h4>${projeto.titulo}</h4>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerMembro.appendChild(card);
+            containerMembroConcluidos.appendChild(card);
         }
     }
 }
@@ -722,9 +730,80 @@ async function alterarProjeto() {
 }
 
 function ocultarProjetos(tipo){
-    if (document.getElementById(tipo).style.display = 'none'){
-        document.getElementById(tipo).style.display = 'block';
-    }else{
+    if (document.getElementById(tipo).style.display === 'block'){
         document.getElementById(tipo).style.display = 'none';
+    }else{
+        document.getElementById(tipo).style.display = 'block';
     }
+}
+
+function statusProjetos(){
+    const status = document.getElementById('statusBtn').value;
+
+    const gestorAtrasados = document.getElementById('projetosGestorAtrasados');
+    const gestorPendentes = document.getElementById('projetosGestorPendentes');
+    const gestorConcluidos = document.getElementById('projetosGestorConcluidos');
+
+    const admAtrasados = document.getElementById('projetosAdmAtrasados');
+    const admPendentes = document.getElementById('projetosAdmPendentes');
+    const admConcluidos = document.getElementById('projetosAdmConcluidos');
+
+    const membroAtrasados = document.getElementById('projetosMembroAtrasados');
+    const membroPendentes = document.getElementById('projetosMembroPendentes');
+    const membroConcluidos = document.getElementById('projetosMembroConcluidos');
+    
+    if (status === "todos"){
+        gestorAtrasados.style.display = "flex";
+        gestorConcluidos.style.display = "flex";
+        gestorPendentes.style.display = "flex";
+        admAtrasados.style.display = "flex";
+        admConcluidos.style.display = "flex";
+        admPendentes.style.display = "flex";
+        membroAtrasados.style.display = "flex";
+        membroConcluidos.style.display = "flex";
+        membroPendentes.style.display = "flex";
+        
+    }else if (status === "pendentes"){
+        gestorPendentes.style.display = "flex";
+        admPendentes.style.display = "flex";
+        membroPendentes.style.display = "flex";
+
+        gestorAtrasados.style.display = "none";
+        admAtrasados.style.display = "none";
+        membroAtrasados.style.display = "none";
+
+        gestorConcluidos.style.display = "none";
+        admConcluidos.style.display = "none";
+        membroConcluidos.style.display = "none";
+        
+    }else if (status === "atrasados"){
+        gestorPendentes.style.display = "none";
+        admPendentes.style.display = "none";
+        membroPendentes.style.display = "none";
+
+        gestorAtrasados.style.display = "flex";
+        admAtrasados.style.display = "flex";
+        membroAtrasados.style.display = "flex";
+
+        gestorConcluidos.style.display = "none";
+        admConcluidos.style.display = "none";
+        membroConcluidos.style.display = "none";
+        
+    }else if (status === "concluidos"){
+        gestorPendentes.style.display = "none";
+        admPendentes.style.display = "none";
+        membroPendentes.style.display = "none";
+
+        gestorAtrasados.style.display = "none";
+        admAtrasados.style.display = "none";
+        membroAtrasados.style.display = "none";
+
+        gestorConcluidos.style.display = "flex";
+        admConcluidos.style.display = "flex";
+        membroConcluidos.style.display = "flex";
+    }
+}
+
+function abrirTarefas(idProjeto){
+    window.location.href = "tarefas.html?id=" + idProjeto;
 }

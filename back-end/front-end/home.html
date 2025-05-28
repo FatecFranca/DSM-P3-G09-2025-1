@@ -24,8 +24,7 @@
             <a href="contato.html">Fale conosco</a>
             <a href="gerenciarnotificacoes.html" title="Notificações"><img src="img/icones/sino-de-notificacao.png"
                     alt="Notificações" class="icon-img" id="img-not"><label id="txt-not">Notificações</label></a>
-            <a onclick="encerrarSessao()" title="Sair"><img src="img/icones/sair.png" alt="Sair" class="icon-sair"
-                    id="img-sair"><label id="txt-sair">Sair</label></a>
+            <a onclick="encerrarSessao()" title="Sair"><img src="img/icones/sair.png" alt="Sair" class="icon-sair" id="img-sair"><label id="txt-sair">Sair</label></a>
         </nav>
     </header>
 
@@ -44,28 +43,40 @@
 
         <section class="projects">
             <h2 class="section-title">Meus projetos</h2>
-            <select class="btn status" id="statusBtn">
+            <select class="btn status" id="statusBtn" onchange="statusProjetos()">
                 <option value="todos">STATUS ▾</option>
                 <option value="todos">Todos</option>
-                <option value="Pendente">Pendentes</option>
-                <option value="Atrasado">Atrasados</option>
-                <option value="Concluido">Concluídos</option>
+                <option value="pendentes">Pendentes</option>
+                <option value="atrasados">Atrasados</option>
+                <option value="concluidos">Concluídos</option>
             </select>
 
             <br><br>
             <div class="project-group">
-                <h3 class="category-title" onclick="ocultarProjetos('projetosGestor')">› GESTOR</h3>
-                <div id="projetosGestor" class="project-unique"></div>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosGestor')" title="Oculta/Mostrar">› GESTOR</h3>
+                <div id="projetosGestor" style="display: block;">
+                    <div id="projetosGestorAtrasados" class="project-unique"></div>
+                    <div id="projetosGestorPendentes" class="project-unique"></div>
+                    <div id="projetosGestorConcluidos" class="project-unique"></div>
+                </div>
             </div>
 
             <div class="project-group">
-                <h3 class="category-title" onclick="ocultarProjetos('projetosAdministrador')">› ADMINISTRADOR</h3>
-                <div id="projetosAdministrador" class="project-unique"></div>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosAdministrador')" title="Oculta/Mostrar">› ADMINISTRADOR</h3>
+                <div id="projetosAdministrador" style="display: block;">
+                    <div id="projetosAdmAtrasados" class="project-unique"></div>
+                    <div id="projetosAdmPendentes" class="project-unique"></div>
+                    <div id="projetosAdmConcluidos" class="project-unique"></div>
+                </div>
             </div>
 
             <div class="project-group">
-                <h3 class="category-title" onclick="ocultarProjetos('projetosMembro')">› MEMBRO</h3>
-                <div id="projetosMembro" class="project-unique"></div>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosMembro')" title="Oculta/Mostrar">› MEMBRO</h3>
+                <div id="projetosMembro" style="display: block;">
+                    <div id="projetosMembroAtrasados" class="project-unique"></div>
+                    <div id="projetosMembroPendentes" class="project-unique"></div>
+                    <div id="projetosMembroConcluidos" class="project-unique"></div>
+                </div>
             </div>
         </section>
 

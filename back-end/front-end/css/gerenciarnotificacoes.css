@@ -48,6 +48,10 @@ nav a:hover {
   color: #3f5fff;
 }
 
+#txt-sair{
+  display: none;
+}
+
 /* Botão menu hamburger - só aparece no mobile */
 .menu-toggle {
   display: none;
@@ -83,6 +87,15 @@ nav a:hover {
   nav a {
     margin: 10px 0;
   }
+
+  #img-sair{
+    display: none;
+  }
+
+  #txt-sair{
+    display: block;
+  }
+
 }
 
 .back-btn {
@@ -176,4 +189,12 @@ footer a {
   footer div {
     margin: 5px 0;
   }
+}
+
+.icon-sair {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
 }

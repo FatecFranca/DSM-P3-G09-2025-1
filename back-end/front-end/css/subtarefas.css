@@ -60,6 +60,30 @@ nav a:hover {
     cursor: pointer;
 }
 
+#txt-sair{
+  display: none;
+}
+
+#txt-not{
+  display: none;
+}
+
+.icon-img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.icon-sair {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
 /* Responsividade para telas menores que 750px */
 @media (max-width: 750px) {
     .menu-toggle {
