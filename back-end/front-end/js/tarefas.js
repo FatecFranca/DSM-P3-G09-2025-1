@@ -56,10 +56,18 @@ function adicionarTarefa(tarefa) {
 
   const div = document.createElement("div");
   div.className = `tarefa ${tarefa.status}`;
+
   div.innerHTML = `
     <div class="drag"></div>
+    <div class="botoes-ordenacao">
+      <button title="Subir" onclick="moverParaCima(this)">🔼</button>
+      <button title="Descer" onclick="moverParaBaixo(this)">🔽</button>
+    </div>
     <h3>${tarefa.titulo}</h3>
-    <p class="data">${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} ${formatarDataISOparaBR(tarefa.data)}</p>
+    <p class="data">
+      ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
+      ${formatarDataISOparaBR(tarefa.data)}
+    </p>
     <p class="descricao">${tarefa.descricao}</p>
     <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
     <div style="margin-top: 10px;">
@@ -96,7 +104,10 @@ function atualizarTarefa(card, tarefa) {
   card.innerHTML = `
     <div class="drag"></div>
     <h3>${tarefa.titulo}</h3>
-    <p class="data">${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} ${tarefa.data}</p>
+    <p class="data">
+      ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
+      ${formatarDataISOparaBR(tarefa.data)}
+    </p>
     <p class="descricao">${tarefa.descricao}</p>
     <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
     <div style="margin-top: 10px;">
@@ -116,3 +127,18 @@ function corStatus(status) {
   if (status === "atrasada") return "vermelho";
 }
 
+function moverParaCima(botao) {
+  const tarefa = botao.closest('.tarefa');
+  const anterior = tarefa.previousElementSibling;
+  if (anterior) {
+    tarefa.parentNode.insertBefore(tarefa, anterior);
+  }
+}
+
+function moverParaBaixo(botao) {
+  const tarefa = botao.closest('.tarefa');
+  const proximo = tarefa.nextElementSibling;
+  if (proximo) {
+    tarefa.parentNode.insertBefore(proximo, tarefa);
+  }
+}

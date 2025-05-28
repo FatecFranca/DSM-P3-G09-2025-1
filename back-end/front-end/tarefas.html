@@ -1,125 +1,118 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Taskflow - Tarefas</title>
-  <link rel="stylesheet" href="css/tarefas.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet" />
-  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Taskflow - Tarefas</title>
+<link href="css/tarefas.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&amp;family=Space+Grotesk:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="img/icones/icone-TF.png" rel="shortcut icon" type="image/x-icon"/>
 </head>
 <body>
-  <!-- HEADER PADRÃO -->
-  <header>
-    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
-    </div>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    <nav>
-            <a href="home.html">Home</a>
-            <a href="sobre.html">Sobre nós</a>
-            <a href="contato.html">Fale conosco</a>
-            <a href="gerenciarnotificacoes.html" title="Notificações"><img src="img/icones/sino-de-notificacao.png"
-                    alt="Notificações" class="icon-img" id="img-not"><label id="txt-not">Notificações</label></a>
-            <a onclick="encerrarSessao()" title="Sair"><img src="img/icones/sair.png" alt="Sair" class="icon-sair" id="img-sair"><label id="txt-sair">Sair</label></a>
-        </nav>
-  </header>
-  
-  <div id="form-container" style="display: none;">
-    <form id="task-form">
-      <h3 id="form-title">Nova Tarefa</h3>
-      <input type="text" id="titulo" placeholder="Título" required />
-      <input type="date" id="data" required />
-      <select id="status" required>
-        <option value="">Status</option>
-        <option value="pendente">Pendente</option>
-        <option value="concluida">Concluída</option>
-        <option value="atrasada">Atrasada</option>
-      </select>
-      <textarea id="descricao" placeholder="Descrição" required></textarea>
-      <input type="file" id="arquivo" />
-      <button type="submit">Salvar</button>
-      <button type="button" onclick="fecharFormulario()">Cancelar</button>
-    </form>
-  </div>
-
-  <main>
-    <div class="topo">
-      <a href="home.html" id="voltar" aria-label="Voltar">⭠</a>
-      <h1>Nome Projeto</h1>
-    </div>
-    <hr />
-    <button id="add-task">ADICIONAR TAREFA</button>
-
-    <section class="categoria">
-      <h2>GESTOR</h2>
-      <div class="tarefas">
-        <div class="tarefa concluida">
-          <div class="drag"></div>
-          <h3>PROTOTIPAÇÃO TELA TAREFAS</h3>
-          <p class="data">Entregue em 17/05/2025</p>
-          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-          <span class="status verde">Concluída</span>
-        </div>
-        <div class="tarefa pendente">
-          <div class="drag"></div>
-          <h3>TAREFA UM</h3>
-          <p class="data">Data máxima para entrega 01/06/2025</p>
-          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-          <span class="status azul">Pendente</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="categoria">
-      <h2>ADMINISTRADOR</h2>
-      <div class="tarefas">
-        <div class="tarefa atrasada">
-          <div class="drag"></div>
-          <h3>DOCUMENTAÇÃO</h3>
-          <p class="data">Data máxima para entrega 15/05/2025</p>
-          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-          <span class="status vermelho">Atrasada</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="categoria">
-      <h2>MEMBRO</h2>
-      <div class="tarefas">
-        <div class="tarefa pendente">
-          <div class="drag"></div>
-          <h3>TAREFA DOIS</h3>
-          <p class="data">Data máxima para entrega 01/06/2025</p>
-          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-          <span class="status azul">Pendente</span>
-        </div>
-        <div class="tarefa pendente">
-          <div class="drag"></div>
-          <h3>TAREFA TRÊS</h3>
-          <p class="data">Data máxima para entrega 01/06/2025</p>
-          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-          <span class="status azul">Pendente</span>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER PADRÃO -->
-  <footer>
-    <div class="logo-footer">
-      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
-      <span>— O site completo para gerenciamento de tarefas</span>
-    </div>
-    <div class="footer-links">
-      <a href="termosUso.html">Termos</a> |
+<!-- HEADER PADRÃO -->
+<header>
+<div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+<img alt="TaskFlow" class="logo-header" src="img/logos/logocoloridoheader.png"/>
+</div>
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+<nav>
+<a href="home.html">Home</a>
+<a href="sobre.html">Sobre nós</a>
+<a href="contato.html">Fale conosco</a>
+<a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img" id="img-not" src="img/icones/sino-de-notificacao.png"/><label id="txt-not">Notificações</label></a>
+<a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair" id="img-sair" src="img/icones/sair.png"/><label id="txt-sair">Sair</label></a>
+</nav>
+</header>
+<div id="form-container" style="display: none;">
+<form id="task-form">
+<h3 id="form-title">Nova Tarefa</h3>
+<input id="titulo" placeholder="Título" required="" type="text"/>
+<input id="data" required="" type="date"/>
+<select id="status" required="">
+<option value="">Status</option>
+<option value="pendente">Pendente</option>
+<option value="concluida">Concluída</option>
+<option value="atrasada">Atrasada</option>
+</select>
+<textarea id="descricao" placeholder="Descrição" required=""></textarea>
+<input id="arquivo" type="file"/>
+<button type="submit">Salvar</button>
+<button onclick="fecharFormulario()" type="button">Cancelar</button>
+</form>
+</div>
+<main>
+<div class="topo">
+<a aria-label="Voltar" href="home.html" id="voltar">⭠</a>
+<h1>Nome Projeto</h1>
+</div>
+<hr/>
+<button id="add-task">ADICIONAR TAREFA</button>
+<section class="categoria">
+<h2>GESTOR</h2>
+<div class="tarefas">
+<div class="tarefa concluida">
+<div class="drag"></div>
+<div class="botoes-ordenacao"><button onclick="moverParaCima(this)" title="Subir">🔼</button><button onclick="moverParaBaixo(this)" title="Descer">🔽</button></div><h3>PROTOTIPAÇÃO TELA TAREFAS</h3>
+<p class="data">Entregue em 17/05/2025</p>
+<p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+<span class="status verde">Concluída</span><div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a></div>
+</div>
+<div class="tarefa pendente">
+<div class="drag"></div>
+<div class="botoes-ordenacao"><button onclick="moverParaCima(this)" title="Subir">🔼</button><button onclick="moverParaBaixo(this)" title="Descer">🔽</button></div><h3>TAREFA UM</h3>
+<p class="data">Data máxima para entrega 01/06/2025</p>
+<p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+<span class="status azul">Pendente</span><div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a></div>
+</div>
+</div>
+</section>
+<section class="categoria">
+<h2>ADMINISTRADOR</h2>
+<div class="tarefas">
+<div class="tarefa atrasada">
+<div class="drag"></div>
+<div class="botoes-ordenacao"><button onclick="moverParaCima(this)" title="Subir">🔼</button><button onclick="moverParaBaixo(this)" title="Descer">🔽</button></div><h3>DOCUMENTAÇÃO</h3>
+<p class="data">Data máxima para entrega 15/05/2025</p>
+<p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+<span class="status vermelho">Atrasada</span><div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a></div>
+</div>
+</div>
+</section>
+<section class="categoria">
+<h2>MEMBRO</h2>
+<div class="tarefas">
+<div class="tarefa pendente">
+<div class="drag"></div>
+<div class="botoes-ordenacao"><button onclick="moverParaCima(this)" title="Subir">🔼</button><button onclick="moverParaBaixo(this)" title="Descer">🔽</button></div><h3>TAREFA DOIS</h3>
+<p class="data">Data máxima para entrega 01/06/2025</p>
+<p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+<span class="status azul">Pendente</span><div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a></div>
+</div>
+<div class="tarefa pendente">
+<div class="drag"></div>
+<div class="botoes-ordenacao"><button onclick="moverParaCima(this)" title="Subir">🔼</button><button onclick="moverParaBaixo(this)" title="Descer">🔽</button></div><h3>TAREFA TRÊS</h3>
+<p class="data">Data máxima para entrega 01/06/2025</p>
+<p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+<span class="status azul">Pendente</span><div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a></div>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER PADRÃO -->
+<footer>
+<div class="logo-footer">
+<img alt="TaskFlow" class="logoimg" src="img/logos/logocoloridoheader.png"/>
+<span>— O site completo para gerenciamento de tarefas</span>
+</div>
+<div class="footer-links">
+<a href="termosUso.html">Termos</a> |
       <a href="politicaPrivacidade.html">Privacidade</a> |
       <a href="contato.html">Suporte</a>
-    </div>
-  </footer>
-
-  <script src="js/tarefas.js"></script>
-  <script>
+</div>
+</footer>
+<script src="js/tarefas.js"></script>
+<script>
     function toggleMenu() {
       const nav = document.querySelector("header nav");
       nav.classList.toggle("show");
@@ -127,3 +120,4 @@
   </script>
 </body>
 </html>
+

@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
   const tarefasContainer = document.querySelectorAll('.tarefas');
   const tipoUsuario = 'ADM'; // 'ADM', 'GESTOR' ou 'MEMBRO'
