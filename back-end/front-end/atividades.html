@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskflow - Atividades</title>
+    <link rel="stylesheet" href="css/atividades.css">
+    <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER PADRÃO -->
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+            <img alt="TaskFlow" class="logo-header" src="img/logos/logocoloridoheader.png" />
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="sobre.html">Sobre nós</a>
+            <a href="contato.html">Fale conosco</a>
+            <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img" id="img-not"
+                    src="img/icones/sino-de-notificacao.png" /><label id="txt-not">Notificações</label></a>
+            <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair" id="img-sair"
+                    src="img/icones/sair.png" /><label id="txt-sair">Sair</label></a>
+        </nav>
+    </header>
+    <main>
+    <div class="topo">
+        <h1>Nome da Subtarefa</h1>
+    </div>
+    <hr />
+        <button class="add-btn">ADICIONAR ATIVIDADE</button>
+        <div id="form-container" class="form-container">
+            <form id="form-atividade" class="formulario-atividade">
+                <h2>Nova Atividade</h2>
+                <input type="text" id="descricao" placeholder="Descrição da atividade" required>
+                <input type="datetime-local" id="data" required>
+                <input type="text" id="usuario" placeholder="Nome do usuário" required>
+                <input type="file" id="anexo" accept=".pdf,.doc,.docx,.jpg,.png">
+                <div class="botoes">
+                    <button type="submit" class="btn-salvar">Salvar</button>
+                    <button type="button" class="btn-cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        <ul class="atividades">
+            <li>
+                <div class="descricao">
+                    <strong>Descrição da atividade Descrição da atividade</strong>
+                    <button class="editar">&#9998;</button>
+                    <p class="detalhes">dd/mm/aaaa 00:00 hrs<br>Por: Nome do usuário</p>
+                </div>
+                <a href="#" class="download">&#8681;</a>
+            </li>
+            <li>
+                <div class="descricao">
+                    <strong>Descrição da atividade Descrição da atividade</strong>
+                    <p class="detalhes">dd/mm/aaaa 00:00 hrs<br>Por: Nome do usuário</p>
+                </div>
+                <a href="#" class="download">&#8681;</a>
+            </li>
+            <li>
+                <div class="descricao">
+                    <strong>Descrição da atividade Descrição da atividade</strong>
+                    <button class="editar">&#9998;</button>
+                    <p class="detalhes">dd/mm/aaaa 00:00 hrs<br>Por: Nome do usuário</p>
+                </div>
+                <a href="#" class="download">&#8681;</a>
+            </li>
+            <li>
+                <div class="descricao">
+                    <strong>Descrição da atividade Descrição da atividade</strong>
+                    <p class="detalhes">dd/mm/aaaa 00:00 hrs<br>Por: Nome do usuário</p>
+                </div>
+                <a href="#" class="download">&#8681;</a>
+            </li>
+        </ul>
+    </main>
+    <!-- FOOTER PADRÃO -->
+    <footer>
+        <div class="logo-footer">
+            <img alt="TaskFlow" class="logoimg" src="img/logos/logocoloridoheader.png" />
+            <span>— O site completo para gerenciamento de tarefas</span>
+        </div>
+        <div class="footer-links">
+            <a href="termosUso.html">Termos</a> |
+            <a href="politicaPrivacidade.html">Privacidade</a> |
+            <a href="contato.html">Suporte</a>
+        </div>
+    </footer>
+    <script>
+    function toggleMenu() {
+      const nav = document.querySelector("header nav");
+      nav.classList.toggle("show");
+    }
+    </script>
+    <script src="js/atividades.js"></script>
+</body>
+</html>
