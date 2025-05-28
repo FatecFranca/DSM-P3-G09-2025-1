@@ -289,7 +289,7 @@ controller.retrieveAllAdministrador = async function (req, res) {
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes });
+        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes, result: true });
     }
     catch (error) {
         // Deu errado: exibe o erro no terminal
@@ -353,7 +353,7 @@ controller.retrieveAllMembro = async function (req, res) {
         });
 
         // Retorna os dados obtidos
-        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes });
+        return res.status(200).json({ projetosConcluidos: projetosConcluidos, projetosAtrasados: projetosAtrasados, projetosPendentes: projetosPendentes, result: true });
     }
     catch (error) {
         // Deu errado: exibe o erro no terminal

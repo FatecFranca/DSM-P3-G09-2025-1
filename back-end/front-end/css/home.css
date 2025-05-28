@@ -208,6 +208,7 @@ select.btn.status {
   color: white;
   font-weight: bold;
   width: 100%;
+  cursor: pointer;
 }
 
 
@@ -222,6 +223,16 @@ select.btn.status {
   align-items: stretch;
 }
 
+.project-unique {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  background-color: #4294ff;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+}
 
 .project-card {
   background-color: #ffffff;

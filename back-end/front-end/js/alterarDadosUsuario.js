@@ -113,7 +113,7 @@ async function alterarDados() {
 }
 
 async function encerrarSessao() {
-    if (!confirm("Deseja realmente encerrar a sessão?")) {
+    if (!confirm("Deseja realmente sair?")) {
         return;
     }
     const resposta = await fetch('http://localhost:8080/usuarios/encerrarSessao/true', {

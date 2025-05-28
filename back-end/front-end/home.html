@@ -53,16 +53,19 @@
             </select>
 
             <br><br>
-            <div class="project-group" id="projetosGestor">
-                <h3 class="category-title">› GESTOR</h3>
+            <div class="project-group">
+                <h3 class="category-title" onclick="ocultarProjetos('projetosGestor')">› GESTOR</h3>
+                <div id="projetosGestor" class="project-unique"></div>
             </div>
 
-            <div class="project-group" id="projetosAdministrador">
-                <h3 class="category-title">› ADMINISTRADOR</h3>
+            <div class="project-group">
+                <h3 class="category-title" onclick="ocultarProjetos('projetosAdministrador')">› ADMINISTRADOR</h3>
+                <div id="projetosAdministrador" class="project-unique"></div>
             </div>
 
-            <div class="project-group" id="projetosMembro">
-                <h3 class="category-title">› MEMBRO</h3>
+            <div class="project-group">
+                <h3 class="category-title" onclick="ocultarProjetos('projetosMembro')">› MEMBRO</h3>
+                <div id="projetosMembro" class="project-unique"></div>
             </div>
         </section>
 
@@ -124,6 +127,7 @@
                 <select id="novoGestor" class="select-gestor">
                     <option value=""></option>
                 </select>
+                <input type="password" id="senhaGestor" placeholder="Digite a senha para ceder o cargo" />
                 <button type="button" onclick="cederCargoGestor()">Ceder Cargo</button>
 
                 <p id="msgAvisoGestao" class="mensagem-erro"></p>

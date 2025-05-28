@@ -48,6 +48,11 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 async function encerrarSessao() {
+
+    if (!confirm("Deseja realmente sair?")){
+        return;
+    }
+
     const resposta = await fetch('http://localhost:8080/usuarios/encerrarSessao/true', {
         method: 'GET',
         credentials: 'include',
@@ -215,8 +220,7 @@ async function carregarProjetos() {
             containerGestor.appendChild(card);
         }
     }
-
-
+  
     // Buscar projetos em que o usuário é administrador
     const buscaProjetosAdministrador = await fetch('http://localhost:8080/projetos/administrador/true', {
         method: 'GET',
@@ -604,6 +608,15 @@ async function buscarAdmins(idProjeto) {
 
         if (projeto.administradores.length === 0) {
             listaAdmins.innerHTML = "<p class='nadaEncontrado'>Nenhum administrador adicionado a este projeto</p>";
+            const optionPadrao = document.createElement("option");
+            optionPadrao.value = "none";
+            optionPadrao.textContent = "Nenhum um Administrador";
+            listaGestores.appendChild(optionPadrao);
+        }else{
+            const optionPadrao = document.createElement("option");
+            optionPadrao.value = "none";
+            optionPadrao.textContent = "Selecione um Administrador";
+            listaGestores.appendChild(optionPadrao);
         }
 
         for (let i = 0; i < projeto.administradores.length; i++) {
@@ -627,8 +640,44 @@ async function buscarAdmins(idProjeto) {
     }
 }
 
-function cederCargoGestor(){
+async function cederCargoGestor(){
 
+    const senhaGestor = document.getElementById('senhaGestor').value;
+    if (senhaGestor === ""){
+        alert("Insira a senha para continuar...");
+        document.getElementById('senhaGestor').focus();
+        return;
+    }
+
+    const idGestorNovo = document.getElementById("novoGestor").value;
+    if (idGestorNovo === "none" || idGestorNovo === ""){
+        alert("Selecione um Administrador a conceder o cargo...");
+        document.getElementById('novoGestor').focus();
+        return;
+    }
+
+    if (!confirm("Tem certeza que deseja ceder o seu cargo de gestor? \n Você não terá mais acesso a esse projeto de nenhuma outra forma!")){
+        return;
+    }
+
+    const idProjeto = document.getElementById("idProjetoGestaoMembros").value;
+
+    const resposta = await fetch('http://localhost:8080/projetos/updateGestor/' + idProjeto, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha_gestor: senhaGestor, id_gestorNovo: idGestorNovo })
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.result){
+        alert('Você cedeu o seu cargo de gestor!');
+        window.location.reload();
+        return
+    }else{
+        return alert('Erro: ' + dados.mensagem);
+    }
 }
 
 async function alterarProjeto() {
@@ -669,5 +718,13 @@ async function alterarProjeto() {
         window.location.href = "home.html";
     } else {
         msgAviso.innerHTML = dados.mensagem;
+    }
+}
+
+function ocultarProjetos(tipo){
+    if (document.getElementById(tipo).style.display = 'none'){
+        document.getElementById(tipo).style.display = 'block';
+    }else{
+        document.getElementById(tipo).style.display = 'none';
     }
 }
