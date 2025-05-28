@@ -1,135 +1,194 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const tarefasContainer = document.querySelectorAll('.tarefas');
-  const tipoUsuario = 'ADM'; // 'ADM', 'GESTOR' ou 'MEMBRO'
+const tipoUsuario = "ADM"; // Altere para "GESTOR" ou "MEMBRO" conforme necessário
 
-  let subtarefas = [
-    {
-      id: 1,
-      titulo: 'PROTOTIPAÇÃO TELA TAREFAS',
-      descricao: 'Protótipo entregue conforme solicitado.',
-      dataEntrega: '2025-05-17',
-      dataMaxima: '2025-05-17',
-      status: 'concluida',
-      anexo: 'protótipo.pdf',
-      responsavel: 'GESTOR',
-    },
-    {
-      id: 2,
-      titulo: 'DOCUMENTAÇÃO',
-      descricao: 'Documentação técnica.',
-      dataMaxima: '2025-05-15',
-      status: 'atrasada',
-      anexo: 'documento.zip',
-      responsavel: 'ADM',
-    },
-    {
-      id: 3,
-      titulo: 'PORTIFÓLIO',
-      descricao: 'Documentação.',
-      dataMaxima: '2025-05-15',
-      status: 'pendente',
-      anexo: 'portifolio.zip',
-      responsavel: 'MEMBRO',
-    },
-  ];
-
-  function renderSubtarefas() {
-    tarefasContainer.forEach(c => (c.innerHTML = ''));
-
-    subtarefas.forEach((tarefa, index) => {
-      const box = document.createElement('div');
-      box.className = `tarefa ${tarefa.status}`;
-
-      const statusCor = {
-        concluida: 'verde',
-        pendente: 'azul',
-        atrasada: 'vermelho',
-      };
-
-      let botoes = '';
-      if (podeEditar(tarefa)) {
-        botoes = `
-    <div class="botoes-ordenacao">
-      <button title="Subir" onclick="moverParaCima(${index})">🔼</button>
-      <button title="Descer" onclick="moverParaBaixo(${index})">🔽</button>
-    </div>`;
-      }
-
-      box.innerHTML = `
-        <div class="drag"></div>
-        ${botoes}
-        <h3>${tarefa.titulo}</h3>
-        <p class="data">
-          ${tarefa.status === 'concluida' ? `Entregue em ${formatarData(tarefa.dataEntrega)}` : `Data máxima para entrega ${formatarData(tarefa.dataMaxima)}`}
-        </p>
-        <p class="descricao">${tarefa.descricao}</p>
-        <span class="status ${statusCor[tarefa.status]}">${capitalize(tarefa.status)}</span><br/><br/>
-        <a href="#">📎 Baixar ${tarefa.anexo}</a>
-      `;
-
-      const destino = Array.from(tarefasContainer).find(c =>
-        c.parentElement.querySelector('h2').textContent === tarefa.responsavel
-      );
-
-      destino?.appendChild(box);
-    });
-  }
-
-  window.moverParaCima = function (index) {
-    if (index > 0) {
-      [subtarefas[index - 1], subtarefas[index]] = [subtarefas[index], subtarefas[index - 1]];
-      renderSubtarefas();
-    }
-  };
-
-  window.moverParaBaixo = function (index) {
-    if (index < subtarefas.length - 1) {
-      [subtarefas[index + 1], subtarefas[index]] = [subtarefas[index], subtarefas[index + 1]];
-      renderSubtarefas();
-    }
-  };
-
-  function podeEditar(tarefa) {
-    const statusPermitidos = ['concluida', 'atrasada'];
-    return ['ADM', 'GESTOR'].includes(tipoUsuario) && statusPermitidos.includes(tarefa.status);
-  }
-
-  function formatarData(data) {
-    const d = new Date(data);
-    return d.toLocaleDateString('pt-BR');
-  }
-
-  function capitalize(texto) {
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
-  }
-
-  document.getElementById('task-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const novaTarefa = {
-      id: Date.now(),
-      titulo: document.getElementById('titulo').value,
-      descricao: document.getElementById('descricao').value,
-      dataMaxima: document.getElementById('data').value,
-      status: document.getElementById('status').value,
-      anexo: document.getElementById('arquivo').files[0]?.name || 'sem-arquivo.pdf',
-      responsavel: tipoUsuario,
-      dataEntrega: document.getElementById('status').value === 'concluida' ? document.getElementById('data').value : null,
-    };
-
-    subtarefas.push(novaTarefa);
-    this.reset();
-    document.getElementById('form-container').style.display = 'none';
-    renderSubtarefas();
-  });
-
-  document.getElementById('add-task').addEventListener('click', () => {
-    document.getElementById('form-container').style.display = 'flex';
-  });
-
-  window.fecharFormulario = function () {
-    document.getElementById('form-container').style.display = 'none';
-  };
-
-  renderSubtarefas();
+document.getElementById("add-task").addEventListener("click", () => {
+  abrirFormulario();
 });
+
+const subtarefas = [
+  {
+    titulo: "PROTOTIPAÇÃO TELA SUBTAREFAS",
+    data: "2025-06-01",
+    status: "concluida",
+    descricao: "Protótipo entregue e aprovado.",
+    arquivo: null,
+    nomeArquivo: null,
+    responsavel: "GESTOR"
+  },
+  {
+    titulo: "AJUSTES DE CSS",
+    data: "2025-06-02",
+    status: "pendente",
+    descricao: "Falta corrigir responsividade mobile.",
+    arquivo: null,
+    nomeArquivo: null,
+    responsavel: "ADM"
+  },
+  {
+    titulo: "INSERIR ÍCONE DE EDIÇÃO",
+    data: "2025-06-03",
+    status: "atrasada",
+    descricao: "Aguardando ícone final da designer.",
+    arquivo: null,
+    nomeArquivo: null,
+    responsavel: "MEMBRO"
+  }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  subtarefas.forEach(t => adicionarSubtarefa(t));
+});
+
+const form = document.getElementById("task-form");
+let editando = null;
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const titulo = document.getElementById("titulo").value;
+  const data = document.getElementById("data").value;
+  const status = document.getElementById("status").value;
+  const descricao = document.getElementById("descricao").value;
+  const arquivoInput = document.getElementById("arquivo");
+  const arquivo = arquivoInput.files[0];
+
+  const subtarefa = {
+    titulo,
+    data,
+    status,
+    descricao,
+    arquivo: arquivo ? URL.createObjectURL(arquivo) : null,
+    nomeArquivo: arquivo ? arquivo.name : null,
+    responsavel: tipoUsuario
+  };
+
+  if (editando) {
+    atualizarSubtarefa(editando, subtarefa);
+    editando = null;
+  } else {
+    adicionarSubtarefa(subtarefa);
+  }
+
+  form.reset();
+  fecharFormulario();
+});
+
+function abrirFormulario() {
+  document.getElementById("form-container").style.display = "flex";
+}
+
+function fecharFormulario() {
+  document.getElementById("form-container").style.display = "none";
+  form.reset();
+  editando = null;
+}
+
+function adicionarSubtarefa(subtarefa) {
+  const categoria = Array.from(document.querySelectorAll(".categoria")).find(secao =>
+    secao.querySelector("h2").textContent.trim().toUpperCase() === subtarefa.responsavel
+  );
+
+  if (categoria) {
+    const container = categoria.querySelector(".tarefas");
+    const div = criarCardSubtarefa(subtarefa);
+    container.appendChild(div);
+  }
+}
+
+function criarCardSubtarefa(subtarefa) {
+  const div = document.createElement("div");
+  div.className = `tarefa ${subtarefa.status}`;
+
+  div.innerHTML = `
+    <div class="drag"></div>
+    <div class="botoes-ordenacao">
+      <button title="Subir" onclick="moverParaCima(this)">🔼</button>
+      <button title="Descer" onclick="moverParaBaixo(this)">🔽</button>
+    </div>
+    <h3>${subtarefa.titulo}</h3>
+    <p class="data">
+      ${subtarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
+      ${formatarDataISOparaBR(subtarefa.data)}
+    </p>
+    <p class="descricao">${subtarefa.descricao}</p>
+    <span class="status ${corStatus(subtarefa.status)}">${capitalizar(subtarefa.status)}</span>
+    <div style="margin-top: 10px;">
+      <button onclick="editarSubtarefa(this)">Editar</button>
+      ${subtarefa.arquivo ? `<a href="${subtarefa.arquivo}" download="${subtarefa.nomeArquivo}">Download</a>` : ""}
+    </div>
+  `;
+
+  return div;
+}
+
+function editarSubtarefa(botao) {
+  const card = botao.closest(".tarefa");
+  const titulo = card.querySelector("h3").innerText;
+  const data = card.querySelector(".data").innerText.split(" ").slice(-1)[0].split("/").reverse().join("-");
+  const descricao = card.querySelector(".descricao").innerText;
+  const status = card.classList.contains("concluida")
+    ? "concluida"
+    : card.classList.contains("pendente")
+    ? "pendente"
+    : "atrasada";
+
+  document.getElementById("titulo").value = titulo;
+  document.getElementById("data").value = data;
+  document.getElementById("status").value = status;
+  document.getElementById("descricao").value = descricao;
+
+  abrirFormulario();
+  editando = card;
+}
+
+function atualizarSubtarefa(card, subtarefa) {
+  card.className = `tarefa ${subtarefa.status}`;
+  card.innerHTML = `
+    <div class="drag"></div>
+    <div class="botoes-ordenacao">
+      <button title="Subir" onclick="moverParaCima(this)">🔼</button>
+      <button title="Descer" onclick="moverParaBaixo(this)">🔽</button>
+    </div>
+    <h3>${subtarefa.titulo}</h3>
+    <p class="data">
+      ${subtarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
+      ${formatarDataISOparaBR(subtarefa.data)}
+    </p>
+    <p class="descricao">${subtarefa.descricao}</p>
+    <span class="status ${corStatus(subtarefa.status)}">${capitalizar(subtarefa.status)}</span>
+    <div style="margin-top: 10px;">
+      <button onclick="editarSubtarefa(this)">Editar</button>
+      ${subtarefa.arquivo ? `<a href="${subtarefa.arquivo}" download="${subtarefa.nomeArquivo}">Download</a>` : ""}
+    </div>
+  `;
+}
+
+function moverParaCima(botao) {
+  const tarefa = botao.closest('.tarefa');
+  const anterior = tarefa.previousElementSibling;
+  if (anterior) {
+    tarefa.parentNode.insertBefore(tarefa, anterior);
+  }
+}
+
+function moverParaBaixo(botao) {
+  const tarefa = botao.closest('.tarefa');
+  const proximo = tarefa.nextElementSibling;
+  if (proximo) {
+    tarefa.parentNode.insertBefore(proximo, tarefa);
+  }
+}
+
+function formatarDataISOparaBR(dataISO) {
+  const [ano, mes, dia] = dataISO.split("-");
+  return `${dia}/${mes}/${ano}`;
+}
+
+function capitalizar(texto) {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+function corStatus(status) {
+  if (status === "concluida") return "verde";
+  if (status === "pendente") return "azul";
+  if (status === "atrasada") return "vermelho";
+}
