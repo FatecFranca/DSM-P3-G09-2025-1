@@ -148,10 +148,21 @@ hr {
     margin-bottom: 20px;
 }
 
-#add-task {
+.add-task {
     background: #4285f4;
     color: white;
     padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.subTarefa {
+    background: #4285f4;
+    color: white;
+    padding: 8px 14px;
     border: none;
     font-weight: bold;
     border-radius: 4px;
@@ -350,21 +361,21 @@ footer a {
   transition: background 0.3s ease;
 }
 
-#task-form button[type="submit"] {
+.btn-cad {
   background: #4285f4;
   color: white;
 }
 
-#task-form button[type="submit"]:hover {
+.btn-cad:hover {
   background: #3367d6;
 }
 
-#task-form button[type="button"] {
+.btn-cancelar {
   background: #ccc;
   color: #333;
 }
 
-#task-form button[type="button"]:hover {
+.btn-cancelar:hover {
   background: #bbb;
 }
 
@@ -395,4 +406,25 @@ footer a {
 
 .tarefa a:hover {
   background: #3ac850;
+}
+
+.baixar-anexo {
+  text-decoration: none;
+  color: #fff;
+  background: #4cd964;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.baixar-anexo:hover {
+  background: #3ac850;
+}
+
+#msgAviso {
+  color: #960505;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
 }

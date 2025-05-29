@@ -1,3 +1,5 @@
+let dadosProjeto;
+
 document.getElementById("add-task").addEventListener("click", () => {
   abrirFormulario();
 });
@@ -141,4 +143,91 @@ function moverParaBaixo(botao) {
   if (proximo) {
     tarefa.parentNode.insertBefore(proximo, tarefa);
   }
+}
+
+function toggleMenu() {
+  const menu = document.getElementById('menuNav');
+  menu.classList.toggle('show');
+}
+
+async function encerrarSessao() {
+
+    if (!confirm("Deseja realmente sair?")){
+        return;
+    }
+
+    const resposta = await fetch('http://localhost:8080/usuarios/encerrarSessao/true', {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const dados = await resposta.json();
+    if (dados.result) {
+        window.location.href = "login.html";
+    }
+}
+
+async function carregarDados() {
+  const urlAtual = window.location.href;
+  const urlClass = new URL(urlAtual);
+  const idProjeto = urlClass.searchParams.get("id");
+
+  const resposta = await fetch('http://localhost:8080/projetos/' + idProjeto, {
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }
+  });
+
+  dadosProjeto = await resposta.json();
+  if (dadosProjeto.result) {
+    document.getElementById('nomeProjeto').innerHTML = dadosProjeto.projeto.titulo;
+  }else{
+    window.location.href = "home.html";
+  }
+
+}
+
+async function cadastrarTarefa() {
+  const titulo = document.getElementById('titulo').value.trim();
+  const data = document.getElementById('data').value;
+  const descricao = document.getElementById('descricao').value.trim();
+  const arquivo = document.getElementById('anexo').files[0];
+  const msgAviso = document.getElementById('msgAviso');
+  msgAviso.innerHTML = "";
+
+  if (titulo === ""){
+    msgAviso.innerHTML = "Preencha o campo Título!";
+    return;
+  }else if (descricao === ""){
+    msgAviso.innerHTML = "Preencha o campo Descrição!";
+    return;
+  }else if (!data || data === null || undefined){
+    msgAviso.innerHTML = "Preencha o campo Data!";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('anexo', arquivo);
+  formData.append('titulo', titulo);
+  formData.append('descricao', descricao);
+  formData.append('data_limite', data);
+  formData.append('id_projeto', dadosProjeto.projeto.id);
+
+  const resposta = await fetch('http://localhost:8080/tarefas/', {
+    method: 'POST',
+    credentials: 'include',
+    body: formData
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result) {
+    alert("Tarefa criada com sucessa!");
+    window.location.href = "tarefas.html?id="+dadosProjeto.projeto.id;
+  } else {
+    msgAviso.innerHTML = dados.mensagem;
+  }
+
+
 }

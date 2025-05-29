@@ -13,7 +13,7 @@ import { validarSessao } from './utils.js';
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), '..', 'uploads', 'anexoTarefas', nomeArquivo);
+    const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoAnexo)) {

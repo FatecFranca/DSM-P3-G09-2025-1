@@ -9,7 +9,7 @@ const router = Router();
 
 // Validada (04/05)
 // Cadastro de Tarefa
-router.post('/', upload.single('anexoTarefa'), controller.create);
+router.post('/', upload.single('anexo'), controller.create);
 /*
     Dados a serem informados:
     titulo: String
