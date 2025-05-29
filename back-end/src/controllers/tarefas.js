@@ -227,7 +227,7 @@ controller.retrieveOne = async function(req, res) {
 // Obtendo todas as tarefas pelo projeto 
 controller.retrieveAllProjeto = async function(req, res) {
     try {
-
+        
         // Verificando se a sessão foi iniciada
         const valSes = validarSessao(req);
 
@@ -282,7 +282,7 @@ controller.retrieveAllProjeto = async function(req, res) {
         }
 
         // Retorna os dados obtidos
-        return res.send(tarefas);
+        return res.status(200).json({ result: true, tarefas: tarefas});
     }
     catch(error) {
         // Deu errado: exibe o erro no terminal
@@ -290,7 +290,7 @@ controller.retrieveAllProjeto = async function(req, res) {
 
         // Envia o erro ao front-end, com status de erro
         // HTTP 500: Internal Server Error
-        res.status(500).send(error);
+        return res.status(500).send(error);
     }
 }
 

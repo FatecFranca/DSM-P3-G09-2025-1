@@ -319,7 +319,7 @@ controller.retrieveAllTarefa = async function(req, res) {
         }
 
         // Retorna os dados obtidos
-        return res.send(subtarefas);
+        return res.status(200).json({ subtarefas: subtarefas, result: true });
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado

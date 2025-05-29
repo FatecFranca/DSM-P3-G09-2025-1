@@ -89,8 +89,8 @@ function editarTarefa(botao) {
   const status = card.classList.contains("concluida")
     ? "concluida"
     : card.classList.contains("pendente")
-    ? "pendente"
-    : "atrasada";
+      ? "pendente"
+      : "atrasada";
 
   document.getElementById("titulo").value = titulo;
   document.getElementById("data").value = data;
@@ -152,20 +152,35 @@ function toggleMenu() {
 
 async function encerrarSessao() {
 
-    if (!confirm("Deseja realmente sair?")){
-        return;
-    }
+  if (!confirm("Deseja realmente sair?")) {
+    return;
+  }
 
-    const resposta = await fetch('http://localhost:8080/usuarios/encerrarSessao/true', {
-        method: 'GET',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' }
-    });
+  const resposta = await fetch('http://localhost:8080/usuarios/encerrarSessao/true', {
+    method: 'GET',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  });
 
-    const dados = await resposta.json();
-    if (dados.result) {
-        window.location.href = "login.html";
-    }
+  const dados = await resposta.json();
+  if (dados.result) {
+    window.location.href = "login.html";
+  }
+}
+
+async function baixarAnexoTarefa(nomeArquivo) {
+  if (!nomeArquivo) {
+    alert("Nenhum anexo disponível para esta tarefa.");
+    return;
+  }
+
+  const url = `http://localhost:8080/uploads/anexoTarefas/${nomeArquivo}`;
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = nomeArquivo;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 async function carregarDados() {
@@ -173,16 +188,118 @@ async function carregarDados() {
   const urlClass = new URL(urlAtual);
   const idProjeto = urlClass.searchParams.get("id");
 
+  const containerTarefas = document.getElementById('tarefasProjeto');
+
   const resposta = await fetch('http://localhost:8080/projetos/' + idProjeto, {
-      method: 'GET',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }
+    method: 'GET',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
   });
 
   dadosProjeto = await resposta.json();
   if (dadosProjeto.result) {
+
+    const dataISO = new Date(dadosProjeto.projeto.data_limite).toISOString().split('T')[0];
+    const [ano, mes, dia] = dataISO.split('-');
+    const dataFormatada = `${dia}/${mes}/${ano}`;
+
     document.getElementById('nomeProjeto').innerHTML = dadosProjeto.projeto.titulo;
-  }else{
+    document.getElementById('dtMaxProj').innerHTML = dataFormatada;
+    document.getElementById('descProj').innerHTML = dadosProjeto.projeto.descricao;
+
+    const respostaTarefas = await fetch('http://localhost:8080/tarefas/projeto/' + idProjeto, {
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    const dadosTarefas = await respostaTarefas.json();
+    if (dadosTarefas.result) {
+      for (i = 0; dadosTarefas.tarefas.length; i++) {
+        const tarefa = dadosTarefas.tarefas[i];
+        const card = document.createElement("section");
+
+        const dataISO = new Date(tarefa.data_limite).toISOString().split('T')[0];
+        const [ano, mes, dia] = dataISO.split('-');
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+
+        let exibirAnexo = ``;
+        if (tarefa.anexo !== null) {
+          exibirAnexo = `<a onclick="baixarAnexoTarefa(${tarefa.anexo})" class="baixar-anexo">Anexo Tarefa</a>`;
+        }
+
+        card.className = "categoria";
+        card.innerHTML += `
+          <h2>${tarefa.titulo}</h2>
+          <p><b>Data Máxima Entrega:</b> ${dataFormatada}</p><br>
+          <p class="descricao">${tarefa.descricao}</p><br>
+          <button onclick="addSubTarefa(${tarefa.id})" class="subTarefa">ADICIONAR SUBTAREFA</button>
+          <div class="tarefas">
+        `;
+
+        const respostaSubTarefas = await fetch('http://localhost:8080/subtarefas/tarefa/' + tarefa.id, {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const dadosSubTarefas = await respostaSubTarefas.json();
+        if (dadosSubTarefas.result) {
+          alert(dadosSubTarefas.subtarefas.length);
+          for (i = 0; dadosSubTarefas.subtarefas.length; i++) {
+            const subtarefa = dadosSubTarefas.subtarefas[i];
+            let status;
+            let descData;
+
+            if (subtarefa.satus === "Concluída"){
+              status = "verde";
+              descData = "Entregue em ";
+            }else if (subtarefa.satus === "Atrasada"){
+              status = "vermelho";
+              descData = "Data Máxima Entrega: "
+            }else if (subtarefa.satus === "Pendente"){
+              status = "azul";
+            }
+
+            const dataISO = new Date(subtarefa.data_limite).toISOString().split('T')[0];
+            const [ano, mes, dia] = dataISO.split('-');
+            const dataFormatada = `${dia}/${mes}/${ano}`;
+
+            if (subtarefa.anexo === null){
+              const baixarAnexoSub = "";
+            }else{
+              const baixarAnexoSub = `<a onclick="baixarAnexoSubTarefa(${subtarefa.anexo})">Baixar Anexo</a>`;
+            }
+
+            card.innerHTML +=`
+              <div class="tarefa concluida">
+              <div class="drag"><h3>PROTOTIPAÇÃO TELA TAREFAS</h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">${subtarefa.ordem}</a></div>
+              <p class="data">${descData}${dataFormatada}</p>
+              <p class="descricao">${subtarefa.descricao}</p>
+              <span class="status ${status}">${subtarefa.status}</span>
+              <div style="margin-top: 10px;"><button onclick="editarSubTarefa(${subtarefa.id})">Editar</button>${baixarAnexoSub}
+              </div>
+              <br>
+              <button onclick="moverParaCimaSub(${subtarefa.id})" title="Subir">🔼</button><button onclick="moverParaBaixoSub(${subtarefa.id})" title="Descer">🔽</button>
+              </div>
+            `;
+
+          }
+        }
+        card.innerHTML += `
+          </div>
+          <br><br>
+          ${exibirAnexo}&nbsp;&nbsp;<button onclick="moverParaCima(${tarefa.id})" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo(${tarefa.id})" title="Descer" class="position">🔽</button>
+        `;
+
+        containerTarefas.appendChild(card);
+      }
+    } else {
+      alert(dadosTarefas.mensagem);
+      return;
+    }
+
+  } else {
     window.location.href = "home.html";
   }
 
@@ -196,13 +313,13 @@ async function cadastrarTarefa() {
   const msgAviso = document.getElementById('msgAviso');
   msgAviso.innerHTML = "";
 
-  if (titulo === ""){
+  if (titulo === "") {
     msgAviso.innerHTML = "Preencha o campo Título!";
     return;
-  }else if (descricao === ""){
+  } else if (descricao === "") {
     msgAviso.innerHTML = "Preencha o campo Descrição!";
     return;
-  }else if (!data || data === null || undefined){
+  } else if (!data || data === null || undefined) {
     msgAviso.innerHTML = "Preencha o campo Data!";
     return;
   }
@@ -224,7 +341,7 @@ async function cadastrarTarefa() {
 
   if (dados.result) {
     alert("Tarefa criada com sucessa!");
-    window.location.href = "tarefas.html?id="+dadosProjeto.projeto.id;
+    window.location.href = "tarefas.html?id=" + dadosProjeto.projeto.id;
   } else {
     msgAviso.innerHTML = dados.mensagem;
   }

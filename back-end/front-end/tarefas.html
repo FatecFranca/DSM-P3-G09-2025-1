@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Taskflow - Tarefas</title>
+  <title>Taskflow - Tarefas e Subtarefas</title>
   <link href="css/tarefas.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&amp;family=Space+Grotesk:wght@500&amp;display=swap"
     rel="stylesheet" />
@@ -35,9 +35,9 @@
       <h3 id="form-title">Nova Tarefa</h3>
       <input id="titulo" placeholder="Título" required="" type="text" />
       <input id="data" required="" type="date" />
-      <textarea id="descricao" placeholder="Descrição" required=""></textarea>
+      <textarea id="descricao" class="descricao" placeholder="Descrição" required=""></textarea>
       <input id="anexo" type="file" />
-      <p id="msgAviso">aaa</p>
+      <p id="msgAviso"></p>
       <button type="button" onclick="cadastrarTarefa()" class="btn-cad">Salvar</button>
       <button onclick="fecharFormulario()" type="button" class="btn-cancelar">Cancelar</button>
     </form>
@@ -48,34 +48,70 @@
       <a aria-label="Voltar" href="home.html" id="voltar">⭠</a>
       <h1 id="nomeProjeto"></h1>
     </div>
-    <hr />
+    <hr/>
+    <p><b>Data Máxima Entrega: </b><a id="dtMaxProj"></a></p>
+    <br>
+    <p id="descProj"></p>
+    <br>
+    <hr/>
     <button id="add-task" class="add-task">ADICIONAR TAREFA</button>
 
-    <section class="categoria">
-      <h2>Tarefa - Titulo</h2>
-      <p><b>Data Entrega:</b> 28/05/2025</p><br>
-      <p>Testes desc</p><br>
+    <div id="tarefasProjeto">
 
-      <button onclick="addSubTarefa()" class="subTarefa">ADICIONAR SUBTAREFA</button>
+      <!--
+      <section class="categoria">
+        <h2>Tarefa - Titulo</h2>
+        <p><b>Data Entrega:</b> 28/05/2025</p><br>
+        <p>Testes desc</p><br>
 
-      <div class="tarefas">
-        <div class="tarefa concluida">
-          <div class="drag"></div>
-          <h3>PROTOTIPAÇÃO TELA TAREFAS</h3>
-          <p class="data">Entregue em 17/05/2025</p>
-          <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-          <span class="status verde">Concluída</span>
-          <div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a>
+        <button onclick="addSubTarefa()" class="subTarefa">ADICIONAR SUBTAREFA</button>
+
+        <div class="tarefas">
+          <div class="tarefa concluida">
+            <div class="drag"><h3>PROTOTIPAÇÃO TELA TAREFAS</h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">10</a></div>
+            <p class="data">Entregue em 17/05/2025</p>
+            <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+            <span class="status verde">Concluída</span>
+            <div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a>
+            </div>
+            <br>
+            <button onclick="moverParaCima(this)" title="Subir">🔼</button><button
+                onclick="moverParaBaixo(this)" title="Descer">🔽</button>
           </div>
-          <br>
-          <button onclick="moverParaCima(this)" title="Subir">🔼</button><button
-              onclick="moverParaBaixo(this)" title="Descer">🔽</button>
         </div>
-      </div>
-      
-      <br><br>
-      <a onclick="baixarAnexoTarefa()" class="baixar-anexo">Baixar Anexo Tarefa</a>
-    </section>
+        
+        <br><br>
+        <a onclick="baixarAnexoTarefa()" class="baixar-anexo">Baixar Anexo Tarefa</a>&nbsp;&nbsp;<button onclick="moverParaCima(this)" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo(this)" title="Descer" class="position">🔽</button>
+      </section>
+
+      <section class="categoria">
+        <h2>Tarefa - Titulo</h2>
+        <p><b>Data Entrega:</b> 28/05/2025</p><br>
+        <p>Testes desc</p><br>
+
+        <button onclick="addSubTarefa()" class="subTarefa">ADICIONAR SUBTAREFA</button>
+
+        <div class="tarefas">
+          <div class="tarefa concluida">
+            <div class="drag"><h3>PROTOTIPAÇÃO TELA TAREFAS</h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">10</a></div>
+            <p class="data">Entregue em 17/05/2025</p>
+            <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
+            <span class="status verde">Concluída</span>
+            <div style="margin-top: 10px;"><button onclick="editarTarefa(this)">Editar</button><a href="#">Download</a>
+            </div>
+            <br>
+            <button onclick="moverParaCima(this)" title="Subir">🔼</button><button
+                onclick="moverParaBaixo(this)" title="Descer">🔽</button>
+          </div>
+        </div>
+        
+        <br><br>
+        <a onclick="baixarAnexoTarefa()" class="baixar-anexo">Baixar Anexo Tarefa</a>&nbsp;&nbsp;<button onclick="moverParaCima(this)" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo(this)" title="Descer" class="position">🔽</button>
+      </section> 
+      -->
+
+    </div>
+
   </main>
   <!-- FOOTER PADRÃO -->
   <footer>

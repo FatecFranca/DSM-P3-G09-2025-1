@@ -198,7 +198,9 @@ main {
     padding: 15px;
     border: 1px solid #c6d3df;
     border-radius: 8px;
-    width: 300px;
+    width: 48%;
+    margin: 8px;
+    margin-left: 0px;
     position: relative;
 }
 
@@ -270,7 +272,7 @@ footer a {
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 855px) {
     .tarefas {
         flex-direction: column;
         align-items: center;
@@ -278,7 +280,7 @@ footer a {
 
     .tarefa {
         width: 100%;
-        max-width: 90%;
+        max-width: 95%;
     }
 
     .topo {
@@ -379,7 +381,7 @@ footer a {
   background: #bbb;
 }
 
-.tarefa button {
+.tarefa button, .position {
   background: transparent;
   border: 1px solid #4285f4;
   color: #4285f4;
@@ -390,7 +392,7 @@ footer a {
   cursor: pointer;
 }
 
-.tarefa button:hover {
+.tarefa button:hover, .position:hover {
   background: #4285f4;
   color: white;
 }
@@ -398,20 +400,20 @@ footer a {
 .tarefa a {
   text-decoration: none;
   color: #fff;
-  background: #4cd964;
+  background: #4285f4;
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 0.85rem;
 }
 
 .tarefa a:hover {
-  background: #3ac850;
+  background: #366dc7;
 }
 
 .baixar-anexo {
   text-decoration: none;
   color: #fff;
-  background: #4cd964;
+  background: #4285f4;
   padding: 8px 14px;
   border-radius: 5px;
   font-size: 0.85rem;
@@ -419,7 +421,7 @@ footer a {
 }
 
 .baixar-anexo:hover {
-  background: #3ac850;
+  background: #366dc7;
 }
 
 #msgAviso {
@@ -427,4 +429,16 @@ footer a {
   font-size: 14px;
   margin-top: 10px;
   text-align: center;
+}
+
+.drag{
+    display: flex;
+}
+
+.drag h3{
+    width: 95%;
+}
+
+.descricao{
+    white-space: pre-wrap;
 }

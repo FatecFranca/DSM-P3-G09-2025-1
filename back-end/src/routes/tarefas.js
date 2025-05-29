@@ -37,7 +37,7 @@ router.get('/projeto/:id', controller.retrieveAllProjeto);
 
 // Validada (04/05)
 // Alterar Tarefa
-router.put('/:id', upload.single('anexoTarefa'), controller.update);
+router.put('/:id', upload.single('anexo'), controller.update);
 /*
     Dados a serem informados:
     titulo: String
