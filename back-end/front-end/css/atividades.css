@@ -1,0 +1,308 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.topo h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    text-align: center;
+}
+
+hr {
+    border: none;
+    border-bottom: 2px solid #c6d3df;
+    margin-bottom: 20px;
+}
+
+.add-btn {
+    background: #4285f4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+main {
+    margin-top: 10px;
+}
+
+.atividades {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.atividades li {
+    border-bottom: 1px solid #ccc;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.descricao {
+    max-width: 80%;
+}
+
+.editar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+.download {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: black;
+}
+
+.detalhes {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* ================== HEADER ================== */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    box-shadow: none;
+    position: relative;
+    z-index: 100;
+}
+
+/* Logo */
+.logo-header {
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Navegação desktop */
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+/* Links do menu */
+nav a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 20px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #3f5fff;
+}
+
+#txt-sair{
+  display: none;
+}
+
+#txt-not{
+  display: none;
+}
+
+.icon-img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.icon-sair {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* Botão menu hamburger - só aparece no mobile */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Responsividade para telas menores que 750px */
+@media (max-width: 750px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 2rem;
+        flex-direction: column;
+        background: #fff;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        z-index: 1000;
+    }
+
+    nav.show {
+        display: flex;
+    }
+
+    nav a {
+        margin: 10px 0;
+    }
+}
+
+
+/* ================== FOOTER ================== */
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    font-size: 0.8rem;
+    color: #666;
+    border-top: 1px solid #eee;
+    margin-top: 30px;
+    text-align: right;
+}
+
+footer a {
+    color: #444;
+    text-decoration: none;
+    margin-left: 0.5rem;
+}
+
+.logo-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logoimg, .logofooter {
+    height: 12px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .tarefas {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tarefa {
+        width: 100%;
+        max-width: 90%;
+    }
+
+    .topo {
+        flex-direction: column;
+    }
+
+    #add-task {
+        width: 100%;
+    }
+}
+
+@media (max-width: 750px) {
+    footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    footer div {
+        margin: 5px 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .descricao {
+        max-width: 70%;
+    }
+}
+
+/* Fundo escuro translúcido para o modal */
+.form-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+/* Formulário centralizado e bonito */
+.formulario-atividade {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.formulario-atividade h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.formulario-atividade input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.botoes {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-salvar, .btn-cancelar {
+    flex: 1;
+    padding: 10px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-salvar {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-cancelar {
+    background-color: #ccc;
+    color: black;
+}
