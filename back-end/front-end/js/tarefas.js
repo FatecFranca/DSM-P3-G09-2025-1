@@ -10,114 +10,166 @@ function formatarDataISOparaBR(dataISO) {
 }
 
 const form = document.getElementById("task-form");
-let editando = null; // para saber se estamos editando ou criando
+let editando = 0; // para saber se estamos editando ou criando
+let idTarefaEditar;
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+// form.addEventListener("submit", (e) => {
+//   e.preventDefault();
 
-  const titulo = document.getElementById("titulo").value;
-  const data = document.getElementById("data").value;
-  const status = document.getElementById("status").value;
-  const descricao = document.getElementById("descricao").value;
-  const arquivoInput = document.getElementById("arquivo");
-  const arquivo = arquivoInput.files[0];
+//   const titulo = document.getElementById("titulo").value;
+//   const data = document.getElementById("data").value;
+//   const status = document.getElementById("status").value;
+//   const descricao = document.getElementById("descricao").value;
+//   const arquivoInput = document.getElementById("arquivo");
+//   const arquivo = arquivoInput.files[0];
 
-  const tarefa = {
-    titulo,
-    data,
-    status,
-    descricao,
-    arquivo: arquivo ? URL.createObjectURL(arquivo) : null,
-    nomeArquivo: arquivo ? arquivo.name : null
-  };
+//   const tarefa = {
+//     titulo,
+//     data,
+//     status,
+//     descricao,
+//     arquivo: arquivo ? URL.createObjectURL(arquivo) : null,
+//     nomeArquivo: arquivo ? arquivo.name : null
+//   };
 
-  if (editando) {
-    atualizarTarefa(editando, tarefa);
-    editando = null;
-  } else {
-    adicionarTarefa(tarefa);
-  }
+//   if (editando) {
+//     atualizarTarefa(editando, tarefa);
+//     editando = null;
+//   } else {
+//     adicionarTarefa(tarefa);
+//   }
 
-  form.reset();
-  fecharFormulario();
-});
+//   form.reset();
+//   fecharFormulario();
+// });
 
 function abrirFormulario() {
   document.getElementById("form-container").style.display = "flex";
+  document.getElementById("form-title").innerHTML = "Nova Tarefa";
+  document.getElementById("label-anexo").innerHTML = "Anexo da Tarefa";
 }
-
 
 function fecharFormulario() {
   document.getElementById("form-container").style.display = "none";
   form.reset();
-  editando = null;
+  editando = 0;
 }
 
-function adicionarTarefa(tarefa) {
-  const container = document.querySelector(".categoria .tarefas");
+// function adicionarTarefa(tarefa) {
+//   const container = document.querySelector(".categoria .tarefas");
 
-  const div = document.createElement("div");
-  div.className = `tarefa ${tarefa.status}`;
+//   const div = document.createElement("div");
+//   div.className = `tarefa ${tarefa.status}`;
 
-  div.innerHTML = `
-    <div class="drag"></div>
-    <div class="botoes-ordenacao">
-      <button title="Subir" onclick="moverParaCima(this)">🔼</button>
-      <button title="Descer" onclick="moverParaBaixo(this)">🔽</button>
-    </div>
-    <h3>${tarefa.titulo}</h3>
-    <p class="data">
-      ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
-      ${formatarDataISOparaBR(tarefa.data)}
-    </p>
-    <p class="descricao">${tarefa.descricao}</p>
-    <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
-    <div style="margin-top: 10px;">
-      <button onclick="editarTarefa(this)">Editar</button>
-      ${tarefa.arquivo ? `<a href="${tarefa.arquivo}" download="${tarefa.nomeArquivo}">Download</a>` : ""}
-    </div>
-  `;
+//   div.innerHTML = `
+//     <div class="drag"></div>
+//     <div class="botoes-ordenacao">
+//       <button title="Subir" onclick="moverParaCima(this)">🔼</button>
+//       <button title="Descer" onclick="moverParaBaixo(this)">🔽</button>
+//     </div>
+//     <h3>${tarefa.titulo}</h3>
+//     <p class="data">
+//       ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
+//       ${formatarDataISOparaBR(tarefa.data)}
+//     </p>
+//     <p class="descricao">${tarefa.descricao}</p>
+//     <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
+//     <div style="margin-top: 10px;">
+//       <button onclick="editarTarefa(${tarefa.id_tarefa})">Editar</button>
+//       ${tarefa.arquivo ? `<a href="${tarefa.arquivo}" download="${tarefa.nomeArquivo}">Download</a>` : ""}
+//     </div>
+//   `;
 
-  container.appendChild(div);
+//   container.appendChild(div);
+// }
+
+async function editarTarefa(idTarefa) {
+
+  idTarefaEditar = idTarefa;
+
+  const resposta = await fetch('http://localhost:8080/tarefas/' + idTarefa, {
+    method: 'GET',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result){
+    document.getElementById("form-container").style.display = "flex";
+    document.getElementById("form-title").innerHTML = "Editar Tarefa";
+    document.getElementById("label-anexo").innerHTML = "Substituir Anexo da Tarefa";
+    document.getElementById("titulo").value = dados.tarefa.titulo;
+    const data = new Date(dados.tarefa.data_limite);
+    const dataFormatada = data.toISOString().split('T')[0];
+    document.getElementById("data").value = dataFormatada;
+    document.getElementById("descricao").value = dados.tarefa.descricao;
+    editando = 1;
+  }else{
+    alert(dados.mensagem);
+  }
+  
 }
 
-function editarTarefa(botao) {
-  const card = botao.closest(".tarefa");
-  const titulo = card.querySelector("h3").innerText;
-  const data = card.querySelector(".data").innerText.split(" ").slice(-1)[0];
-  const descricao = card.querySelector(".descricao").innerText;
-  const status = card.classList.contains("concluida")
-    ? "concluida"
-    : card.classList.contains("pendente")
-      ? "pendente"
-      : "atrasada";
+async function alterarTarefa() {
+  const titulo = document.getElementById('titulo').value.trim();
+  const data = document.getElementById('data').value;
+  const descricao = document.getElementById('descricao').value.trim();
+  const arquivo = document.getElementById('anexo').files[0];
+  const msgAviso = document.getElementById('msgAviso');
+  msgAviso.innerHTML = "";
 
-  document.getElementById("titulo").value = titulo;
-  document.getElementById("data").value = data;
-  document.getElementById("status").value = status;
-  document.getElementById("descricao").value = descricao;
+  if (titulo === "") {
+    msgAviso.innerHTML = "Preencha o campo Título!";
+    return;
+  } else if (descricao === "") {
+    msgAviso.innerHTML = "Preencha o campo Descrição!";
+    return;
+  } else if (!data || data === null || undefined) {
+    msgAviso.innerHTML = "Preencha o campo Data!";
+    return;
+  }
 
-  abrirFormulario();
-  editando = card;
+  const formData = new FormData();
+  formData.append('anexo', arquivo);
+  formData.append('titulo', titulo);
+  formData.append('descricao', descricao);
+  formData.append('data_limite', data);
+  formData.append('id_projeto', dadosProjeto.projeto.id);
+
+  const resposta = await fetch('http://localhost:8080/tarefas/' + idTarefaEditar, {
+    method: 'PUT',
+    credentials: 'include',
+    body: formData
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result) {
+    alert("Tarefa atualizada com sucesso!");
+    window.location.href = "tarefas.html?id=" + dadosProjeto.projeto.id;
+  } else {
+    msgAviso.innerHTML = dados.mensagem;
+  }
 }
 
-function atualizarTarefa(card, tarefa) {
-  card.className = `tarefa ${tarefa.status}`;
-  card.innerHTML = `
-    <div class="drag"></div>
-    <h3>${tarefa.titulo}</h3>
-    <p class="data">
-      ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
-      ${formatarDataISOparaBR(tarefa.data)}
-    </p>
-    <p class="descricao">${tarefa.descricao}</p>
-    <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
-    <div style="margin-top: 10px;">
-      <button onclick="editarTarefa(this)">Editar</button>
-      ${tarefa.arquivo ? `<a href="${tarefa.arquivo}" download="${tarefa.nomeArquivo}">Download</a>` : ""}
-    </div>
-  `;
-}
+// function atualizarTarefa(card, tarefa) {
+//   card.className = `tarefa ${tarefa.status}`;
+//   card.innerHTML = `
+//     <div class="drag"></div>
+//     <h3>${tarefa.titulo}</h3>
+//     <p class="data">
+//       ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
+//       ${formatarDataISOparaBR(tarefa.data)}
+//     </p>
+//     <p class="descricao">${tarefa.descricao}</p>
+//     <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
+//     <div style="margin-top: 10px;">
+//       <button onclick="editarTarefa(${tarefa.id_tarefa})">Editar</button>
+//       ${tarefa.arquivo ? `<a href="${tarefa.arquivo}" download="${tarefa.nomeArquivo}">Download</a>` : ""}
+//     </div>
+//   `;
+// }
 
 function capitalizar(texto) {
   return texto.charAt(0).toUpperCase() + texto.slice(1);
@@ -215,27 +267,48 @@ async function carregarDados() {
 
     const dadosTarefas = await respostaTarefas.json();
     if (dadosTarefas.result) {
-      for (i = 0; dadosTarefas.tarefas.length; i++) {
+      for (i = 0; i < dadosTarefas.tarefas.length; i++) {
         const tarefa = dadosTarefas.tarefas[i];
         const card = document.createElement("section");
 
-        const dataISO = new Date(tarefa.data_limite).toISOString().split('T')[0];
+        let data;
+        if (tarefa.status === "Concluída"){
+          data = tarefa.data_entrega;
+        }else{
+          data = tarefa.data_limite;
+        }
+
+        const dataISO = new Date(data).toISOString().split('T')[0];
         const [ano, mes, dia] = dataISO.split('-');
         const dataFormatada = `${dia}/${mes}/${ano}`;
 
+        let descDataTarefa;
+        let statusTarefa;
+        if (tarefa.status === "Concluída"){
+          statusTarefa = "verde";
+          descDataTarefa = "Entregue em ";
+        }else if (tarefa.status === "Atrasada"){
+          statusTarefa = "vermelho";
+          descDataTarefa = "Data Máxima Entrega: ";
+        }else if (tarefa.status === "Pendente"){
+          statusTarefa = "azul";
+          descDataTarefa = "Data Máxima Entrega: ";
+        }
+
         let exibirAnexo = ``;
         if (tarefa.anexo !== null) {
-          exibirAnexo = `<a onclick="baixarAnexoTarefa(${tarefa.anexo})" class="baixar-anexo">Anexo Tarefa</a>`;
+          exibirAnexo = `<a onclick="baixarAnexoTarefa('${tarefa.anexo}')" class="baixar-anexo">Anexo Tarefa</a>`;
         }
 
         card.className = "categoria";
-        card.innerHTML += `
+        card.insertAdjacentHTML('beforeend', `
           <h2>${tarefa.titulo}</h2>
-          <p><b>Data Máxima Entrega:</b> ${dataFormatada}</p><br>
+          <p><b>${descDataTarefa}</b> ${dataFormatada}</p><br>
+          <span class="status ${statusTarefa}">${tarefa.status}</span><br><br>
           <p class="descricao">${tarefa.descricao}</p><br>
-          <button onclick="addSubTarefa(${tarefa.id})" class="subTarefa">ADICIONAR SUBTAREFA</button>
+          <button onclick="addSubTarefa('${tarefa.id}')" class="subTarefa">ADICIONAR SUBTAREFA</button>
           <div class="tarefas">
-        `;
+        `);
 
         const respostaSubTarefas = await fetch('http://localhost:8080/subtarefas/tarefa/' + tarefa.id, {
           method: 'GET',
@@ -245,52 +318,53 @@ async function carregarDados() {
 
         const dadosSubTarefas = await respostaSubTarefas.json();
         if (dadosSubTarefas.result) {
-          alert(dadosSubTarefas.subtarefas.length);
-          for (i = 0; dadosSubTarefas.subtarefas.length; i++) {
+          for (b = 0; b < dadosSubTarefas.subtarefas.length; b++) {
             const subtarefa = dadosSubTarefas.subtarefas[i];
             let status;
             let descData;
 
-            if (subtarefa.satus === "Concluída"){
+            if (subtarefa.status === "Concluída"){
               status = "verde";
               descData = "Entregue em ";
-            }else if (subtarefa.satus === "Atrasada"){
+            }else if (subtarefa.status === "Atrasada"){
               status = "vermelho";
               descData = "Data Máxima Entrega: "
-            }else if (subtarefa.satus === "Pendente"){
+            }else if (subtarefa.status === "Pendente"){
               status = "azul";
+              descDataTarefa = "Data Máxima Entrega: ";
             }
 
             const dataISO = new Date(subtarefa.data_limite).toISOString().split('T')[0];
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
+            let baixarAnexoSub;
             if (subtarefa.anexo === null){
-              const baixarAnexoSub = "";
+              baixarAnexoSub = "";
             }else{
-              const baixarAnexoSub = `<a onclick="baixarAnexoSubTarefa(${subtarefa.anexo})">Baixar Anexo</a>`;
+              baixarAnexoSub = `<a onclick="baixarAnexoSubTarefa('${subtarefa.anexo}')">Baixar Anexo</a>`;
             }
 
-            card.innerHTML +=`
+            card.insertAdjacentHTML('beforeend', `
               <div class="tarefa concluida">
               <div class="drag"><h3>PROTOTIPAÇÃO TELA TAREFAS</h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">${subtarefa.ordem}</a></div>
               <p class="data">${descData}${dataFormatada}</p>
               <p class="descricao">${subtarefa.descricao}</p>
               <span class="status ${status}">${subtarefa.status}</span>
-              <div style="margin-top: 10px;"><button onclick="editarSubTarefa(${subtarefa.id})">Editar</button>${baixarAnexoSub}
+              <div style="margin-top: 10px;"><button onclick="editarSubTarefa('${subtarefa.id}')">Editar</button>${baixarAnexoSub}
               </div>
               <br>
               <button onclick="moverParaCimaSub(${subtarefa.id})" title="Subir">🔼</button><button onclick="moverParaBaixoSub(${subtarefa.id})" title="Descer">🔽</button>
               </div>
-            `;
+            `);
 
           }
         }
-        card.innerHTML += `
+        card.insertAdjacentHTML('beforeend', `
           </div>
           <br><br>
-          ${exibirAnexo}&nbsp;&nbsp;<button onclick="moverParaCima(${tarefa.id})" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo(${tarefa.id})" title="Descer" class="position">🔽</button>
-        `;
+          <div style="margin-top: 10px;"><button onclick="editarTarefa('${tarefa.id}')" class="edit-tarefa">Editar</button>&nbsp;${exibirAnexo}&nbsp;<button onclick="moverParaCima('${tarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo('${tarefa.id}')" title="Descer" class="position">🔽</button>
+        `);
 
         containerTarefas.appendChild(card);
       }
@@ -306,6 +380,12 @@ async function carregarDados() {
 }
 
 async function cadastrarTarefa() {
+
+  if (editando === 1){
+    alterarTarefa();
+    return;
+  }
+
   const titulo = document.getElementById('titulo').value.trim();
   const data = document.getElementById('data').value;
   const descricao = document.getElementById('descricao').value.trim();
@@ -340,11 +420,10 @@ async function cadastrarTarefa() {
   const dados = await resposta.json();
 
   if (dados.result) {
-    alert("Tarefa criada com sucessa!");
+    alert("Tarefa criada com sucesso!");
     window.location.href = "tarefas.html?id=" + dadosProjeto.projeto.id;
   } else {
     msgAviso.innerHTML = dados.mensagem;
   }
-
 
 }

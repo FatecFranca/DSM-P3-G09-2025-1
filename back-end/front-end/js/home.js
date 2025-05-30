@@ -166,7 +166,7 @@ async function carregarProjetos() {
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -192,7 +192,7 @@ async function carregarProjetos() {
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -206,7 +206,7 @@ async function carregarProjetos() {
             if (projeto.status === "Concluído") {
                 projeto.status = "Concluido";
             }
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+            const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
@@ -220,8 +220,8 @@ async function carregarProjetos() {
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a></span>
                 </div>
-                <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><strong>Entregue em</strong> ${dataFormatada}</p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -257,7 +257,7 @@ async function carregarProjetos() {
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -282,7 +282,7 @@ async function carregarProjetos() {
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -296,7 +296,7 @@ async function carregarProjetos() {
             if (projeto.status === "Concluído") {
                 projeto.status = "Concluido";
             }
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+            const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
@@ -309,8 +309,8 @@ async function carregarProjetos() {
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
-                <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><strong>Entregue em</strong> ${dataFormatada}</p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -348,7 +348,7 @@ async function carregarProjetos() {
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -373,7 +373,7 @@ async function carregarProjetos() {
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
@@ -388,7 +388,7 @@ async function carregarProjetos() {
                 projeto.status = "Concluido";
             }
 
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+            const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
@@ -401,8 +401,8 @@ async function carregarProjetos() {
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
                 </div>
-                <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
-                <p><strong>Status:</strong> <span class="${projeto.status}">${projeto.status}</span></p>
+                <p><strong>Entregue em</strong> ${dataFormatada}</p>
+                <p><span class="${projeto.status}">${projeto.status}</span></p>
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;

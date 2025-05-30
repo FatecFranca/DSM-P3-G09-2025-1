@@ -3,6 +3,7 @@
 
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
+import path from 'path';
 const controller = {};
 
 // Importando validação de sessão
@@ -204,7 +205,7 @@ controller.retrieveOne = async function(req, res) {
         }
         
         // Retorna os dados obtidos
-        return res.send(tarefa);
+        return res.status(200).json({ result: true, tarefa: tarefa });
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -370,8 +371,11 @@ controller.update = async function(req, res) {
         }
 
         // Deletando o anexo
-        if (verificaTarefa.anexo){
-            deletarAnexo(verificaTarefa.anexo);
+        if (urlAnexo !== null && urlAnexo !== verificaTarefa.anexo) {
+            // Deletando o anexo
+            if (verificaTarefa.anexo) {
+                deletarAnexo(verificaTarefa.anexo);
+            }
         }
 
         // Monta a URL da anexo

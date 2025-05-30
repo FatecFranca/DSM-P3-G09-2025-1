@@ -36,9 +36,10 @@
       <input id="titulo" placeholder="Título" required="" type="text" />
       <input id="data" required="" type="date" />
       <textarea id="descricao" class="descricao" placeholder="Descrição" required=""></textarea>
+      <label for="anexo" id="label-anexo">Anexo da Tarefa</label>
       <input id="anexo" type="file" />
       <p id="msgAviso"></p>
-      <button type="button" onclick="cadastrarTarefa()" class="btn-cad">Salvar</button>
+      <button type="button" onclick="cadastrarTarefa()" id="salvar-tarefa" class="btn-cad">Salvar</button>
       <button onclick="fecharFormulario()" type="button" class="btn-cancelar">Cancelar</button>
     </form>
   </div>
