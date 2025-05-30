@@ -1,8 +1,3 @@
-function toggleMenu() {
-  const menu = document.getElementById('menuNav');
-  menu.classList.toggle('show');
-}
-
 document.getElementById('meuPerfilBtn').addEventListener('click', () => {
   window.location.href = 'alterarDadosUsuario.html';
 });
@@ -163,7 +158,7 @@ async function carregarProjetos() {
             card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
-                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
+                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -189,7 +184,7 @@ async function carregarProjetos() {
             card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
-                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a></span>
+                    <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -218,7 +213,7 @@ async function carregarProjetos() {
             card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
-                    <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a></span>
+                    <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
                 </div>
                 <p><strong>Entregue em</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -536,7 +531,7 @@ async function buscarMembros(idProjeto) {
             const card = document.createElement("div");
 
             card.innerHTML = `
-                <a class="descricao">${membro.nome}</a><img src="img/icones/x-exlcuir.svg" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.id}', '${idProjeto}')">
+                <a class="descricao">${membro.nome}</a><img src="img/icones/x-deletar.png" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.id}', '${idProjeto}')">
             `;
             listaMembros.appendChild(card);
         }
@@ -634,7 +629,7 @@ async function buscarAdmins(idProjeto) {
             const card = document.createElement("div");
 
             card.innerHTML = `
-                <a class="descricao">${administrador.nome}</a><img src="img/icones/x-exlcuir.svg" class="btn-excluir-membro" title="Excluir Administrador" onclick="excluirAdministrador('${administrador.id}', '${idProjeto}')">
+                <a class="descricao">${administrador.nome}</a><img src="img/icones/x-deletar.png" class="btn-excluir-membro" title="Excluir Administrador" onclick="excluirAdministrador('${administrador.id}', '${idProjeto}')">
             `;
             listaAdmins.appendChild(card);
 

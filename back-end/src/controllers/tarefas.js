@@ -4,6 +4,7 @@
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 import path from 'path';
+import fs from 'fs';
 const controller = {};
 
 // Importando validação de sessão
@@ -370,6 +371,9 @@ controller.update = async function(req, res) {
 
         }
 
+        // Monta a URL da anexo
+        const urlAnexo = req.file ? `${req.file.filename}` : null;
+
         // Deletando o anexo
         if (urlAnexo !== null && urlAnexo !== verificaTarefa.anexo) {
             // Deletando o anexo
@@ -378,11 +382,6 @@ controller.update = async function(req, res) {
             }
         }
 
-        // Monta a URL da anexo
-        const urlAnexo = req.file ? `${req.file.filename}` : null;
-
-        // Ajustando a url do anexo para a inserção no BD
-        req.body.anexo = urlAnexo;
 
         // Deletando a possibilidade de ser informada a ordem da tarefa, há uma função específica para esse controle.
         // Deletanndo também possíbilidade de alterar o projeto da tarefa
@@ -391,7 +390,12 @@ controller.update = async function(req, res) {
         delete req.body.status;
         delete req.body.data_entrega;
         delete req.body.data_criacao;
+        delete req.body.anexo;
 
+        // Ajustando a url do anexo para a inserção no BD
+        if (urlAnexo !== null && urlAnexo !== undefined) {
+            req.body.anexo = urlAnexo;
+        }
         
         if (req.body.data_limite > new Date()){
             req.body.status = "Pendente";

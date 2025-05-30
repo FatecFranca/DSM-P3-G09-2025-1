@@ -6,6 +6,7 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>Taskflow - Tarefas e Subtarefas</title>
+  <link rel="stylesheet" href="css/index.css">
   <link href="css/tarefas.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&amp;family=Space+Grotesk:wght@500&amp;display=swap"
     rel="stylesheet" />
@@ -23,10 +24,8 @@
       <a href="home.html">Home</a>
       <a href="sobre.html">Sobre nós</a>
       <a href="contato.html">Fale conosco</a>
-      <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img" id="img-not"
-          src="img/icones/sino-de-notificacao.png" /><label id="txt-not">Notificações</label></a>
-      <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair" id="img-sair"
-          src="img/icones/sair.png" /><label id="txt-sair">Sair</label></a>
+      <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img" id="img-not" src="img/icones/sino-de-notificacao.png" /><label id="txt-not">Notificações</label></a>
+      <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair" id="img-sair" src="img/icones/sair.png" /><label id="txt-sair">Sair</label></a>
     </nav>
   </header>
 
@@ -127,6 +126,7 @@
     </div>
   </footer>
   <script src="js/login.js"></script>
+  <script src="js/menuMobile.js"></script>
   <script src="js/tarefas.js"></script>
   <script>
     window.onload = sessaoIniGeral();

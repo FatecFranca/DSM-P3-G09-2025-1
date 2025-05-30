@@ -110,6 +110,22 @@ nav a:hover {
     nav a {
         margin: 10px 0;
     }
+
+    #txt-not{
+    display: block;
+  }
+
+  #txt-sair{
+    display: block;
+  }
+
+  #img-sair{
+    display: none;
+  }
+
+  #img-not{
+    display: none;
+  }
 }
 
 /* ================== PÁGINA TAREFAS ================== */
@@ -290,6 +306,7 @@ footer a {
     #add-task {
         width: 100%;
     }
+
 }
 
 @media (max-width: 750px) {
@@ -302,6 +319,7 @@ footer a {
     footer div {
         margin: 5px 0;
     }
+
 }
 
 /* ================== FORMULÁRIO ================== */
@@ -414,7 +432,8 @@ footer a {
   text-decoration: none;
   color: #fff;
   background: #4285f4;
-  padding: 8px 14px;
+  padding: 5px 10px;
+  margin-right: 8px;
   border-radius: 5px;
   font-size: 0.85rem;
   cursor: pointer;
@@ -422,6 +441,21 @@ footer a {
 
 .baixar-anexo:hover {
   background: #366dc7;
+}
+
+.btn-excluir {
+  text-decoration: none;
+  color: #fff;
+  background: #c02525;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-excluir:hover {
+  background: #9e1f1f;
 }
 
 #msgAviso {
@@ -435,10 +469,53 @@ footer a {
     display: flex;
 }
 
+.drag a{
+    text-decoration: none;
+    color: #fff;
+    background: #4285f4;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    text-align: center;
+    height: 28px;
+}
+
 .drag h3{
+    width: 95%;
+}
+
+.drag h2{
     width: 95%;
 }
 
 .descricao{
     white-space: pre-wrap;
+}
+
+.btn-concluir{
+  text-decoration: none;
+  color: #fff;
+  background: #4cd964;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-concluir:hover {
+  background: #366dc7;
+}
+
+.btns-tarefa{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 535px) {
+    .btns-tarefa{
+      display: block;
+    }
 }

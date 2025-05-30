@@ -1,4 +1,8 @@
 let dadosProjeto;
+let dadosSessao;
+const form = document.getElementById("task-form");
+let editando = 0; // para saber se estamos editando ou criando
+let idTarefaEditar;
 
 document.getElementById("add-task").addEventListener("click", () => {
   abrirFormulario();
@@ -8,40 +12,6 @@ function formatarDataISOparaBR(dataISO) {
   const [ano, mes, dia] = dataISO.split("-");
   return `${dia}/${mes}/${ano}`;
 }
-
-const form = document.getElementById("task-form");
-let editando = 0; // para saber se estamos editando ou criando
-let idTarefaEditar;
-
-// form.addEventListener("submit", (e) => {
-//   e.preventDefault();
-
-//   const titulo = document.getElementById("titulo").value;
-//   const data = document.getElementById("data").value;
-//   const status = document.getElementById("status").value;
-//   const descricao = document.getElementById("descricao").value;
-//   const arquivoInput = document.getElementById("arquivo");
-//   const arquivo = arquivoInput.files[0];
-
-//   const tarefa = {
-//     titulo,
-//     data,
-//     status,
-//     descricao,
-//     arquivo: arquivo ? URL.createObjectURL(arquivo) : null,
-//     nomeArquivo: arquivo ? arquivo.name : null
-//   };
-
-//   if (editando) {
-//     atualizarTarefa(editando, tarefa);
-//     editando = null;
-//   } else {
-//     adicionarTarefa(tarefa);
-//   }
-
-//   form.reset();
-//   fecharFormulario();
-// });
 
 function abrirFormulario() {
   document.getElementById("form-container").style.display = "flex";
@@ -54,34 +24,6 @@ function fecharFormulario() {
   form.reset();
   editando = 0;
 }
-
-// function adicionarTarefa(tarefa) {
-//   const container = document.querySelector(".categoria .tarefas");
-
-//   const div = document.createElement("div");
-//   div.className = `tarefa ${tarefa.status}`;
-
-//   div.innerHTML = `
-//     <div class="drag"></div>
-//     <div class="botoes-ordenacao">
-//       <button title="Subir" onclick="moverParaCima(this)">🔼</button>
-//       <button title="Descer" onclick="moverParaBaixo(this)">🔽</button>
-//     </div>
-//     <h3>${tarefa.titulo}</h3>
-//     <p class="data">
-//       ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
-//       ${formatarDataISOparaBR(tarefa.data)}
-//     </p>
-//     <p class="descricao">${tarefa.descricao}</p>
-//     <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
-//     <div style="margin-top: 10px;">
-//       <button onclick="editarTarefa(${tarefa.id_tarefa})">Editar</button>
-//       ${tarefa.arquivo ? `<a href="${tarefa.arquivo}" download="${tarefa.nomeArquivo}">Download</a>` : ""}
-//     </div>
-//   `;
-
-//   container.appendChild(div);
-// }
 
 async function editarTarefa(idTarefa) {
 
@@ -153,24 +95,6 @@ async function alterarTarefa() {
   }
 }
 
-// function atualizarTarefa(card, tarefa) {
-//   card.className = `tarefa ${tarefa.status}`;
-//   card.innerHTML = `
-//     <div class="drag"></div>
-//     <h3>${tarefa.titulo}</h3>
-//     <p class="data">
-//       ${tarefa.status === "concluida" ? "Entregue em" : "Data máxima para entrega"} 
-//       ${formatarDataISOparaBR(tarefa.data)}
-//     </p>
-//     <p class="descricao">${tarefa.descricao}</p>
-//     <span class="status ${corStatus(tarefa.status)}">${capitalizar(tarefa.status)}</span>
-//     <div style="margin-top: 10px;">
-//       <button onclick="editarTarefa(${tarefa.id_tarefa})">Editar</button>
-//       ${tarefa.arquivo ? `<a href="${tarefa.arquivo}" download="${tarefa.nomeArquivo}">Download</a>` : ""}
-//     </div>
-//   `;
-// }
-
 function capitalizar(texto) {
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
@@ -195,11 +119,6 @@ function moverParaBaixo(botao) {
   if (proximo) {
     tarefa.parentNode.insertBefore(proximo, tarefa);
   }
-}
-
-function toggleMenu() {
-  const menu = document.getElementById('menuNav');
-  menu.classList.toggle('show');
 }
 
 async function encerrarSessao() {
@@ -236,6 +155,19 @@ async function baixarAnexoTarefa(nomeArquivo) {
 }
 
 async function carregarDados() {
+
+  const dadosUsuario = await fetch('http://localhost:8080/usuarios/verificaSessao/true', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    });
+
+  dadosSessao = await dadosUsuario.json();
+
+  if (!dadosSessao.result) {
+      return window.location.href = "login.html";
+  }
+
   const urlAtual = window.location.href;
   const urlClass = new URL(urlAtual);
   const idProjeto = urlClass.searchParams.get("id");
@@ -249,6 +181,7 @@ async function carregarDados() {
   });
 
   dadosProjeto = await resposta.json();
+
   if (dadosProjeto.result) {
 
     const dataISO = new Date(dadosProjeto.projeto.data_limite).toISOString().split('T')[0];
@@ -297,12 +230,21 @@ async function carregarDados() {
 
         let exibirAnexo = ``;
         if (tarefa.anexo !== null) {
-          exibirAnexo = `<a onclick="baixarAnexoTarefa('${tarefa.anexo}')" class="baixar-anexo">Anexo Tarefa</a>`;
+          exibirAnexo = `<a onclick="baixarAnexoTarefa('${tarefa.anexo}')" class="baixar-anexo">Baixar Anexo</a>`;
+        }
+
+        let exibirConcluirEditar = ``;
+        if (dadosProjeto.projeto.id_gestor === dadosSessao.dados.id || dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id)){
+          if (tarefa.status === "Concluída"){
+            exibirConcluirEditar = `<a class="btn-concluir" onclick="statusTarefa('${tarefa.id}', 'Reabrir')">Reabrir</a>&nbsp;<a onclick="editarTarefa('${tarefa.id}')" class="edit-tarefa">Editar</a>&nbsp;<a class="btn-excluir" onclick="excluirTarefa('${tarefa.id}')">Excluir</a>`;
+          }else{
+            exibirConcluirEditar = `<a class="btn-concluir" onclick="statusTarefa('${tarefa.id}', 'Concluir')">Concluir</a>&nbsp;<a onclick="editarTarefa('${tarefa.id}')" class="edit-tarefa">Editar</a>&nbsp;<a class="btn-excluir" onclick="excluirTarefa('${tarefa.id}')">Excluir</a>`;
+          }
         }
 
         card.className = "categoria";
         card.insertAdjacentHTML('beforeend', `
-          <h2>${tarefa.titulo}</h2>
+          <div class="drag"><h2>${tarefa.titulo}</h2><a title="Ordem" style="background-color: rgb(93, 93, 212);">${tarefa.ordem}</a></div>
           <p><b>${descDataTarefa}</b> ${dataFormatada}</p><br>
           <span class="status ${statusTarefa}">${tarefa.status}</span><br><br>
           <p class="descricao">${tarefa.descricao}</p><br>
@@ -363,7 +305,7 @@ async function carregarDados() {
         card.insertAdjacentHTML('beforeend', `
           </div>
           <br><br>
-          <div style="margin-top: 10px;"><button onclick="editarTarefa('${tarefa.id}')" class="edit-tarefa">Editar</button>&nbsp;${exibirAnexo}&nbsp;<button onclick="moverParaCima('${tarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo('${tarefa.id}')" title="Descer" class="position">🔽</button>
+          <div class="btns-tarefa"><div>${exibirConcluirEditar}</div><br><div>${exibirAnexo}&nbsp;<button onclick="moverParaCima('${tarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo('${tarefa.id}')" title="Descer" class="position">🔽</button></div>
         `);
 
         containerTarefas.appendChild(card);
@@ -424,6 +366,35 @@ async function cadastrarTarefa() {
     window.location.href = "tarefas.html?id=" + dadosProjeto.projeto.id;
   } else {
     msgAviso.innerHTML = dados.mensagem;
+  }
+
+}
+
+async function statusTarefa(idTarefa, tipoAlteracao) {
+
+  if (!confirm(`Deseja realmente ${tipoAlteracao} essa tarefa?`)){
+    return;
+  }
+  
+  const resposta = await fetch('http://localhost:8080/tarefas/updateStatus/' + idTarefa, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tipo_alteracao: tipoAlteracao })
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result) {
+    if (tipoAlteracao === "Concluir"){
+      alert("Tarefa concluida com sucesso!");
+    }else if (tipoAlteracao === "Reabrir"){
+      alert("Tarefa reaberta com sucesso!");
+    }
+  
+    window.location.href = "tarefas.html?id=" + dadosProjeto.projeto.id;
+  } else {
+    alert(dados.mensagem);
   }
 
 }
