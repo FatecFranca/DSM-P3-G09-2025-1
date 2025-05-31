@@ -7,7 +7,7 @@ const router = Router();
 
 // Validada (07/05)
 // Cadastro de Subtarefa
-router.post('/', upload.single('anexoSubtarefa'), controller.create);
+router.post('/', upload.single('anexoSub'), controller.create);
 /*
     Dados a serem informados:
     titulo: String
@@ -34,7 +34,7 @@ router.get('/tarefa/:id', controller.retrieveAllTarefa);
 
 
 // Alterar Subtarefa
-router.put('/:id', upload.single('anexoSubtarefa'), controller.update);
+router.put('/:id', upload.single('anexoSub'), controller.update);
 /*
     Dados a serem informados:
     titulo: String

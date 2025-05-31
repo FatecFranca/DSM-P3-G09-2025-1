@@ -4,6 +4,8 @@
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 const controller = {};
+import path from 'path';
+import fs from 'fs';
 
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
@@ -12,7 +14,7 @@ import { validarSessao } from './utils.js';
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), '..', 'uploads', 'anexoSubTarefas', nomeArquivo);
+    const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoAnexo)) {
@@ -120,6 +122,8 @@ controller.create = async function(req, res) {
 
         // Ajustando a url do anexo para a inserção no BD
         req.body.anexo = urlAnexo;
+
+        delete req.body.anexoSub;
 
         await prisma.subTarefa.create({ data: req.body });
 

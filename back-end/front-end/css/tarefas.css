@@ -324,7 +324,7 @@ footer a {
 
 /* ================== FORMULÁRIO ================== */
 
-#form-container {
+.form-container {
   position: fixed;
   inset: 0; /* equivale a top: 0; left: 0; bottom: 0; right: 0 */
   background: rgba(0, 0, 0, 0.5);
@@ -334,7 +334,7 @@ footer a {
   align-items: center;
 }
 
-#task-form {
+.task-form {
   background: #fff;
   padding: 30px;
   border-radius: 10px;
@@ -348,18 +348,18 @@ footer a {
 }
 
 
-#task-form h3 {
+.task-form h3 {
   font-family: 'Space Grotesk', sans-serif;
   text-align: center;
   font-size: 1.4rem;
   margin-bottom: 10px;
 }
 
-#task-form input[type="text"],
-#task-form input[type="date"],
-#task-form select,
-#task-form textarea,
-#task-form input[type="file"] {
+.task-form input[type="text"],
+.task-form input[type="date"],
+.task-form select,
+.task-form textarea,
+.task-form input[type="file"] {
   padding: 10px;
   border: 1px solid #c6d3df;
   border-radius: 5px;
@@ -367,12 +367,16 @@ footer a {
   width: 100%;
 }
 
-#task-form textarea {
+.task-form input[type="date"]{
+  margin-top: 0;
+}
+
+.task-form textarea {
   resize: vertical;
   min-height: 80px;
 }
 
-#task-form button {
+.task-form button {
   padding: 10px;
   border: none;
   border-radius: 5px;
@@ -458,7 +462,7 @@ footer a {
   background: #9e1f1f;
 }
 
-#msgAviso {
+#msgAviso, #msgAvisoSub {
   color: #960505;
   font-size: 14px;
   margin-top: 10px;
