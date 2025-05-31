@@ -1001,12 +1001,6 @@ controller.delete = async function (req, res) {
             return res.status(400).json({ mensagem: "Você não tem permissão para excluir esse Projeto!" });
         }
 
-        // Verificando se a senha informada é a senha atual do usuario
-        const valSenha = await validaSenha(req.body.senha_gestor, verificaProjeto.id_gestor);
-        if (!valSenha) {
-            return res.status(400).json({ mensagem: "Senha Inválida!" });
-        }
-
         // Deletando o anexo
         if (verificaProjeto.anexo) {
             deletarAnexo(verificaProjeto.anexo);

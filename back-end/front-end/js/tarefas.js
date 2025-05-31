@@ -105,19 +105,45 @@ function corStatus(status) {
   if (status === "atrasada") return "vermelho";
 }
 
-function moverParaCima(botao) {
-  const tarefa = botao.closest('.tarefa');
-  const anterior = tarefa.previousElementSibling;
-  if (anterior) {
-    tarefa.parentNode.insertBefore(tarefa, anterior);
+async function moverParaCima(idTarefa, ordem) {
+  if (ordem === 1){
+    return;
+  }
+
+  const resposta = await fetch('http://localhost:8080/tarefas/updateOrdem/' + idTarefa, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'antecipar' })
+    });
+
+  const dados = await resposta.json();
+
+  if (!dados.result){
+    alert(dados.mensagem);
+  }else{
+    window.location.reload();
   }
 }
 
-function moverParaBaixo(botao) {
-  const tarefa = botao.closest('.tarefa');
-  const proximo = tarefa.nextElementSibling;
-  if (proximo) {
-    tarefa.parentNode.insertBefore(proximo, tarefa);
+async function moverParaBaixo(idTarefa, ordem, qtTarefas) {
+  if (ordem === qtTarefas){
+    return;
+  }
+
+  const resposta = await fetch('http://localhost:8080/tarefas/updateOrdem/' + idTarefa, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'regredir' })
+    });
+
+  const dados = await resposta.json();
+
+  if (!dados.result){
+    alert(dados.mensagem);
+  }else{
+    window.location.reload();
   }
 }
 
@@ -236,7 +262,7 @@ async function carregarDados() {
         let exibirConcluirEditar = ``;
         if (dadosProjeto.projeto.id_gestor === dadosSessao.dados.id || dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id)){
           if (tarefa.status === "Concluída"){
-            exibirConcluirEditar = `<a class="btn-concluir" onclick="statusTarefa('${tarefa.id}', 'Reabrir')">Reabrir</a>&nbsp;<a onclick="editarTarefa('${tarefa.id}')" class="edit-tarefa">Editar</a>&nbsp;<a class="btn-excluir" onclick="excluirTarefa('${tarefa.id}')">Excluir</a>`;
+            exibirConcluirEditar = `<a class="btn-concluir" onclick="statusTarefa('${tarefa.id}', 'Reabrir')">Reabrir</a>`;
           }else{
             exibirConcluirEditar = `<a class="btn-concluir" onclick="statusTarefa('${tarefa.id}', 'Concluir')">Concluir</a>&nbsp;<a onclick="editarTarefa('${tarefa.id}')" class="edit-tarefa">Editar</a>&nbsp;<a class="btn-excluir" onclick="excluirTarefa('${tarefa.id}')">Excluir</a>`;
           }
@@ -296,17 +322,20 @@ async function carregarDados() {
               <div style="margin-top: 10px;"><button onclick="editarSubTarefa('${subtarefa.id}')">Editar</button>${baixarAnexoSub}
               </div>
               <br>
-              <button onclick="moverParaCimaSub(${subtarefa.id})" title="Subir">🔼</button><button onclick="moverParaBaixoSub(${subtarefa.id})" title="Descer">🔽</button>
+              <button onclick="moverParaCimaSub(${subtarefa.id}, ${subtarefa.ordem})" title="Subir">🔼</button><button onclick="moverParaBaixoSub(${subtarefa.id}, ${subtarefa.ordem}, ${dadosSubTarefas.subtarefas.length})" title="Descer">🔽</button>
               </div>
             `);
 
           }
         }
+        
+
         card.insertAdjacentHTML('beforeend', `
           </div>
           <br><br>
-          <div class="btns-tarefa"><div>${exibirConcluirEditar}</div><br><div>${exibirAnexo}&nbsp;<button onclick="moverParaCima('${tarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo('${tarefa.id}')" title="Descer" class="position">🔽</button></div>
+          <div class="btns-tarefa"><div>${exibirConcluirEditar}</div><br><div>${exibirAnexo}&nbsp;<button onclick="moverParaCima('${tarefa.id}', ${tarefa.ordem})" title="Subir" class="position">🔼</button><button onclick="moverParaBaixo('${tarefa.id}', ${tarefa.ordem}, ${dadosTarefas.tarefas.length})" title="Descer" class="position">🔽</button></div>
         `);
+        
 
         containerTarefas.appendChild(card);
       }
@@ -397,4 +426,27 @@ async function statusTarefa(idTarefa, tipoAlteracao) {
     alert(dados.mensagem);
   }
 
+}
+
+async function excluirTarefa(idTarefa) {
+  if (!confirm('Deseja realmente excluir essa tarefa?')){
+    return;
+  }
+
+  const resposta = await fetch('http://localhost:8080/tarefas/' + idTarefa, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result){
+    alert('Tarefa excluida com sucesso!');
+    window.location.reload();
+    return;
+  }else{
+    alert('Erro: ' + dados.mensagem);
+    return;
+  }
 }

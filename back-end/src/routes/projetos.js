@@ -117,9 +117,5 @@ router.put('/updateStatus/:id', controller.updateStatus);
 // Testar com tarefas / subtarefas / atividades 
 // Deletar projeto
 router.delete('/:id', controller.delete);
-/*
-    Dados a serem informados:
-    senha_gestor: String (Usuário Informará a senha atual dele)
-*/
 
 export default router;

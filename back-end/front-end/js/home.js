@@ -213,7 +213,7 @@ async function carregarProjetos() {
             card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
-                    <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
+                    <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a></span>
                 </div>
                 <p><strong>Entregue em</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -801,4 +801,27 @@ function statusProjetos(){
 
 function abrirTarefas(idProjeto){
     window.location.href = "tarefas.html?id=" + idProjeto;
+}
+
+async function excluirProjeto(idProjeto) {
+    if (!confirm('Deseja realmente excluir esse projeto?')){
+        return;
+    }
+
+    const resposta = await fetch('http://localhost:8080/projetos/' + idProjeto, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.result){
+        alert('Projeto excluido com sucesso!');
+        window.location.reload();
+        return;
+    }else{
+        alert('Erro: ' + dados.mensagem);
+        return;
+    }
 }
