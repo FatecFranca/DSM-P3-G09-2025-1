@@ -18,14 +18,6 @@
       <a href="home.html">Home</a>
       <a href="sobre.html">Sobre nós</a>
       <a href="contato.html">Fale conosco</a>
-      <a href="gerenciarnotificacoes.html" title="Notificações">
-        <img src="img/icones/sino-de-notificacao.png" alt="Notificações" class="icon-img" id="img-not">
-        <label id="txt-not">Notificações</label>
-      </a>
-      <a onclick="encerrarSessao()" title="Sair">
-        <img src="img/icones/sair.png" alt="Sair" class="icon-sair" id="img-sair">
-        <label id="txt-sair">Sair</label>
-      </a>
     </nav>
   </header>
 
@@ -51,7 +43,7 @@
   </section>
 
   <section class="form-contato">
-    <form id="formContato" action="#" method="POST">
+    <form id="formContato">
       <div class="form-group">
         <label for="nome">Nome</label>
         <input type="text" id="nome" name="nome" required placeholder="Seu nome completo" />
@@ -72,7 +64,9 @@
         <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Escreva sua mensagem aqui..."></textarea>
       </div>
 
-      <button type="submit" class="btn-enviar">Enviar</button>
+      <p id="msgAviso" style="text-align: center; color: red;"></p>
+
+      <button type="button" class="btn-enviar" onclick="enviar()">Enviar</button>
     </form>
   </section>
 
@@ -93,6 +87,35 @@
       <a href="contato.html">Suporte</a>
     </div>
   </footer>
+
+  <script>
+    function enviar(){
+      const mensagem = document.getElementById('mensagem').value.trim();
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const assunto = document.getElementById('assunto').value.trim();
+      let msgAviso = document.getElementById('msgAviso');
+      msgAviso.innerHTML = "";
+
+      if (nome === ""){
+        msgAviso.innerHTML = "Prencha o campo nome!";
+        return;
+      }else if (email === ""){
+        msgAviso.innerHTML = "Prencha o campo e-mail!";
+        return;
+      }else if (assunto === ""){
+        msgAviso.innerHTML = "Prencha o campo assunto!";
+        return;
+      }else if (mensagem === ""){
+        msgAviso.innerHTML = "Prencha o campo mensagem!";
+        return;
+      }
+
+      alert("Sua mensagem foi enviada, aguarde nosso retorno!")
+      window.location.reload();
+      return;
+    }
+  </script>
 
   <script src="js/menuMobile.js"></script>
 </body>

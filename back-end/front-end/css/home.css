@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background-color: #e4f0f2;
   color: #000000;
 }
@@ -54,6 +54,13 @@ nav a:hover {
   display: block;
 }
 
+#txt-sair{
+  display: none;
+}
+
+#txt-not{
+  display: none;
+}
 
 @media (max-width: 750px) {
   .menu-toggle {
@@ -79,6 +86,22 @@ nav a:hover {
 
   nav a {
     margin: 10px 0;
+  }
+
+  #txt-not{
+    display: block;
+  }
+
+  #txt-sair{
+    display: block;
+  }
+
+  #img-sair{
+    display: none;
+  }
+
+  #img-not{
+    display: none;
   }
 }
 
@@ -447,7 +470,7 @@ footer a {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
 }
 
@@ -562,4 +585,19 @@ footer a {
   font-size: 0.9rem;
   background-color: #fff;
   color: #333;
+}
+
+.baixar-anexo {
+  text-decoration: none;
+  color: #fff;
+  background: #4285f4;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.baixar-anexo:hover {
+  background: #366dc7;
 }

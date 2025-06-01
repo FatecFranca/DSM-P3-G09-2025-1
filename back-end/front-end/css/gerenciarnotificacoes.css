@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 body {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background: white;
   padding: 0;
 }
@@ -111,7 +111,7 @@ main {
   padding: 1rem;
 }
 .notificacoes-container h2 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   border-bottom: 2px solid #4057f1;
   margin-bottom: 1rem;

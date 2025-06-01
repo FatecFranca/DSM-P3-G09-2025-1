@@ -12,9 +12,13 @@ import { validarSessao } from './utils.js';
 
 // Testar com o front
 // Função para excluir um arquivo da pasta
-async function deletarAnexo(nomeArquivo) {
+async function deletarAnexo(nomeArquivo, tipo) {
     // Caminho absoluto do arquivo
     const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
+
+    if (tipo === "a"){
+        caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
+    }
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoAnexo)) {
@@ -234,7 +238,7 @@ controller.retrieveOne = async function(req, res) {
         }
         
         // Retorna os dados obtidos
-        return res.send(subTarefa);
+        return res.status(400).json({ result: true, subtarefa: subTarefa });
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -428,22 +432,28 @@ controller.update = async function(req, res) {
 
         }
 
-        // Deletando o anexo
-        if (verificaSubTarefa.anexo){
-            deletarAnexo(verificaSubTarefa.anexo);
-        }
-
         // Monta a URL da anexo
         const urlAnexo = req.file ? `${req.file.filename}` : null;
 
+        // Deletando o anexo
+        if (urlAnexo !== null && urlAnexo !== verificaTarefa.anexo) {
+            // Deletando o anexo
+            if (verificaTarefa.anexo) {
+                deletarAnexo(verificaTarefa.anexo);
+            }
+        }
+
         // Ajustando a url do anexo para a inserção no BD
-        req.body.anexo = urlAnexo;
+        if (urlAnexo !== null && urlAnexo !== undefined) {
+            req.body.anexo = urlAnexo;
+        }
 
         // Deletando dados que não devem ser informados nessa função, mas que são alterados em outras
         delete req.body.ordem;
         delete req.body.id_tarefa;
         delete req.body.data_entrega;
         delete req.body.ids_membros;
+        delete req.body.anexoSub;
 
         if (req.body.status === "Atrasada"){
             // Verificando se as notificações já foram enviadas para os usuários necessários 
@@ -483,7 +493,7 @@ controller.update = async function(req, res) {
         });
     
         // Retornando mensagem de sucessao caso tenha atualizado
-        return res.status(201).json({result: true});
+        return res.status(200).json({result: true});
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -582,7 +592,7 @@ controller.updateStatus = async function(req, res) {
             });
         
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({mensagem: "Subtarefa Concluída!"});
+            return res.status(201).json({result: true});
 
         }else if (req.body.tipo_alteracao === "Reabrir"){
 
@@ -637,7 +647,7 @@ controller.updateStatus = async function(req, res) {
            
         
             // Retornando mensagem de sucessao caso tenha atualizado
-            return res.status(201).json({mensagem: "Subtarefa Reaberta!"});
+            return res.status(201).json({result: true});
         }else{
             return res.status(400).json({ mensagem: "Função Inválida! Operação não existente!"});
         }
@@ -1231,7 +1241,7 @@ controller.delete = async function(req, res) {
 
                 // Deletando o anexo
                 if (atividade.anexo){
-                    deletarAnexo(atividade.anexo);
+                    deletarAnexo(atividade.anexo, "a");
                 }
 
                 // Deletando as subtarefas
@@ -1260,7 +1270,7 @@ controller.delete = async function(req, res) {
 
         // Deletando o anexo
         if (verificaSubTarefa.anexo){
-            deletarAnexo(verificaSubTarefa.anexo);
+            deletarAnexo(verificaSubTarefa.anexo, "s");
         }
 
         // Busca a subtarefa a ser excluída

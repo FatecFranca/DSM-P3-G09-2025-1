@@ -7,7 +7,7 @@
 
 /* Body e fonte */
 body, html {
-  font-family: 'Montserrat', 'Space Grotesk', Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background-color: #f9f9f9;
   min-height: 100vh;
 }
@@ -141,7 +141,7 @@ input[type="file"] {
   font-size: 1rem;
   background-color: #fff;
   transition: border-color 0.3s ease;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
   resize: none;
 }
 

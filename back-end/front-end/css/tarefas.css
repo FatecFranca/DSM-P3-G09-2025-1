@@ -112,20 +112,20 @@ nav a:hover {
     }
 
     #txt-not{
-    display: block;
-  }
+      display: block;
+    }
 
-  #txt-sair{
-    display: block;
-  }
+    #txt-sair{
+      display: block;
+    }
 
-  #img-sair{
-    display: none;
-  }
+    #img-sair{
+      display: none;
+    }
 
-  #img-not{
-    display: none;
-  }
+    #img-not{
+      display: none;
+    }
 }
 
 /* ================== PÁGINA TAREFAS ================== */
@@ -143,7 +143,7 @@ header {
 }
 
 .topo h1 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     text-align: center;
 }
 
@@ -199,7 +199,7 @@ main {
 
 .categoria h2 {
     font-weight: bold;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 10px;
 }
 
@@ -224,6 +224,7 @@ main {
     font-weight: bold;
     margin-bottom: 5px;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .data {
@@ -249,6 +250,10 @@ main {
 
 .azul {
     background-color: #4285f4;
+}
+
+.laranja {
+    background-color: #f39c12;
 }
 
 .vermelho {
@@ -349,7 +354,7 @@ footer a {
 
 
 .task-form h3 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   text-align: center;
   font-size: 1.4rem;
   margin-bottom: 10px;
@@ -490,6 +495,7 @@ footer a {
 
 .drag h2{
     width: 95%;
+    text-transform: uppercase;
 }
 
 .descricao{
@@ -508,7 +514,22 @@ footer a {
 }
 
 .btn-concluir:hover {
-  background: #366dc7;
+  background: #3baa4e;
+}
+
+.btn-reabrir{
+  text-decoration: none;
+  color: #fff;
+  background: #dfd21e;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-reabrir:hover {
+  background: #b8ad18;
 }
 
 .btns-tarefa{
@@ -522,4 +543,21 @@ footer a {
     .btns-tarefa{
       display: block;
     }
+}
+
+.btns-subTarefa{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 1073px) {
+    .btns-subTarefa{
+      display: block;
+    }
+}
+
+#nomeProjeto{
+  text-transform: uppercase;
 }

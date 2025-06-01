@@ -149,15 +149,15 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
@@ -175,15 +175,15 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
@@ -205,14 +205,14 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a></span>
                 </div>
                 <p><strong>Entregue em</strong> ${dataFormatada}</p>
@@ -241,15 +241,15 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -266,15 +266,15 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -295,14 +295,14 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Entregue em</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -332,15 +332,15 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -357,15 +357,15 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.className = "project-card";
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Data máxima de entrega:</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>
@@ -387,14 +387,14 @@ async function carregarProjetos() {
             const [ano, mes, dia] = dataISO.split('-');
             const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            let exibirAnexo = `<button class=btn download" disabled title="Sem Anexo">⬇</button>`;
+            let exibirAnexo = ``;
             if (projeto.anexo !== null) {
-                exibirAnexo = `<button class=btn download" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">⬇</button>`;
+                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
             }
 
             card.innerHTML = `
                 <div class="project-header">
-                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; color: #0a036b"><u>${projeto.titulo}</u></h3>
+                    <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
                 <p><strong>Entregue em</strong> ${dataFormatada}</p>
                 <p><span class="${projeto.status}">${projeto.status}</span></p>

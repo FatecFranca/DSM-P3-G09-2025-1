@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background-color: #f9f9f9;
 }
 
@@ -64,7 +64,7 @@ input[type="password"] {
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-bottom: 2px;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .form-actions {

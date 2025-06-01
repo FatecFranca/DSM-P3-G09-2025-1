@@ -10,7 +10,6 @@ const controller = {};
 
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
-import { url } from 'inspector';
 
 // Validada
 // Função para validar senha do gestor
@@ -29,9 +28,17 @@ async function validaSenha(senhaNova, idGestor) {
 
 // Testar com o front
 // Função para excluir um arquivo da pasta
-async function deletarAnexo(nomeArquivo) {
-    // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo);
+async function deletarAnexo(nomeArquivo, tipo) {
+
+    let caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo); 
+
+    if (tipo === "t"){
+        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
+    }else if (tipo === "s"){
+        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
+    }else if (tipo === "a"){
+        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
+    }
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoAnexo)) {
@@ -413,12 +420,14 @@ controller.update = async function (req, res) {
         if (urlAnexo !== null && urlAnexo !== verificaProjeto.anexo) {
             // Deletando o anexo
             if (verificaProjeto.anexo) {
-                deletarAnexo(verificaProjeto.anexo);
+                deletarAnexo(verificaProjeto.anexo, "p");
             }
         }
 
+        delete req.body.anexo;
+
         // Ajustando a url do anexo para a inserção no BD
-        if (urlAnexo !== null) {
+        if (urlAnexo !== null && urlAnexo !== undefined) {
             req.body.anexo = urlAnexo;
         }
 
@@ -1003,7 +1012,7 @@ controller.delete = async function (req, res) {
 
         // Deletando o anexo
         if (verificaProjeto.anexo) {
-            deletarAnexo(verificaProjeto.anexo);
+            deletarAnexo(verificaProjeto.anexo, "p");
         }
 
         // Deletando as tarefas
@@ -1041,7 +1050,7 @@ controller.delete = async function (req, res) {
 
                                 // Deletando o anexo
                                 if (atividade.anexo) {
-                                    deletarAnexo(atividade.anexo);
+                                    deletarAnexo(atividade.anexo, "a");
                                 }
 
                                 // Deletando as atividades
@@ -1073,7 +1082,7 @@ controller.delete = async function (req, res) {
 
                         // Deletando o anexo
                         if (subTarefa.anexo) {
-                            deletarAnexo(subTarefa.anexo);
+                            deletarAnexo(subTarefa.anexo, "s");
                         }
 
                         // Deletando as subtarefas
@@ -1087,7 +1096,7 @@ controller.delete = async function (req, res) {
 
                 // Deletando o anexo
                 if (tarefa.anexo) {
-                    deletarAnexo(tarefa.anexo);
+                    deletarAnexo(tarefa.anexo, "t");
                 }
 
                 // Deletando as tarefas
