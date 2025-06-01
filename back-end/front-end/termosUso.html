@@ -1,10 +1,9 @@
-<!-- termos.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Termos de Uso | Taskflow</title>
+  <title>Termos de Uso - Taskflow</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/index.css">
   <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
@@ -12,21 +11,28 @@
 <body>
   <header>
     <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
     </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     <nav>
+      <a href="home.html">Home</a>
       <a href="sobre.html">Sobre nós</a>
       <a href="contato.html">Fale conosco</a>
-      <a href="login.html">Entrar</a>
-      <a href="cadastrarUsuario.html" class="register">Cadastre-se</a>
+      <a href="gerenciarnotificacoes.html" title="Notificações">
+        <img src="img/icones/sino-de-notificacao.png" alt="Notificações" class="icon-img" id="img-not">
+        <label id="txt-not">Notificações</label>
+      </a>
+      <a onclick="encerrarSessao()" title="Sair">
+        <img src="img/icones/sair.png" alt="Sair" class="icon-sair" id="img-sair">
+        <label id="txt-sair">Sair</label>
+      </a>
     </nav>
   </header>
 
   <section class="hero">
     <div class="hero-text">
       <h1>Termos de Uso</h1>
-      <p>Leia atentamente os nossos termos de serviço antes de utilizar a plataforma Taskflow.</p>
+      <p>Ao utilizar o Taskflow, você concorda com os seguintes termos e condições:</p>
     </div>
   </section>
 
@@ -34,7 +40,10 @@
     <div class="card">
       <div class="card-content">
         <p>
-          Ao utilizar o Taskflow, você concorda com os seguintes termos: você é responsável por manter a confidencialidade da sua conta, não deve usar a plataforma para fins ilegais, e concorda em não tentar comprometer a integridade do sistema. Podemos atualizar esses termos periodicamente.
+          Você é integralmente responsável por manter a confidencialidade das informações de acesso à sua conta, incluindo login e senha, bem como por todas as atividades realizadas por meio dela. É expressamente proibido utilizar a plataforma para quaisquer fins ilegais, não autorizados ou que violem a legislação vigente. Além disso, você se compromete a não tentar interferir, danificar, acessar indevidamente ou comprometer a integridade, segurança e funcionamento do sistema, seus servidores ou sua infraestrutura tecnológica.
+        </p>
+        <p>
+          O Taskflow se reserva o direito de atualizar, modificar ou revisar estes termos periodicamente, sendo recomendável que o usuário os consulte regularmente para estar ciente de eventuais alterações. O uso contínuo da plataforma após a publicação de atualizações será considerado como aceitação tácita dos novos termos.
         </p>
       </div>
     </div>
@@ -42,13 +51,21 @@
 
   <footer>
     <div class="logo-footer">
-      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">&nbsp;&nbsp;&nbsp; — &nbsp;&nbsp; O site completo para gerenciamento de tarefas
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
+      <span>— O site completo para gerenciamento de tarefas</span>
     </div>
-    <br><br><br>
-    <div>
-      <a href="politicaPrivacidade.html">Privacidade</a> | <a href="contato.html">Suporte</a>
+    <div class="footer-links">
+      <a href="termosUso.html">Termos</a> |
+      <a href="politicaPrivacidade.html">Privacidade</a> |
+      <a href="contato.html">Suporte</a>
     </div>
   </footer>
-  <script src="js/menuMobile.js"></script>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector("header nav");
+      nav.classList.toggle("show");
+    }
+  </script>
 </body>
 </html>
