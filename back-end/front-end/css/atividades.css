@@ -140,6 +140,21 @@ nav a:hover {
     cursor: pointer;
 }
 
+#txt-sair{
+  display: none;
+}
+
+#txt-not{
+  display: none;
+}
+
+#msgAviso {
+  color: #960505;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
 /* Responsividade para telas menores que 750px */
 @media (max-width: 750px) {
     .menu-toggle {
@@ -165,6 +180,22 @@ nav a:hover {
 
     nav a {
         margin: 10px 0;
+    }
+
+    #txt-not{
+        display: block;
+    }
+
+    #txt-sair{
+        display: block;
+    }
+
+    #img-sair{
+        display: none;
+    }
+
+    #img-not{
+        display: none;
     }
 }
 

@@ -436,10 +436,10 @@ controller.update = async function(req, res) {
         const urlAnexo = req.file ? `${req.file.filename}` : null;
 
         // Deletando o anexo
-        if (urlAnexo !== null && urlAnexo !== verificaTarefa.anexo) {
+        if (urlAnexo !== null && urlAnexo !== verificaSubTarefa.anexo) {
             // Deletando o anexo
-            if (verificaTarefa.anexo) {
-                deletarAnexo(verificaTarefa.anexo);
+            if (verificaSubTarefa.anexo) {
+                deletarAnexo(verificaSubTarefa.anexo, "s");
             }
         }
 

@@ -165,10 +165,11 @@ async function carregarDados() {
             }else{
               document.getElementById('add-task').style.display = "none";
             }
+            
 
             tarefasFinal += `
               <div class="tarefa concluida" id=${subtarefa.id}>
-              <div class="drag"><h3><u>${subtarefa.titulo}</u></h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">${subtarefa.ordem}</a></div>
+              <div class="drag"><h3 onclick="window.location.href='atividades.html?id=${subtarefa.id}'"><u>${subtarefa.titulo}</u></h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">${subtarefa.ordem}</a></div>
               <br>
               <p class="data">${descDataSub}${dataFormatada}</p>
               <br>

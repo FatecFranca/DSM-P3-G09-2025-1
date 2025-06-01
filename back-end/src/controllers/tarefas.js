@@ -13,9 +13,17 @@ import { validarSessao } from './utils.js';
 
 // Testar com o front
 // Função para excluir um arquivo da pasta
-async function deletarAnexo(nomeArquivo) {
+async function deletarAnexo(nomeArquivo, tipo) {
     // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
+    let caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
+
+    if (tipo === "t"){
+        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
+    }else if (tipo === "s"){
+        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
+    }else if (tipo === "a"){
+        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
+    }
 
     // Verifica se o arquivo existe antes de tentar excluir
     if (fs.existsSync(caminhoAnexo)) {
@@ -378,7 +386,7 @@ controller.update = async function(req, res) {
         if (urlAnexo !== null && urlAnexo !== verificaTarefa.anexo) {
             // Deletando o anexo
             if (verificaTarefa.anexo) {
-                deletarAnexo(verificaTarefa.anexo);
+                deletarAnexo(verificaTarefa.anexo, "t");
             }
         }
 
@@ -824,7 +832,7 @@ controller.delete = async function(req, res) {
                     for (const atividade of atividadesDeletar){
                         // Deletando o anexo
                         if (atividade.anexo){
-                            deletarAnexo(atividade.anexo);
+                            deletarAnexo(atividade.anexo, "a");
                         }
 
                         // Deletando as atividades
@@ -856,7 +864,7 @@ controller.delete = async function(req, res) {
 
                 // Deletando o anexo
                 if (subTarefa.anexo){
-                    deletarAnexo(su.anexo);
+                    deletarAnexo(subTarefa.anexo, "s");
                 }
 
                 // Deletando as subtarefas
@@ -870,7 +878,7 @@ controller.delete = async function(req, res) {
 
         // Deletando o anexo
         if (verificaTarefa.anexo){
-            deletarAnexo(verificaTarefa.anexo);
+            deletarAnexo(verificaTarefa.anexo, "t");
         }
 
         // Busca o a tarefa a ser excluída
