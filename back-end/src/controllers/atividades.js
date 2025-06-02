@@ -82,7 +82,7 @@ controller.create = async function(req, res) {
           return res.status(400).json({mensagem: "Subtarefa já está Concluída! Não permitido alterações!"});
         }
 
-        // Verificando se o usuário que está tentando cadastrar a atividade é um adm ou gestor, pelo menos
+        // Verificando se o usuário que está tentando cadastrar a atividade é um adm ou gestor, ou pelo menos  membro
         let encontrou = false;
         if (req.session.usuario.id !== verificaProjeto.id_gestor){
             verificaSubTarefa.ids_membros.forEach(membro => {

@@ -1,3 +1,5 @@
+let idSubtarefa;
+
 document.addEventListener('DOMContentLoaded', () => {
     const formContainer = document.getElementById('form-container');
     const form = document.getElementById('form-atividade');
@@ -55,9 +57,9 @@ async function carrgearAtividades() {
 
     const urlAtual = window.location.href;
     const urlClass = new URL(urlAtual);
-    const idSubarefa = urlClass.searchParams.get("id");
+    idSubtarefa = urlClass.searchParams.get("id");
 
-    const buscarAtividades = await fetch('http://localhost:8080/atividades/tarefa/' + idSubarefa, {
+    const buscarAtividades = await fetch('http://localhost:8080/atividades/subtarefa/' + idSubtarefa, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
@@ -67,7 +69,7 @@ async function carrgearAtividades() {
 
     if (atividades.result){
 
-        const buscarSubtarefa = await fetch('http://localhost:8080/subtarefas/' + idSubarefa, {
+        const buscarSubtarefa = await fetch('http://localhost:8080/subtarefas/' + idSubtarefa, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include'
@@ -77,10 +79,13 @@ async function carrgearAtividades() {
 
         const containerAtividades = document.getElementById('atividades');
 
-        alert(dadosSubtarefa.titulo);
+        const dataISO = new Date(dadosSubtarefa.subtarefa.data_limite).toISOString().split('T')[0];
+        const [ano, mes, dia] = dataISO.split('-');
+        const dataFormatada = `${dia}/${mes}/${ano}`;
 
-        document.getElementById('nomeSubtarefa').innerHTML =  dadosSubtarefa.titulo;
-        document.getElementById('descSubtarefa').innerHTML =  dadosSubtarefa.descricao;
+        document.getElementById('nomeSubtarefa').innerHTML =  dadosSubtarefa.subtarefa.titulo;
+        document.getElementById('descSubtarefa').innerHTML =  dadosSubtarefa.subtarefa.descricao;
+        document.getElementById('dtMaxSub').innerHTML =  dataFormatada;
         
 
         for(i=0; atividades.atividades.length; i++){
@@ -114,9 +119,11 @@ async function carrgearAtividades() {
                 </div>
                 <a class="download" title="Baixar Anexo" onclick="baixarAnexo('${atividade.anexo}')">&#8681;</a>
             `);
-        }
 
-        containerAtividades.appendChild(card);
+            containerAtividades.appendChild(card);
+        }
+    }else{
+        alert('não');
     }
 }
 
@@ -135,10 +142,10 @@ async function criarAtividade() {
     const formData = new FormData();
     formData.append('anexo', anexo);
     formData.append('descricao', descricao);
+    formData.append('id_subtarefa', idSubtarefa);
 
     const criarAtividade = await fetch('http://localhost:8080/atividades/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: formData
     });

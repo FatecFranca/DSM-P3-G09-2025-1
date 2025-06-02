@@ -238,7 +238,7 @@ controller.retrieveOne = async function(req, res) {
         }
         
         // Retorna os dados obtidos
-        return res.status(400).json({ result: true, subtarefa: subTarefa });
+        return res.status(200).json({ result: true, subtarefa: subTarefa });
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado

@@ -8,7 +8,7 @@ const router = Router();
 
 // Validada (08/05)
 // Cadastro de Atividade
-router.post('/', upload.single('anexoAtividade'), controller.create);
+router.post('/', upload.single('anexo'), controller.create);
 /*
     Dados a serem informados:
     descricao: String
@@ -33,7 +33,7 @@ router.get('/subtarefa/:id', controller.retrieveAllSubTarefa);
 
 // Validada (08/05)
 // Alterar Atividade
-router.put('/:id', upload.single('anexoAtividade'), controller.update);
+router.put('/:id', upload.single('anexo'), controller.update);
 /*
     Dados a serem informados:
     descricao: String
