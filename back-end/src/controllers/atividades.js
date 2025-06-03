@@ -3,6 +3,8 @@
 
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
+import path from 'path';
+import fs from 'fs';
 const controller = {};
 
 // Importando validação de sessão
@@ -11,20 +13,24 @@ import { validarSessao } from './utils.js';
 // Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
-    // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), '..', 'uploads', 'anexoAtividades', nomeArquivo);
+    try{
+        // Caminho absoluto do arquivo
+        const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
 
-    // Verifica se o arquivo existe antes de tentar excluir
-    if (fs.existsSync(caminhoAnexo)) {
-        fs.unlink(caminhoAnexo, (err) => {
-        if (err) {
-            console.error('Erro ao deletar o anexo:', err);
+        // Verifica se o arquivo existe antes de tentar excluir
+        if (fs.existsSync(caminhoAnexo)) {
+            fs.unlink(caminhoAnexo, (err) => {
+            if (err) {
+                console.error('Erro ao deletar o anexo:', err);
+            } else {
+                console.log('Anexo deletado com sucesso!');
+            }
+            });
         } else {
-            console.log('Anexo deletado com sucesso!');
+            console.log('Anexo não encontrado:', caminhoAnexo);
         }
-        });
-    } else {
-        console.log('Anexo não encontrado:', caminhoAnexo);
+    }catch{
+        console.error();
     }
 }
 
@@ -232,7 +238,7 @@ controller.retrieveOne = async function(req, res) {
         }
         
         // Retorna os dados obtidos
-        return res.send(atividade);
+        return res.status(200).json({ result: true, atividade: atividade });
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado
@@ -420,20 +426,23 @@ controller.update = async function(req, res) {
           }
         }
 
+        // Monta a URL da anexo
+        const urlAnexo = req.file ? `${req.file.filename}` : null;
+
         // Deletando o anexo
-        if (verificaAtividade.anexo){
+        if (urlAnexo !== null && urlAnexo !== verificaAtividade.anexo) {
           deletarAnexo(verificaAtividade.anexo);
         }
 
         // Deletando possiveis dados que podem atrapalha a atuaalização
         delete req.body.data_realizacao;
         delete req.body.id_subtarefa;
-
-        // Monta a URL da anexo
-        const urlAnexo = req.file ? `${req.file.filename}` : null;
+        delete req.body.anexo;
 
         // Ajustando a url do anexo para a inserção no BD
-        req.body.anexo = urlAnexo;
+        if (urlAnexo !== null && urlAnexo !== undefined) {
+            req.body.anexo = urlAnexo;
+        }
 
         // Deletando dados que podem ser enviados mas não devem ser alterados
         delete req.body.data_realizacao;

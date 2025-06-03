@@ -131,6 +131,7 @@ async function carregarDados() {
             let descDataSub = '';
             let exibirConcluirEditarSub = '';
             let exibirMudarOrdemSub = '';
+            let exibirMembrosSub = '';
 
             if (subtarefa.status === "Concluída") {
               status = "verde";
@@ -160,6 +161,7 @@ async function carregarDados() {
                 exibirMudarOrdem = `<button onclick="moverParaCimaSub('${subtarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixoSub('${subtarefa.id}')" title="Descer" class="position">🔽</button>`;
               } else {
                 exibirConcluirEditarSub = `<label class="btn-concluir" onclick="statusSubTarefa('${subtarefa.id}', 'Concluir')">Concluir</label>&nbsp;<button onclick="editarSubTarefa('${subtarefa.id}')" class="edit-subTarefa">Editar</button>&nbsp;<label class="btn-excluir" onclick="excluirSubTarefa('${subtarefa.id}')">Excluir</label>`;
+                exibirMembrosSub = `<button onclick="membrosSubtatrefa('${subtarefa.id}')" title="Gerenciar Membros" class="position">👤</button>`;
                 exibirMudarOrdemSub = `<button onclick="moverParaCimaSub('${subtarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixoSub('${subtarefa.id}')" title="Descer" class="position">🔽</button>`;
               }
             }else{
@@ -176,7 +178,7 @@ async function carregarDados() {
               <span class="status ${status}">${subtarefa.status}</span>
               <br><br>
               <p class="descricao">${subtarefa.descricao}</p>
-              <div class="btns-subTarefa"><div>${exibirConcluirEditarSub}</div><br><div>${baixarAnexoSub}&nbsp;${exibirMudarOrdemSub}</div>
+              <div class="btns-subTarefa"><div>${exibirConcluirEditarSub}</div><br><div>${baixarAnexoSub}&nbsp;${exibirMembrosSub}</div><br><div>${exibirMudarOrdemSub}</div>
               </div></div>
             `;
 
@@ -471,7 +473,7 @@ async function excluirTarefa(idTarefa) {
   const dados = await resposta.json();
 
   if (dados.result) {
-    alert('Tarefa excluida com sucesso!');
+    alert('Tarefa excluída com sucesso!');
     window.location.reload();
     return;
   } else {
@@ -592,7 +594,7 @@ async function excluirSubTarefa(idSubTarefa) {
   const dados = await resposta.json();
 
   if (dados.result) {
-    alert('Subtarefa excluida com sucesso!');
+    alert('Subtarefa excluída com sucesso!');
     window.location.reload();
     return;
   } else {

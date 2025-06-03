@@ -1,13 +1,13 @@
 document.getElementById('meuPerfilBtn').addEventListener('click', () => {
-  window.location.href = 'alterarDadosUsuario.html';
+    window.location.href = 'alterarDadosUsuario.html';
 });
 
 document.getElementById('sairMenu').addEventListener('click', (e) => {
-  e.preventDefault();
-  const confirmar = confirm("Tem certeza de que deseja sair?");
-  if (confirmar) {
-    window.location.href = 'index.html';
-  }
+    e.preventDefault();
+    const confirmar = confirm("Tem certeza de que deseja sair?");
+    if (confirmar) {
+        window.location.href = 'index.html';
+    }
 });
 
 // botão filtro
@@ -44,7 +44,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function encerrarSessao() {
 
-    if (!confirm("Deseja realmente sair?")){
+    if (!confirm("Deseja realmente sair?")) {
         return;
     }
 
@@ -141,21 +141,25 @@ async function carregarProjetos() {
 
     const projetosGestor = await buscaProjetosGestor.json();
     if (projetosGestor.result) {
-        for (let i = 0; i < projetosGestor.projetosAtrasados.length; i++) {
-            const projeto = projetosGestor.projetosAtrasados[i];
-            const card = document.createElement("div");
 
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
+        if (projetosGestor.projetosAtrasados.length === 0) {
+            containerGestorAtrasados.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosGestor.projetosAtrasados.length; i++) {
+                const projeto = projetosGestor.projetosAtrasados[i];
+                const card = document.createElement("div");
 
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
-            }
+                const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            card.className = "project-card";
-            card.innerHTML = `
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.className = "project-card";
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
@@ -165,23 +169,28 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerGestorAtrasados.appendChild(card);
-        }
-        for (let i = 0; i < projetosGestor.projetosPendentes.length; i++) {
-            const projeto = projetosGestor.projetosPendentes[i];
-            const card = document.createElement("div");
-
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                containerGestorAtrasados.appendChild(card);
             }
+        }
 
-            card.className = "project-card";
-            card.innerHTML = `
+        if (projetosGestor.projetosPendentes.length === 0) {
+            containerGestorPendentes.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosGestor.projetosPendentes.length; i++) {
+                const projeto = projetosGestor.projetosPendentes[i];
+                const card = document.createElement("div");
+
+                const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
+
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.className = "project-card";
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Editar" onclick="editarPojeto('${projeto.id}')">✎</a>&nbsp;&nbsp;<a title="Membros" onclick="editarMembros('${projeto.id}')">👤</a>&nbsp;&nbsp;<a title="Concluir" onclick="concluirProjeto('${projeto.id}')">✔️</a>&nbsp;&nbsp;<a title="Excluir" onclick="excluirProjeto('${projeto.id}')">❌</a></span>
@@ -191,26 +200,31 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerGestorPendentes.appendChild(card);
+                containerGestorPendentes.appendChild(card);
+            }
         }
-        for (let i = 0; i < projetosGestor.projetosConcluidos.length; i++) {
-            const projeto = projetosGestor.projetosConcluidos[i];
-            const card = document.createElement("div");
 
-            card.className = "project-card";
-            if (projeto.status === "Concluído") {
-                projeto.status = "Concluido";
-            }
-            const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
+        if (projetosGestor.projetosConcluidos.length === 0) {
+            containerGestorConcluidos.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosGestor.projetosConcluidos.length; i++) {
+                const projeto = projetosGestor.projetosConcluidos[i];
+                const card = document.createElement("div");
 
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
-            }
+                card.className = "project-card";
+                if (projeto.status === "Concluído") {
+                    projeto.status = "Concluido";
+                }
+                const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            card.innerHTML = `
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                     <span class="actions"><a title="Reabrir" onclick="reabrirProjeto('${projeto.id}')">🔑</a></span>
@@ -220,10 +234,16 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerGestorConcluidos.appendChild(card);
+                containerGestorConcluidos.appendChild(card);
+            }
+        }
+
+        if (projetosGestor.projetosAtrasados.length === 0 && projetosGestor.projetosPendentes.length === 0 && projetosGestor.projetosConcluidos.length === 0) {
+            document.getElementById('projetosGestor').style.display = "none";
+            document.getElementById('pAvisoGestor').style.display = "block";
         }
     }
-  
+
     // Buscar projetos em que o usuário é administrador
     const buscaProjetosAdministrador = await fetch('http://localhost:8080/projetos/administrador/true', {
         method: 'GET',
@@ -233,21 +253,25 @@ async function carregarProjetos() {
 
     const projetosAdminsitrador = await buscaProjetosAdministrador.json();
     if (projetosAdminsitrador.result) {
-        for (let i = 0; i < projetosAdminsitrador.projetosAtrasados.length; i++) {
-            const projeto = projetosAdminsitrador.projetosAtrasados[i];
-            const card = document.createElement("div");
 
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
+        if (projetosAdminsitrador.projetosAtrasados.length === 0) {
+            containerAdmAtrasados.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosAdminsitrador.projetosAtrasados.length; i++) {
+                const projeto = projetosAdminsitrador.projetosAtrasados[i];
+                const card = document.createElement("div");
 
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
-            }
+                const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            card.className = "project-card";
-            card.innerHTML = `
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.className = "project-card";
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
@@ -256,23 +280,28 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerAdmAtrasados.appendChild(card);
-        }
-        for (let i = 0; i < projetosAdminsitrador.projetosPendentes.length; i++) {
-            const projeto = projetosAdminsitrador.projetosPendentes[i];
-            const card = document.createElement("div");
-
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                containerAdmAtrasados.appendChild(card);
             }
+        }
 
-            card.className = "project-card";
-            card.innerHTML = `
+        if (projetosAdminsitrador.projetosPendentes.length === 0) {
+            containerAdmPendentes.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosAdminsitrador.projetosPendentes.length; i++) {
+                const projeto = projetosAdminsitrador.projetosPendentes[i];
+                const card = document.createElement("div");
+
+                const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
+
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.className = "project-card";
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
@@ -281,26 +310,31 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerAdmPendentes.appendChild(card);
+                containerAdmPendentes.appendChild(card);
+            }
         }
-        for (let i = 0; i < projetosAdminsitrador.projetosConcluidos.length; i++) {
-            const projeto = projetosAdminsitrador.projetosConcluidos[i];
-            const card = document.createElement("div");
 
-            card.className = "project-card";
-            if (projeto.status === "Concluído") {
-                projeto.status = "Concluido";
-            }
-            const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
+        if (projetosAdminsitrador.projetosConcluidos.length === 0) {
+            containerAdmConcluidos.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosAdminsitrador.projetosConcluidos.length; i++) {
+                const projeto = projetosAdminsitrador.projetosConcluidos[i];
+                const card = document.createElement("div");
 
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
-            }
+                card.className = "project-card";
+                if (projeto.status === "Concluído") {
+                    projeto.status = "Concluido";
+                }
+                const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            card.innerHTML = `
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
@@ -309,13 +343,18 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerAdmConcluidos.appendChild(card);
+                containerAdmConcluidos.appendChild(card);
+            }
+        }
+
+        if (projetosAdminsitrador.projetosAtrasados.length === 0 && projetosAdminsitrador.projetosPendentes.length === 0 && projetosAdminsitrador.projetosConcluidos.length === 0) {
+            document.getElementById('projetosAdministrador').style.display = "none";
+            document.getElementById('pAvisoAdministrador').style.display = "block";
         }
     }
 
 
     // Buscar projetos em que o usuário é membro
-    //Buscar projetos em que o usuário é gestor
     const buscaProjetosMembros = await fetch('http://localhost:8080/projetos/membro/true', {
         method: 'GET',
         credentials: 'include',
@@ -324,21 +363,25 @@ async function carregarProjetos() {
 
     const projetosMembro = await buscaProjetosMembros.json();
     if (projetosMembro.result) {
-        for (let i = 0; i < projetosMembro.projetosAtrasados.length; i++) {
-            const projeto = projetosMembro.projetosAtrasados[i];
-            const card = document.createElement("div");
 
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
+        if (projetosMembro.projetosAtrasados.length === 0) {
+            containerMembroAtrasados.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosMembro.projetosAtrasados.length; i++) {
+                const projeto = projetosMembro.projetosAtrasados[i];
+                const card = document.createElement("div");
 
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
-            }
+                const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            card.className = "project-card";
-            card.innerHTML = `
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.className = "project-card";
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
@@ -347,23 +390,28 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerMembroAtrasados.appendChild(card);
-        }
-        for (let i = 0; i < projetosMembro.projetosPendentes.length; i++) {
-            const projeto = projetosMembro.projetosPendentes[i];
-            const card = document.createElement("div");
-
-            const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                containerMembroAtrasados.appendChild(card);
             }
+        }
 
-            card.className = "project-card";
-            card.innerHTML = `
+        if (projetosMembro.projetosPendentes.length === 0) {
+            containerMembroPendentes.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosMembro.projetosPendentes.length; i++) {
+                const projeto = projetosMembro.projetosPendentes[i];
+                const card = document.createElement("div");
+
+                const dataISO = new Date(projeto.data_limite).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
+
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.className = "project-card";
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
@@ -372,27 +420,32 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerMembroPendentes.appendChild(card);
+                containerMembroPendentes.appendChild(card);
+            }
         }
-        for (let i = 0; i < projetosMembro.projetosConcluidos.length; i++) {
-            const projeto = projetosMembro.projetosConcluidos[i];
-            const card = document.createElement("div");
-            card.className = "project-card";
 
-            if (projeto.status === "Concluído") {
-                projeto.status = "Concluido";
-            }
+        if (projetosMembro.projetosConcluidos.length === 0) {
+            containerMembroConcluidos.style.display = "none";
+        } else {
+            for (let i = 0; i < projetosMembro.projetosConcluidos.length; i++) {
+                const projeto = projetosMembro.projetosConcluidos[i];
+                const card = document.createElement("div");
+                card.className = "project-card";
 
-            const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
-            const [ano, mes, dia] = dataISO.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
+                if (projeto.status === "Concluído") {
+                    projeto.status = "Concluido";
+                }
 
-            let exibirAnexo = ``;
-            if (projeto.anexo !== null) {
-                exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
-            }
+                const dataISO = new Date(projeto.data_entrega).toISOString().split('T')[0];
+                const [ano, mes, dia] = dataISO.split('-');
+                const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            card.innerHTML = `
+                let exibirAnexo = ``;
+                if (projeto.anexo !== null) {
+                    exibirAnexo = `<a class="baixar-anexo" title="Baixar Anexo" onclick="baixarAnexo('${projeto.anexo}')">Baixar Anexo</a>`;
+                }
+
+                card.innerHTML = `
                 <div class="project-header">
                     <h3 onclick="abrirTarefas('${projeto.id}')" style="cursor: pointer; text-transform: uppercase;"><u>${projeto.titulo}</u></h3>
                 </div>
@@ -401,7 +454,13 @@ async function carregarProjetos() {
                 <p class="descricao">${projeto.descricao}</p>
                 ${exibirAnexo}
             `;
-            containerMembroConcluidos.appendChild(card);
+                containerMembroConcluidos.appendChild(card);
+            }
+        }
+
+        if (projetosMembro.projetosAtrasados.length === 0 && projetosMembro.projetosPendentes.length === 0 && projetosMembro.projetosConcluidos.length === 0) {
+            document.getElementById('projetosMembro').style.display = "none";
+            document.getElementById('pAvisoMembro').style.display = "block";
         }
     }
 }
@@ -443,7 +502,7 @@ async function editarMembros(idProjeto) {
 
     buscarMembros(idProjeto);
     buscarAdmins(idProjeto);
-    
+
 }
 
 function fecharPopupGestao() {
@@ -452,7 +511,7 @@ function fecharPopupGestao() {
 }
 
 async function adicionarMembro() {
-    
+
     const emailUsu = document.getElementById("emailNovoMembro").value.trim();
     const idProjeto = document.getElementById("idProjetoGestaoMembros").value;
 
@@ -471,11 +530,11 @@ async function adicionarMembro() {
 
     const dados = await resposta.json();
 
-    if (dados.result){
+    if (dados.result) {
         alert('Membro adicionado com sucesso!');
         window.location.reload();
         return
-    }else{
+    } else {
         return alert('Erro: ' + dados.mensagem);
     }
 
@@ -496,11 +555,11 @@ async function excluirMembro(idMembro, idProjeto) {
 
     const dados = await resposta.json();
 
-    if (dados.result){
+    if (dados.result) {
         alert('Membro removido com sucesso!');
         window.location.reload();
         return
-    }else{
+    } else {
         return alert('Erro: ' + dados.mensagem);
     }
 
@@ -510,7 +569,7 @@ async function buscarMembros(idProjeto) {
 
     const listaMembros = document.getElementById("listaMembros");
     listaMembros.innerHTML = "";
-    
+
     const buscarProjeto = await fetch('http://localhost:8080/projetos/' + idProjeto, {
         method: 'GET',
         credentials: 'include',
@@ -518,7 +577,7 @@ async function buscarMembros(idProjeto) {
     });
 
     const projeto = await buscarProjeto.json();
-    
+
     if (projeto.result) {
 
         if (projeto.membros.length === 0) {
@@ -526,7 +585,7 @@ async function buscarMembros(idProjeto) {
         }
 
         for (let i = 0; i < projeto.membros.length; i++) {
-    
+
             const membro = projeto.membros[i];
             const card = document.createElement("div");
 
@@ -538,7 +597,7 @@ async function buscarMembros(idProjeto) {
     }
 }
 
-async function adicionarAdmin(){
+async function adicionarAdmin() {
     const emailUsu = document.getElementById("emailNovoAdmin").value;
     const idProjeto = document.getElementById("idProjetoGestaoMembros").value;
 
@@ -557,11 +616,11 @@ async function adicionarAdmin(){
 
     const dados = await resposta.json();
 
-    if (dados.result){
+    if (dados.result) {
         alert('Administrador adicionado com sucesso!');
         window.location.reload();
         return
-    }else{
+    } else {
         return alert('Erro: ' + dados.mensagem);
     }
 }
@@ -581,11 +640,11 @@ async function excluirAdministrador(idMembro, idProjeto) {
 
     const dados = await resposta.json();
 
-    if (dados.result){
+    if (dados.result) {
         alert('Administrador removido com sucesso!');
         window.location.reload();
         return
-    }else{
+    } else {
         return alert('Erro: ' + dados.mensagem);
     }
 
@@ -598,7 +657,7 @@ async function buscarAdmins(idProjeto) {
 
     const listaGestores = document.getElementById("novoGestor");
     listaGestores.innerHTML = "";
-    
+
     const buscarProjeto = await fetch('http://localhost:8080/projetos/' + idProjeto, {
         method: 'GET',
         credentials: 'include',
@@ -606,7 +665,7 @@ async function buscarAdmins(idProjeto) {
     });
 
     const projeto = await buscarProjeto.json();
-    
+
     if (projeto.result) {
 
         if (projeto.administradores.length === 0) {
@@ -615,7 +674,7 @@ async function buscarAdmins(idProjeto) {
             optionPadrao.value = "none";
             optionPadrao.textContent = "Nenhum um Administrador";
             listaGestores.appendChild(optionPadrao);
-        }else{
+        } else {
             const optionPadrao = document.createElement("option");
             optionPadrao.value = "none";
             optionPadrao.textContent = "Selecione um Administrador";
@@ -623,7 +682,7 @@ async function buscarAdmins(idProjeto) {
         }
 
         for (let i = 0; i < projeto.administradores.length; i++) {
-    
+
             // Inserindo nos administradores
             const administrador = projeto.administradores[i];
             const card = document.createElement("div");
@@ -638,28 +697,28 @@ async function buscarAdmins(idProjeto) {
             option.value = administrador.id;
             option.textContent = administrador.nome;
             listaGestores.appendChild(option);
-            
+
         }
     }
 }
 
-async function cederCargoGestor(){
+async function cederCargoGestor() {
 
     const senhaGestor = document.getElementById('senhaGestor').value;
-    if (senhaGestor === ""){
+    if (senhaGestor === "") {
         alert("Insira a senha para continuar...");
         document.getElementById('senhaGestor').focus();
         return;
     }
 
     const idGestorNovo = document.getElementById("novoGestor").value;
-    if (idGestorNovo === "none" || idGestorNovo === ""){
+    if (idGestorNovo === "none" || idGestorNovo === "") {
         alert("Selecione um Administrador a conceder o cargo...");
         document.getElementById('novoGestor').focus();
         return;
     }
 
-    if (!confirm("Tem certeza que deseja ceder o seu cargo de gestor? \n Você não terá mais acesso a esse projeto de nenhuma outra forma!")){
+    if (!confirm("Tem certeza que deseja ceder o seu cargo de gestor? \n Você não terá mais acesso a esse projeto de nenhuma outra forma!")) {
         return;
     }
 
@@ -674,11 +733,11 @@ async function cederCargoGestor(){
 
     const dados = await resposta.json();
 
-    if (dados.result){
+    if (dados.result) {
         alert('Você cedeu o seu cargo de gestor!');
         window.location.reload();
         return
-    }else{
+    } else {
         return alert('Erro: ' + dados.mensagem);
     }
 }
@@ -724,15 +783,15 @@ async function alterarProjeto() {
     }
 }
 
-function ocultarProjetos(tipo){
-    if (document.getElementById(tipo).style.display === 'block'){
+function ocultarProjetos(tipo) {
+    if (document.getElementById(tipo).style.display === 'block') {
         document.getElementById(tipo).style.display = 'none';
-    }else{
+    } else {
         document.getElementById(tipo).style.display = 'block';
     }
 }
 
-function statusProjetos(){
+function statusProjetos() {
     const status = document.getElementById('statusBtn').value;
 
     const gestorAtrasados = document.getElementById('projetosGestorAtrasados');
@@ -746,8 +805,8 @@ function statusProjetos(){
     const membroAtrasados = document.getElementById('projetosMembroAtrasados');
     const membroPendentes = document.getElementById('projetosMembroPendentes');
     const membroConcluidos = document.getElementById('projetosMembroConcluidos');
-    
-    if (status === "todos"){
+
+    if (status === "todos") {
         gestorAtrasados.style.display = "flex";
         gestorConcluidos.style.display = "flex";
         gestorPendentes.style.display = "flex";
@@ -757,8 +816,8 @@ function statusProjetos(){
         membroAtrasados.style.display = "flex";
         membroConcluidos.style.display = "flex";
         membroPendentes.style.display = "flex";
-        
-    }else if (status === "pendentes"){
+
+    } else if (status === "pendentes") {
         gestorPendentes.style.display = "flex";
         admPendentes.style.display = "flex";
         membroPendentes.style.display = "flex";
@@ -770,8 +829,8 @@ function statusProjetos(){
         gestorConcluidos.style.display = "none";
         admConcluidos.style.display = "none";
         membroConcluidos.style.display = "none";
-        
-    }else if (status === "atrasados"){
+
+    } else if (status === "atrasados") {
         gestorPendentes.style.display = "none";
         admPendentes.style.display = "none";
         membroPendentes.style.display = "none";
@@ -783,8 +842,8 @@ function statusProjetos(){
         gestorConcluidos.style.display = "none";
         admConcluidos.style.display = "none";
         membroConcluidos.style.display = "none";
-        
-    }else if (status === "concluidos"){
+
+    } else if (status === "concluidos") {
         gestorPendentes.style.display = "none";
         admPendentes.style.display = "none";
         membroPendentes.style.display = "none";
@@ -799,12 +858,12 @@ function statusProjetos(){
     }
 }
 
-function abrirTarefas(idProjeto){
+function abrirTarefas(idProjeto) {
     window.location.href = "tarefas.html?id=" + idProjeto;
 }
 
 async function excluirProjeto(idProjeto) {
-    if (!confirm('Deseja realmente excluir esse projeto?')){
+    if (!confirm('Deseja realmente excluir esse projeto?')) {
         return;
     }
 
@@ -816,11 +875,11 @@ async function excluirProjeto(idProjeto) {
 
     const dados = await resposta.json();
 
-    if (dados.result){
+    if (dados.result) {
         alert('Projeto excluido com sucesso!');
         window.location.reload();
         return;
-    }else{
+    } else {
         alert('Erro: ' + dados.mensagem);
         return;
     }

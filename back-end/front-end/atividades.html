@@ -35,11 +35,13 @@
     </div>
     <hr />
     
-        <button class="add-btn">ADICIONAR ATIVIDADE</button>
+        <button class="add-btn" id="add-btn">ADICIONAR ATIVIDADE</button>
         <div id="form-container" class="form-container">
             <form id="form-atividade" class="formulario-atividade">
-                <h2>Nova Atividade</h2>
+                <h2 id="tituloForm">Nova Atividade</h2>
+                <input type="text" id="idAtividadeEditar" style="display: none;">
                 <input type="text" id="descricao" placeholder="Descrição da atividade" required>
+                <label for="anexo" id="label-anexo">Anexo da Atividade (opcional)</label>
                 <input type="file" id="anexo" accept=".pdf,.doc,.docx,.jpg,.png">
                 <p id="msgAviso"></p>
                 <div class="botoes">
@@ -74,7 +76,7 @@
     </script>
     <script src="js/atividades.js"></script>
     <script>
-        window.onload = carrgearAtividades();
+        window.onload = carregarAtividades();
     </script>
 </body>
 </html>

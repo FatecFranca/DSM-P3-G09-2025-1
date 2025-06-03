@@ -601,3 +601,11 @@ footer a {
 .baixar-anexo:hover {
   background: #366dc7;
 }
+
+.pAvisoProjetos{
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  display: none;
+}
