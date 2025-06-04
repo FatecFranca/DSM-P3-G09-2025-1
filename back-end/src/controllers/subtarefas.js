@@ -236,9 +236,15 @@ controller.retrieveOne = async function(req, res) {
         if (!encontrou){
             return res.status(400).json({mensagem: "Você não tem permissão para obter os dados desse projeto!"});
         }
+
+        // Obtendo a listagem de todos os membros da tarefa
+        const membros = await prisma.usuario.findMany({
+            where: { id: { in: subTarefa.ids_membros } },
+            orderBy: [{ nome: 'asc' }]
+        });
         
         // Retorna os dados obtidos
-        return res.status(200).json({ result: true, subtarefa: subTarefa });
+        return res.status(200).json({ result: true, subtarefa: subTarefa, membros: membros });
     }
     catch(error) {
         // P2025: erro do Prisma referente a objeto não encontrado

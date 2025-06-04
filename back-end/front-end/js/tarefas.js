@@ -737,3 +737,69 @@ async function editarSubTarefa(idSubTarefa) {
   }
 
 }
+
+async function membrosSubtatrefa(idSubtarefa){
+  document.getElementById('membrosPopup').style.display = "flex";
+
+  const listaMembrosSubTarefa = document.getElementById("listaMembrosSubTarefa");
+  listaMembrosSubTarefa.innerHTML = "";
+
+  const buscarSubtarefa = await fetch('http://localhost:8080/subtarefas/' + idSubtarefa, {
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }
+  });
+
+  const subtarefa = await buscarSubtarefa.json();
+
+  if (subtarefa.result) {
+
+      if (subtarefa.membros.length === 0) {
+          listaMembrosSubTarefa.innerHTML = "<p class='nadaEncontrado'>Nenhum membro adicionado a esta subtarefa</p>";
+      }
+
+      for (let i = 0; i < subtarefa.membros.length; i++) {
+
+          const membro = subtarefa.membros[i];
+          const card = document.createElement("div");
+
+          card.innerHTML = `
+              <a class="descricao">${membro.nome}</a><img src="img/icones/x-deletar.png" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.id}', '${idSubtarefa}')">
+          `;
+          listaMembrosSubTarefa.appendChild(card);
+      }
+  }
+
+  const listaMembrosProjeto = document.getElementById("listaMembrosProjeto");
+  listaMembrosProjeto.innerHTML = "";
+
+    const buscarProjeto = await fetch('http://localhost:8080/projetos/' + dadosProjeto.id, {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const projeto = await buscarProjeto.json();
+
+    if (projeto.result) {
+
+        if (projeto.membros.length === 0) {
+            listaMembrosProjeto.innerHTML = "<p class='nadaEncontrado'>Nenhum membro adicionado a este projeto</p>";
+        }
+
+        for (let i = 0; i < projeto.membros.length; i++) {
+
+            const membro = projeto.membros[i];
+            const card = document.createElement("div");
+
+            card.innerHTML = `
+                <a class="descricao">${membro.nome}</a><a class="btn-excluir-membro" title="Incluir na Subtarefa" onclick="incluirMembro('${membro.id}', '${dadosProjeto.id}')">✅</a>
+            `;
+            listaMembrosProjeto.appendChild(card);
+        }
+    }
+}
+
+function fecharPopupMembros(){
+  document.getElementById('membrosPopup').style.display = "none";
+}

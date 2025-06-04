@@ -72,10 +72,24 @@
     <br>
     <hr/>
     <button id="add-task" class="add-task">ADICIONAR TAREFA</button>
-
     <div id="tarefasProjeto"></div>
-
   </main>
+
+  <div id="membrosPopup" class="popup-overlay" style="display: none;">
+      <div class="popup-conteudo">
+          <input type="text" id="idProjetoGestaoMembros" name="idProjetoGestaoMembros" style="display: none;" />
+          <span class="fechar" onclick="fecharPopupMembros()">&times;</span>
+          <h2 class="popup-titulo">Gerenciar Membros da Subtarefa</h2>
+
+          <!-- Membros -->
+          <h3>Membros Projeto (Adicionar a Subtarefa)</h3>
+          <div id="listaMembrosProjeto" class="lista-usuarios"></div>
+
+          <h3>Membros Subtarefa</h3>
+          <div id="listaMembrosSubTarefa" class="lista-usuarios"></div>
+          <br>
+      </div>
+  </div>
 
   <!-- FOOTER PADRÃO -->
   <footer>
