@@ -234,7 +234,7 @@ function abrirFormulario() {
   if ((dadosProjeto.projeto.id_gestor === dadosSessao.dados.id || dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id)) && (dadosProjeto.projeto.status !== "Concluído")) {
     document.getElementById("form-container").style.display = "flex";
     document.getElementById("form-title").innerHTML = "Nova Tarefa";
-    document.getElementById("label-anexo").innerHTML = "Anexo da Tarefa";
+    document.getElementById("label-anexo").innerHTML = "Anexo da Tarefa (Opcional)";
   }
 }
 
@@ -488,7 +488,7 @@ function abrirFormularioSubTarefa(idTarefa){
   if ((dadosProjeto.projeto.id_gestor === dadosSessao.dados.id || dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id)) && (dadosProjeto.projeto.status !== "Concluído")) {
     document.getElementById("form-subtarefa").style.display = "flex";
     document.getElementById("sub-title").innerHTML = "Nova Subtarefa";
-    document.getElementById("label-anexo").innerHTML = "Anexo da Subtarefa";
+    document.getElementById("label-anexo").innerHTML = "Anexo da Subtarefa (Opcional)";
     document.getElementById("id-tarefa").value = idTarefa;
   }
 }

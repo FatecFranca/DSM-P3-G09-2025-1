@@ -85,47 +85,47 @@ nav a:hover {
 }
 
 /* Responsividade para telas menores que 750px */
+.txt-not{
+  display: none;
+}
+
+.img-not{
+  display: block;
+}
+
 @media (max-width: 750px) {
-    .menu-toggle {
-        display: block;
-    }
+  .menu-toggle {
+    display: block;
+  }
 
-    nav {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 2rem;
-        flex-direction: column;
-        background: #fff;
-        padding: 1rem 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        border-radius: 8px;
-        z-index: 1000;
-    }
+  nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    flex-direction: column;
+    background: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    z-index: 1000;
+  }
 
-    nav.show {
-        display: flex;
-    }
+  nav.show {
+    display: flex;
+  }
 
-    nav a {
-        margin: 10px 0;
-    }
+  nav a {
+    margin: 10px 0;
+  }
 
-    #txt-not{
-      display: block;
-    }
+  .txt-not{
+    display: block;
+  }
 
-    #txt-sair{
-      display: block;
-    }
-
-    #img-sair{
-      display: none;
-    }
-
-    #img-not{
-      display: none;
-    }
+  .img-not{
+    display: none;
+  }
 }
 
 /* ================== PÁGINA TAREFAS ================== */

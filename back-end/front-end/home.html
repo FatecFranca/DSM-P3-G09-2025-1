@@ -22,33 +22,25 @@
         <nav>
             <a href="sobre.html">Sobre nós</a>
             <a href="contato.html">Fale conosco</a>
-            <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img" id="img-not" src="img/icones/sino-de-notificacao.png" /><label id="txt-not">Notificações</label></a>
-            <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair" id="img-sair" src="img/icones/sair.png" /><label id="txt-sair">Sair</label></a>
+            <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img img-not" id="img-not" src="img/icones/sino-de-notificacao.png" /><label class="txt-not">Notificações</label></a>
+            <a title="Meu Perfil" onclick="window.location.href='alterarDadosUsuario.html'"><img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img img-not" ><label class="txt-not">Meu Perfil</label></a>
+            <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair img-not" src="img/icones/sair.png" /><label class="txt-not">Sair</label></a>
         </nav>
     </header>
 
     <main class="container">
-        <aside class="sidebar">
-            <button class="btn perfil" id="perfilBtn" onclick="window.location.href='alterarDadosUsuario.html'">
-                <img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img"> Meu Perfil
-            </button>
-            <button class="btn sair" id="sairBtn">
-                <img src="img/icones/sair.png" alt="Sair" class="icon-img"> Sair
-            </button>
-            <div style="margin-top: 30px;">
-                <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
-            </div>
-        </aside>
-
         <section class="projects">
             <h2 class="section-title">MEUS PROJETOS</h2>
             <select class="btn status" id="statusBtn" onchange="statusProjetos()">
-                <option value="todos">STATUS ▾</option>
-                <option value="todos">Todos</option>
-                <option value="pendentes">Pendentes</option>
-                <option value="atrasados">Atrasados</option>
-                <option value="concluidos">Concluídos</option>
+                <option value="todos">STATUS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▾</option>
+                <option value="todos">Todos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▾</option>
+                <option value="pendentes">Pendentes &nbsp;&nbsp;&nbsp;▾</option>
+                <option value="atrasados">Atrasados &nbsp;&nbsp;&nbsp;&nbsp;▾</option>
+                <option value="concluidos">Concluídos &nbsp;&nbsp;▾</option>
             </select>
+
+            <a onclick="abrirPopupProjeto()" class="btn dark">NOVO PROJETO</a>
+            
 
             <br><br>
             <div class="project-group">
@@ -102,12 +94,34 @@
                 <input type="file" id="anexo" name="anexo"
                     accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png" />
 
-                <p id="msgAviso"></p>
+                <p id="msgAviso" class="msgAviso"></p>
 
                 <button type="button" onclick="alterarProjeto()">Enviar</button>
             </div>
         </div>
 
+        <div id="criarProjetoPopup" class="popup-overlay" style="display: none;">
+            <div class="popup-conteudo">
+                <span class="fechar" onclick="fecharPopupProjeto()">&times;</span>
+                <h2 class="popup-titulo">Criar Projeto</h2>
+
+                <label for="tituloCri">Título</label>
+                <input type="text" id="tituloCri" name="tituloCri" required />
+
+                <label for="descricaoCri">Descrição</label>
+                <textarea id="descricaoCri" name="descricaoCri" required></textarea>
+
+                <label for="arquivoCri">Arquivos</label>
+                <input type="file" id="arquivoCri" name="arquivoCri" accept=".txt,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.ods,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,image/*" />
+
+                <label for="dataEntregaCri">Determine a data de entrega</label>
+                <input type="date" id="dataEntregaCri" name="dataEntregaCri" required />
+
+                <p id="msgAvisoCri" class="msgAviso"></p>
+
+                <button type="button" class="criar-btn" onclick="criarProjeto()">CRIAR</button>
+            </div>
+        </div>
 
         <div id="gestaoPopup" class="popup-overlay" style="display: none;">
             <div class="popup-conteudo">
