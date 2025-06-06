@@ -40,11 +40,29 @@ async function buscarNotificacoes(){
     p.innerHTML = `Nehuma notificação para vossa pessoa`;
     notificationList.appendChild(p);
   }else{
-    notifications.forEach((text, index) => {
+    notifications.forEach((not) => {
+
+      // Dat formatada
+      const data = new Date(not.data_criacao)
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+
+      const horas = String(data.getHours()).padStart(2, '0');
+      const minutos = String(data.getMinutes()).padStart(2, '0');
+
+      const dataFormatada = `${dia}/${mes}/${ano} - ${horas}:${minutos} hrs`;
+      
       const li = document.createElement("li");
       li.innerHTML = `
-        <input type="checkbox" class="notification-checkbox" data-index="${index}" />
-        <p>${text}</p>
+        <input type="checkbox" class="notification-checkbox" data-id="${not.id}" />
+        <div>
+          <b>${not.titulo}</b>
+          <br><br>
+          <a  style='white-space: pre-wrap;'>${not.texto}</a>
+          <br><br>
+          <p>${dataFormatada}<p>
+        </diV>
       `;
       notificationList.appendChild(li);
     });
@@ -58,24 +76,32 @@ document.getElementById("selectAll").addEventListener("change", function () {
 
 document.getElementById("deleteSelected").addEventListener("click", async function () {
   const checkboxes = document.querySelectorAll(".notification-checkbox:checked");
-  // checkboxes.forEach(cb => 
-  //   cb.closest("li").remove()
-  // );
 
-  for (i = 0; checkboxes.length; i++){
+  for (let i = 0; i < checkboxes.length; i++) {
+    const checkbox = checkboxes[i];
+    
+    const idNotificacao = checkbox.dataset.id;
 
-    // const deletarNotificacao = await fetch('http://localhost:8080/notificacoes/', {
-    //     method: 'DELETE',
-    //     credentials: 'include',
-    //     headers: { 'Content-Type': 'application/json' }
-    // });
+    try {
+      const deletarNotificacao = await fetch('http://localhost:8080/notificacoes/'+  idNotificacao, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+      });
 
-    // const delecao = await deletarNotificacao.json();
+      const resultado = await deletarNotificacao.json();
 
-    // if (!delecao.result){
-    //   alert("Ocorreu um erro durante a exclusão da notificação: " + delecao.mensagem);
-    // }
+      if (!resultado.result) {
+        alert("Erro ao excluir notificação: " + resultado.mensagem);
+        continue;
+      }
 
-    checkboxes[i].closest("li").remove();
+      // Remove do DOM apenas se a exclusão for bem-sucedida
+      checkbox.closest("li").remove();
+
+    } catch (erro) {
+      alert("Erro na exclusão da notificação: " + erro.message);
+    }
   }
 });
+

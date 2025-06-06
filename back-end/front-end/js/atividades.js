@@ -120,6 +120,9 @@ async function carregarAtividades() {
         document.getElementById('descSubtarefa').innerHTML =  dadosSubtarefa.subtarefa.descricao;
         document.getElementById('dtMaxSub').innerHTML =  dataFormatada;
         
+        if((dadosProjeto.projeto.id_gestor !== dadosSessao.dados.id && !dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id) && !dadosSubtarefa.subtarefa.ids_membros.includes(dadosSessao.dados.id)) || (dadosProjeto.projeto.status === "Concluído") || (dadosTarefa.tarefa.status === "Concluída") || (dadosSubtarefa.subtarefa.status === "Concluída")){
+                document.getElementById('add-btn').style.display = "none";
+        }
 
         for(i = 0; atividades.atividades.length; i++){
             const atividade = atividades.atividades[i];
@@ -155,8 +158,6 @@ async function carregarAtividades() {
                     <a class="editar" title="Editar" onclick="editarAtividade('${atividade.id}')">&#9998;</a>
                     <a class="editar" title="Excluir" onclick="excluirAtividade('${atividade.id}')">🗙</a>
                 `;
-            }else if((dadosProjeto.projeto.id_gestor !== dadosSessao.dados.id || !dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id) || !dadosSubtarefa.subtarefa.ids_membros.includes(dadosSessao.dados.id)) || (dadosProjeto.projeto.status === "Concluído") || (dadosTarefa.tarefa.status === "Concluída") || (dadosSubtarefa.subtarefa.status === "Concluída")){
-                document.getElementById('add-btn').style.display = "none";
             }
             
             card.innerHTML = `

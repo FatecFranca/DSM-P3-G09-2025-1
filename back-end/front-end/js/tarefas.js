@@ -764,7 +764,7 @@ async function membrosSubtatrefa(idSubtarefa){
           const card = document.createElement("div");
 
           card.innerHTML = `
-              <a class="descricao">${membro.nome}</a><img src="img/icones/x-deletar.png" class="btn-excluir-membro" title="Excluir Membro" onclick="excluirMembro('${membro.id}', '${idSubtarefa}')">
+              <a class="descricao">${membro.nome}</a><img src="img/icones/x-deletar.png" class="btn-excluir-membro" title="Excluir Membro" onclick="removerMembro('${membro.id}', '${subtarefa.subtarefa.id}')">
           `;
           listaMembrosSubTarefa.appendChild(card);
       }
@@ -773,7 +773,7 @@ async function membrosSubtatrefa(idSubtarefa){
   const listaMembrosProjeto = document.getElementById("listaMembrosProjeto");
   listaMembrosProjeto.innerHTML = "";
 
-    const buscarProjeto = await fetch('http://localhost:8080/projetos/' + dadosProjeto.id, {
+    const buscarProjeto = await fetch('http://localhost:8080/projetos/' + dadosProjeto.projeto.id, {
         method: 'GET',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' }
@@ -783,23 +783,64 @@ async function membrosSubtatrefa(idSubtarefa){
 
     if (projeto.result) {
 
-        if (projeto.membros.length === 0) {
-            listaMembrosProjeto.innerHTML = "<p class='nadaEncontrado'>Nenhum membro adicionado a este projeto</p>";
-        }
-
+        let contMembros = 0;
         for (let i = 0; i < projeto.membros.length; i++) {
+          const membro = projeto.membros[i];
 
-            const membro = projeto.membros[i];
+          if (!subtarefa.subtarefa.ids_membros.includes(membro.id)){
             const card = document.createElement("div");
 
             card.innerHTML = `
-                <a class="descricao">${membro.nome}</a><a class="btn-excluir-membro" title="Incluir na Subtarefa" onclick="incluirMembro('${membro.id}', '${dadosProjeto.id}')">✅</a>
+                <a class="descricao">${membro.nome}</a><label class="btn-excluir-membro" title="Incluir na Subtarefa" onclick="incluirMembro('${membro.id}', '${subtarefa.subtarefa.id}')">✅</label>
             `;
             listaMembrosProjeto.appendChild(card);
+            contMembros += 1;
+          }
+
+        }
+
+        if (contMembros === 0) {
+            listaMembrosProjeto.innerHTML = "<p class='nadaEncontrado'>Sem membros a serem adicionados nessa subtarefa</p>";
         }
     }
 }
 
 function fecharPopupMembros(){
   document.getElementById('membrosPopup').style.display = "none";
+}
+
+async function incluirMembro(idMembro, idSubtarefa) {
+  const resposta = await fetch('http://localhost:8080/subtarefas/addMembro/' + idSubtarefa, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id_membro: idMembro })
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result) {
+    alert("Membro adicionado a subtarefa!");
+    window.location.reload();
+  } else {
+    alert(dados.mensagem);
+  }
+}
+
+async function removerMembro(idMembro, idSubtarefa) {
+  const resposta = await fetch('http://localhost:8080/subtarefas/removeMembro/' + idSubtarefa, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id_membro: idMembro })
+  });
+
+  const dados = await resposta.json();
+
+  if (dados.result) {
+    alert("Membro removido da subtarefa!");
+    window.location.reload();
+  } else {
+    alert(dados.mensagem);
+  }
 }

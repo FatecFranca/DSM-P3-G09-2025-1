@@ -669,7 +669,7 @@ footer a {
 
 .lista-usuarios {
   max-height: 200px;
-  height: 200px;
+  height: auto;
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 5px;
@@ -694,6 +694,15 @@ footer a {
   width: 90%;
   font-size: 15px;
   margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.lista-usuarios div label{
+  width: 8%;
+  font-size: 15px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 100%;
 }
 
 .lista-usuarios button {
@@ -708,4 +717,24 @@ footer a {
 
 .lista-usuarios button:hover {
   background-color: #cc0000;
+}
+
+.nadaEncontrado{
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  margin: 8px;
+}
+
+.btn-excluir-membro{
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  max-width: 10%;
+}
+
+.descricao {
+  margin-top: 5px;
+  white-space: pre-wrap;
 }

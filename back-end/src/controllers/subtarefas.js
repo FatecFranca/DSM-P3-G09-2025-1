@@ -8,7 +8,7 @@ import path from 'path';
 import fs from 'fs';
 
 // Importando validação de sessão
-import { validarSessao } from './utils.js';
+import { diferencaEmDias, validarSessao } from './utils.js';
 
 // Testar com o front
 // Função para excluir um arquivo da pasta
@@ -479,8 +479,103 @@ controller.update = async function(req, res) {
                     const notifica = {
                         tipo: "Atraso",
                         titulo: "Subtarefa Atrasada",
-                        texto: "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => " + " Subtarefa: " + verificaSubTarefa.titulo,
+                        texto: "Há uma subtarefa Atrasada. Verifique se você pode contribuir para entrega-la o mais rápido possivel. \n\nProjeto: <em>" + verificaProjeto.titulo + "</em> ➡️ Tarefa: <em>" + verificaTarefa.titulo + "</em> ➡️ Subtarefa: <em><a href='tarefas.html?id=" + verificaProjeto.id + "'>" + verificaSubTarefa.titulo + "</a></em>",
                         id_usuario: idUsu,
+                        id_subtarefa: verificaSubTarefa.id,
+                        data_criacao: new Date()
+                    }
+
+                    await prisma.notificacao.create({
+                        data: notifica
+                    });
+                }
+            }
+        }else if (req.body.status === "Pendente"){
+
+            await prisma.notificacao.deleteMany({
+                where: {
+                    id_subtarefa: verificaSubTarefa.id,
+                    tipo: "Prazo Curto"
+                }
+            });
+
+            const diasEntrega = diferencaEmDias(req.body.data_limite, new Date());
+
+            if (diasEntrega <= 3){
+                // Verificando se as notificações já foram enviadas para os usuários necessários 
+                for (const idUsu of verificaSubTarefa.ids_membros){
+                    const notficacao = await prisma.notificacao.findFirst({
+                        where: {
+                            id_usuario: idUsu,
+                            id_subtarefa: verificaSubTarefa.id,
+                            tipo: "Prazo Curto"
+                        }
+                    });
+
+                    if (!notficacao){
+
+                        // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                        const notifica = {
+                            tipo: "Prazo Curto",
+                            titulo: "Prazo para a Entrega Curto",
+                            texto: "Há uma subtarefa com o Prazo para a Entrega Curto, com no máximo " + diasEntrega + " dias para entregar. Verifique se você pode contribuir para entrega-la o mais rápido possivel. \n\nProjeto: <em>" + verificaProjeto.titulo + "</em> ➡️ Tarefa: <em>" + verificaTarefa.titulo + "</em> ➡️ Subtarefa: <em><a href='tarefas.html?id=" + verificaProjeto.id + "'>" + verificaSubTarefa.titulo + "</a></em>",
+                            id_usuario: idUsu,
+                            id_subtarefa: verificaSubTarefa.id,
+                            data_criacao: new Date()
+                        }
+
+                        await prisma.notificacao.create({
+                            data: notifica
+                        });
+                    }
+                }
+
+                for (const idUsu of verificaProjeto.ids_administradores){
+                    const notficacao = await prisma.notificacao.findFirst({
+                        where: {
+                            id_usuario: idUsu,
+                            id_subtarefa: verificaSubTarefa.id,
+                            tipo: "Prazo Curto"
+                        }
+                    });
+
+                    if (!notficacao){
+
+                        // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                        const notifica = {
+                            tipo: "Prazo Curto",
+                            titulo: "Prazo para a Entrega Curto",
+                            texto: "Há uma subtarefa com o Prazo para a Entrega Curto, com no máximo " + diasEntrega + " dias para entregar. Verifique se você pode contribuir para entrega-la o mais rápido possivel. \n\nProjeto: <em>" + verificaProjeto.titulo + "</em> ➡️ Tarefa: <em>" + verificaTarefa.titulo + "</em> ➡️ Subtarefa: <em><a href='tarefas.html?id=" + verificaProjeto.id + "'>" + verificaSubTarefa.titulo + "</a></em>",
+                            id_usuario: idUsu,
+                            id_subtarefa: verificaSubTarefa.id,
+                            data_criacao: new Date()
+                        }
+
+                        await prisma.notificacao.create({
+                            data: notifica
+                        });
+                    }
+                }
+
+                const notficacao = await prisma.notificacao.findFirst({
+                    where: {
+                        id_usuario: verificaProjeto.id_gestor,
+                        id_subtarefa: verificaSubTarefa.id,
+                        tipo: "Prazo Curto"
+                    }
+                });
+
+                if (!notficacao){
+
+                    // Criando a notificação a ser apresentada ao novo membro da subtarefa
+
+                    const notifica = {
+                        tipo: "Prazo Curto",
+                        titulo: "Prazo para a Entrega Curto",
+                        texto: "Há uma subtarefa com o Prazo para a Entrega Curto, com no máximo " + diasEntrega + " dias para entregar. Verifique com sua equipe, afim de realiza-la o mais breve possível. \n\nProjeto: <em>" + verificaProjeto.titulo + "</em> ➡️ Tarefa: <em>" + verificaTarefa.titulo + "</em> ➡️ Subtarefa: <em><a href='tarefas.html?id=" + verificaProjeto.id + "'>" + verificaSubTarefa.titulo + "</a></em>",
+                        id_usuario: verificaProjeto.id_gestor,
                         id_subtarefa: verificaSubTarefa.id,
                         data_criacao: new Date()
                     }
@@ -1008,8 +1103,8 @@ controller.addMembro = async function(req, res) {
 
         const notifica = {
             tipo: "Atribuição",
-            titulo: "Nova Subtarefa atribuida",
-            texto: "Uma nova Subtarefa foi atribuida a você. Projeto: " + verificaProjeto.titulo + " => Tarefa: " + verificaTarefa.titulo + " => Subtarefa: " + verificaSubTarefa.titulo + " Com o praso de entraga para o dia " + dtLimFormatada + " Fique atento para contribuir com ela até este praso.",
+            titulo: "Subtarefa atribuida",
+            texto: "Uma nova Subtarefa foi atribuida a você. \n\n<b>Projeto:</b> " + verificaProjeto.titulo + " <b>--> Tarefa:</b> " + verificaTarefa.titulo + " <b>--> Subtarefa:</b> " + verificaSubTarefa.titulo + " \n\nCom o praso de entraga para o dia <b>" + dtLimFormatada + "</b>. Fique atento para realiza-la até este prazo.",
             id_usuario: req.body.id_membro,
             id_subtarefa: verificaSubTarefa.id,
             data_criacao: new Date()
