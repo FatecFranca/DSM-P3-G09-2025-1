@@ -5,8 +5,6 @@ import upload from '../uploads/uploadAneAti.js';
 
 const router = Router();
 
-
-// Validada (08/05)
 // Cadastro de Atividade
 router.post('/', upload.single('anexo'), controller.create);
 /*
@@ -16,22 +14,15 @@ router.post('/', upload.single('anexo'), controller.create);
     id_subtarefa: String
 */
 
-
 // Desativar posteriormente
-router.get('/', controller.retrieveAll);
+// router.get('/', controller.retrieveAll);
 
-
-// Validada (08/05)
 // Buscar os dados de uma atividade específica
 router.get('/:id', controller.retrieveOne);
 
-
-// Validada (08/05)
 // Buscar todas as atividades de uma subtarefa
 router.get('/subtarefa/:id', controller.retrieveAllSubTarefa);
 
-
-// Validada (08/05)
 // Alterar Atividade
 router.put('/:id', upload.single('anexo'), controller.update);
 /*
@@ -40,10 +31,7 @@ router.put('/:id', upload.single('anexo'), controller.update);
     anexo: String (Opcional)
 */
 
-
-// Validado (10/05)
 // Deletar atividade
 router.delete('/:id', controller.delete);
-
 
 export default router;

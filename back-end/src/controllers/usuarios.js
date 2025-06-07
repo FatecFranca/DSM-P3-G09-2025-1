@@ -1,6 +1,3 @@
-// Caro autor do arquivo, favor revisa-lo antes de liber-lo.
-// Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
-
 // Importando bibliotecas necessárias
 import prisma from '../database/client.js';
 import bcrypt from 'bcrypt';
@@ -111,31 +108,31 @@ controller.create = async function(req, res) {
     }
 }
 
-// Desativa após o desenvolvimento
-controller.retrieveAll = async function(req, res) {
-    try {
+// // Desativa após o desenvolvimento
+// controller.retrieveAll = async function(req, res) {
+//     try {
 
-        // Buscando todas os usuários cadastrados
-        const result = await prisma.usuario.findMany({
-            orderBy: [ { nome: 'asc' } ]
-        });
+//         // Buscando todas os usuários cadastrados
+//         const result = await prisma.usuario.findMany({
+//             orderBy: [ { nome: 'asc' } ]
+//         });
 
-        if (!result){
-            return res.status(400).json({mensagem: "Nenhum Usuário Encontrado!"});
-        }
+//         if (!result){
+//             return res.status(400).json({mensagem: "Nenhum Usuário Encontrado!"});
+//         }
     
-        // Retorna os dados obtidos
-        return res.send(result);
-    }
-    catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
+//         // Retorna os dados obtidos
+//         return res.send(result);
+//     }
+//     catch(error) {
+//         // Deu errado: exibe o erro no terminal
+//         console.error(error);
 
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
-    }
-}
+//         // Envia o erro ao front-end, com status de erro
+//         // HTTP 500: Internal Server Error
+//         return res.status(500).send(error);
+//     }
+// }
 
 // Obtendo um usuário específico pelo ID
 controller.retrieveOne = async function(req, res) {
@@ -231,43 +228,6 @@ controller.loginEmail = async function(req, res) {
         return res.status(500).send(error);
     }
 }
-
-// Logando com Google
-controller.loginGoogle = async (req, res) => {
-    try {
-        const { token } = req.body;
-
-        if (!token) {
-            return res.status(400).json({ mensagem: "Token do Firebase não fornecido." });
-        }
-
-        // Verifica o token com o Firebase Admin
-        const decodedToken = await admin.auth().verifyIdToken(token);
-        const email = decodedToken.email;
-
-        const usuario = await prisma.usuario.findFirst({
-            where: { email: email }
-        });
-
-        if (!usuario) {
-            return res.status(404).json({ mensagem: "Usuário não encontrado no sistema." });
-        }
-
-        // Cria a sessão
-        req.session.usuario = {
-            id: usuario.id,
-            nome: usuario.nome,
-            email: usuario.email,
-            foto: usuario.foto
-        };
-
-        return res.status(200).json({ mensagem: "Login com Google validado com sucesso." });
-
-    } catch (error) {
-        console.error("Erro na validação do login com Google:", error);
-        return res.status(401).json({ mensagem: "Token inválido ou expirado." });
-    }
-};
 
 // Atualizando os dados do usuário
 controller.update = async function(req, res) {

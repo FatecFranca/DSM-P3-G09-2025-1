@@ -1,3 +1,8 @@
+/* RESET E FONTES */
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
@@ -431,6 +436,7 @@ footer a {
 }
 
 .popup-conteudo {
+  font-family: 'Montserrat', sans-serif;
   background: white;
   padding: 2rem;
   border-radius: 10px;
@@ -462,17 +468,18 @@ footer a {
 }
 
 .popup-conteudo label {
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 17px;
+  font-family: 'Montserrat', sans-serif;
+  text-decoration: none;
 }
 
 .popup-conteudo input,
 .popup-conteudo textarea {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
+  padding: 10px;
+  border: 1px solid #c6d3df;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 95%;
 }
 
 .popup-conteudo textarea {
@@ -491,6 +498,22 @@ footer a {
 
 .popup-conteudo button:hover {
   background-color: #276fd1;
+}
+
+.btn-cancelar {
+  background: #ccc;
+  color: #333;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+}
+
+.btn-cancelar:hover {
+  background: #bbb;
 }
 
 .popup-conteudo .fechar {
@@ -604,9 +627,11 @@ footer a {
 }
 
 .pAvisoProjetos{
-  color: white;
-  font-weight: bold;
+  color: black;
   text-align: center;
-  width: 100%;
+  width: 98%;
   display: none;
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
 }

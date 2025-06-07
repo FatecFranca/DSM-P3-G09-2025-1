@@ -44,7 +44,7 @@
 
             <br><br>
             <div class="project-group">
-                <h3 class="category-title" onclick="ocultarProjetos('projetosGestor')" title="Oculta/Mostrar">› GESTOR</h3>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosGestor', 'titleGestor', 'GESTOR')" id="titleGestor" title="Oculta/Mostrar">› GESTOR</h3>
                 <div id="projetosGestor" style="display: block;">
                     <p class="pAvisoProjetos" id="pAvisoGestor">Você não possui nenhum projeto sob a sua gestão! Clique em NOVO PROJETO para criar um!</p>
                     <div id="projetosGestorAtrasados" class="project-unique"></div>
@@ -54,7 +54,7 @@
             </div>
 
             <div class="project-group">
-                <h3 class="category-title" onclick="ocultarProjetos('projetosAdministrador')" title="Oculta/Mostrar">› ADMINISTRADOR</h3>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosAdministrador', 'titleAdministrador', 'ADMINISTRADOR')" id="titleAdministrador" title="Oculta/Mostrar">› ADMINISTRADOR</h3>
                 <div id="projetosAdministrador" style="display: block;">
                     <p class="pAvisoProjetos" id="pAvisoAdministrador">Você não participa de nenhum projeto como Administrador!</p>
                     <div id="projetosAdmAtrasados" class="project-unique"></div>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="project-group">
-                <h3 class="category-title" onclick="ocultarProjetos('projetosMembro')" title="Oculta/Mostrar">› MEMBRO</h3>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosMembro','titleMembro','MEMBRO')" id="titleMembro" title="Oculta/Mostrar">› MEMBRO</h3>
                 <div id="projetosMembro" style="display: block;">
                     <p class="pAvisoProjetos" id="pAvisoMembro">Você não participa de nenhum projeto como Membro!</p>
                     <div id="projetosMembroAtrasados" class="project-unique"></div>
@@ -76,8 +76,7 @@
 
         <div id="meuPopup" class="popup-overlay" style="display: none;">
             <div class="popup-conteudo">
-                <input type="text" id="idProjeto" name="idProjeto" style="display: none;" />
-                <span class="fechar" onclick="fecharPopup()">&times;</span>
+                <input type="text" id="idProjeto" name="idProjeto" style="display: none;"/>
                 <h2 class="popup-titulo">Dados do Projeto</h2>
 
                 <label for="titulo">Título</label>
@@ -96,30 +95,30 @@
 
                 <p id="msgAviso" class="msgAviso"></p>
 
-                <button type="button" onclick="alterarProjeto()">Enviar</button>
+                <button type="button" onclick="alterarProjeto()">ALTERAR</button>
+                <div onclick="fecharPopup()" class="btn-cancelar">CANCELAR</div>
+                <br><br>
             </div>
         </div>
 
         <div id="criarProjetoPopup" class="popup-overlay" style="display: none;">
             <div class="popup-conteudo">
-                <span class="fechar" onclick="fecharPopupProjeto()">&times;</span>
                 <h2 class="popup-titulo">Criar Projeto</h2>
 
-                <label for="tituloCri">Título</label>
-                <input type="text" id="tituloCri" name="tituloCri" required />
+                <input type="text" id="tituloCri" name="tituloCri" placeholder="Título" required />
 
-                <label for="descricaoCri">Descrição</label>
-                <textarea id="descricaoCri" name="descricaoCri" required></textarea>
+                <textarea id="descricaoCri" name="descricaoCri" placeholder="Descrição" required></textarea>
 
-                <label for="arquivoCri">Arquivos</label>
+                <label for="arquivoCri">Anexo do Projeto (Opcional)</label>
                 <input type="file" id="arquivoCri" name="arquivoCri" accept=".txt,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.ods,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,image/*" />
 
-                <label for="dataEntregaCri">Determine a data de entrega</label>
+                <label for="dataEntregaCri">Data Máxima  de Entrega</label>
                 <input type="date" id="dataEntregaCri" name="dataEntregaCri" required />
 
                 <p id="msgAvisoCri" class="msgAviso"></p>
 
                 <button type="button" class="criar-btn" onclick="criarProjeto()">CRIAR</button>
+                <div onclick="fecharPopupProjeto()" class="btn-cancelar">CANCELAR</div>
             </div>
         </div>
 

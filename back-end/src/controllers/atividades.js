@@ -1,6 +1,3 @@
-// Caro autor do arquivo, favor revisa-lo antes de liber-lo.
-// Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
-
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 import path from 'path';
@@ -10,7 +7,6 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo) {
     try{
@@ -34,7 +30,6 @@ async function deletarAnexo(nomeArquivo) {
     }
 }
 
-// Validada (08/05)
 // Criando uma nova atividade
 controller.create = async function(req, res) {
     try {
@@ -142,30 +137,27 @@ controller.create = async function(req, res) {
     }
 }
 
-
 // Desativar posteriormente
-controller.retrieveAll = async function(req, res) {
-    try {
-        // Buscando todas a tarefas cadastradas
-        const result = await prisma.atividade.findMany({
-            orderBy: [ { data_realizacao: 'asc' } ]
-        });
+// controller.retrieveAll = async function(req, res) {
+//     try {
+//         // Buscando todas a tarefas cadastradas
+//         const result = await prisma.atividade.findMany({
+//             orderBy: [ { data_realizacao: 'asc' } ]
+//         });
     
-        // Retorna os dados obtidos
-        return res.send(result);
-    }
-    catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
+//         // Retorna os dados obtidos
+//         return res.send(result);
+//     }
+//     catch(error) {
+//         // Deu errado: exibe o erro no terminal
+//         console.error(error);
 
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
-    }
-}
+//         // Envia o erro ao front-end, com status de erro
+//         // HTTP 500: Internal Server Error
+//         return res.status(500).send(error);
+//     }
+// }
 
-
-// Validada (08/05)
 // Obtendo uma atividade específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -257,7 +249,6 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validada (08/05)
 // Obtendo todas as subtarefas pela tarefa 
 controller.retrieveAllSubTarefa = async function(req, res) {
     try {
@@ -350,7 +341,6 @@ controller.retrieveAllSubTarefa = async function(req, res) {
     }
 }
 
-// Validada (08/05)
 // Atualizando os dados da subtarefa
 controller.update = async function(req, res) {
     try {
@@ -474,7 +464,6 @@ controller.update = async function(req, res) {
     }
 }
 
-// Validado (10/05)
 // Deletando a atividade
 controller.delete = async function(req, res) {
     try {

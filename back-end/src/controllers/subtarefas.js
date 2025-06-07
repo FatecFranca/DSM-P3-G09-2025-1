@@ -1,6 +1,3 @@
-// Caro autor do arquivo, favor revisa-lo antes de liber-lo.
-// Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
-
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 const controller = {};
@@ -10,7 +7,6 @@ import fs from 'fs';
 // Importando validação de sessão
 import { diferencaEmDias, validarSessao } from './utils.js';
 
-// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo, tipo) {
     // Caminho absoluto do arquivo
@@ -34,7 +30,6 @@ async function deletarAnexo(nomeArquivo, tipo) {
     }
 }
 
-// Validada (07/05)
 // Criando uma nova subtarefa
 controller.create = async function(req, res) {
     try {
@@ -151,30 +146,27 @@ controller.create = async function(req, res) {
     }
 }
 
-
-// Desativar depois
-controller.retrieveAll = async function(req, res) {
-    try {
-        // Buscando todas a tarefas cadastradas
-        const result = await prisma.subTarefa.findMany({
-            orderBy: [ { data_criacao: 'asc' } ]
-        });
+// // Desativar depois
+// controller.retrieveAll = async function(req, res) {
+//     try {
+//         // Buscando todas a tarefas cadastradas
+//         const result = await prisma.subTarefa.findMany({
+//             orderBy: [ { data_criacao: 'asc' } ]
+//         });
     
-        // Retorna os dados obtidos
-        return res.send(result);
-    }
-    catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
+//         // Retorna os dados obtidos
+//         return res.send(result);
+//     }
+//     catch(error) {
+//         // Deu errado: exibe o erro no terminal
+//         console.error(error);
 
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
-    }
-}
+//         // Envia o erro ao front-end, com status de erro
+//         // HTTP 500: Internal Server Error
+//         return res.status(500).send(error);
+//     }
+// }
 
-
-// Validada (07/05)
 // Obtendo uma subtarefa específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -263,7 +255,6 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validada (07/05)
 // Obtendo todas as subtarefas pela tarefa 
 controller.retrieveAllTarefa = async function(req, res) {
     try {
@@ -352,7 +343,6 @@ controller.retrieveAllTarefa = async function(req, res) {
     }
 }
 
-// Validada (08/05)
 // Atualizando os dados da subtarefa
 controller.update = async function(req, res) {
     try {
@@ -613,7 +603,6 @@ controller.update = async function(req, res) {
     }
 }
 
-// Validada (07/05)
 // Finalizando/Reabrindo a tarefa (Mudando Status e Data Entrega)
 controller.updateStatus = async function(req, res) {
     try {
@@ -770,7 +759,6 @@ controller.updateStatus = async function(req, res) {
     }
 }
 
-// Validada (07/05)
 // Alterar a ordem de uma tarefa
 controller.updateOrdem = async function(req, res) {
     // Verificando se a sessão foi iniciada
@@ -1004,7 +992,6 @@ controller.updateOrdem = async function(req, res) {
 
 }
 
-// Validada (07/05)
 // Adicionando um membro na subtarefa
 controller.addMembro = async function(req, res) {
     try {
@@ -1145,7 +1132,6 @@ controller.addMembro = async function(req, res) {
     }
 }
 
-// Validada (07/05)
 // Removendo um membro da subtarefa
 controller.removeMembro = async function(req, res) {
     try {
@@ -1254,8 +1240,6 @@ controller.removeMembro = async function(req, res) {
     }
 }
 
-
-// Testar com atividades e Notificacao
 // Deletando a subtarefa
 controller.delete = async function(req, res) {
     try {

@@ -1,6 +1,3 @@
-// Caro autor do arquivo, favor revisa-lo antes de liber-lo.
-// Se esta mensagem ainda estiver aqui, significará que ele não foi revisado.
-
 // Importando arquivos e bibliotecas importantes
 import prisma from '../database/client.js';
 import bcrypt from 'bcrypt';
@@ -11,7 +8,6 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-// Validada
 // Função para validar senha do gestor
 async function validaSenha(senhaNova, idGestor) {
     const verificaGestor = await prisma.usuario.findUnique({
@@ -26,7 +22,6 @@ async function validaSenha(senhaNova, idGestor) {
     }
 }
 
-// Testar com o front
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo, tipo) {
 
@@ -54,7 +49,6 @@ async function deletarAnexo(nomeArquivo, tipo) {
     }
 }
 
-// Validada (04/05) - Validar Anexo com Front
 // Criando um novo projeto
 controller.create = async function (req, res) {
     try {
@@ -105,29 +99,27 @@ controller.create = async function (req, res) {
     }
 }
 
-
 // Desativar posteriormente
-controller.retrieveAll = async function (req, res) {
-    try {
-        // Buscando todos os projetos cadastrados
-        const result = await prisma.projeto.findMany({
-            orderBy: [{ data_criacao: 'asc' }]
-        });
+// controller.retrieveAll = async function (req, res) {
+//     try {
+//         // Buscando todos os projetos cadastrados
+//         const result = await prisma.projeto.findMany({
+//             orderBy: [{ data_criacao: 'asc' }]
+//         });
 
-        // Retorna os dados obtidos
-        return res.send(result);
-    }
-    catch (error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
+//         // Retorna os dados obtidos
+//         return res.send(result);
+//     }
+//     catch (error) {
+//         // Deu errado: exibe o erro no terminal
+//         console.error(error);
 
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
-    }
-}
+//         // Envia o erro ao front-end, com status de erro
+//         // HTTP 500: Internal Server Error
+//         return res.status(500).send(error);
+//     }
+// }
 
-// Validada (04/05)
 // Obtendo um projeto específico pelo id
 controller.retrieveOne = async function (req, res) {
     try {
@@ -204,7 +196,6 @@ controller.retrieveOne = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Obtendo todos os projetos pelo gestor
 controller.retrieveAllGestor = async function (req, res) {
     try {
@@ -244,7 +235,6 @@ controller.retrieveAllGestor = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Obtendo todos os projetos pelo administrador
 controller.retrieveAllAdministrador = async function (req, res) {
     try {
@@ -308,7 +298,6 @@ controller.retrieveAllAdministrador = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Obtendo todos os projetos pelo membro
 controller.retrieveAllMembro = async function (req, res) {
     try {
@@ -372,7 +361,6 @@ controller.retrieveAllMembro = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Atualizando os dados do projeto
 controller.update = async function (req, res) {
     try {
@@ -457,7 +445,6 @@ controller.update = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Atualizando o gestor do projeto
 controller.updateGestor = async function (req, res) {
     try {
@@ -552,7 +539,6 @@ controller.updateGestor = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Finalizando/Reabrindo o projeto (Mudando Status e Data Entrega)
 controller.updateStatus = async function (req, res) {
     try {
@@ -624,8 +610,7 @@ controller.updateStatus = async function (req, res) {
         }
     }
 }
-
-// Validada (04/05) 
+ 
 // Adicionando um membro no projeto
 controller.addMembro = async function (req, res) {
     try {
@@ -717,8 +702,7 @@ controller.addMembro = async function (req, res) {
         }
     }
 }
-
-// Validada (04/05) 
+ 
 // Removendo um membro do projeto
 controller.removeMembro = async function (req, res) {
     try {
@@ -817,8 +801,7 @@ controller.removeMembro = async function (req, res) {
         }
     }
 }
-
-// Validada (04/05) 
+ 
 // Adicionando um adminstrador no projeto
 controller.addAdministrador = async function (req, res) {
     try {
@@ -911,7 +894,6 @@ controller.addAdministrador = async function (req, res) {
     }
 }
 
-// Validada (04/05)
 // Removendo um administrador do projeto
 controller.removeAdministrador = async function (req, res) {
     try {
@@ -975,7 +957,6 @@ controller.removeAdministrador = async function (req, res) {
     }
 }
 
-// Testar com tarefas / subtarefas / atividades e Notificacao
 // Deletando o projeto
 controller.delete = async function (req, res) {
     try {

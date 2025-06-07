@@ -5,9 +5,6 @@ import upload from '../uploads/uploadAneTar.js';
 
 const router = Router();
 
-// Rotas
-
-// Validada (04/05)
 // Cadastro de Tarefa
 router.post('/', upload.single('anexo'), controller.create);
 /*
@@ -19,23 +16,15 @@ router.post('/', upload.single('anexo'), controller.create);
     id_projeto: String
 */
 
-
 // Desativar posteriormente
-router.get('/', controller.retrieveAll);
+// router.get('/', controller.retrieveAll);
 
-
-
-// Validada (04/05)
 // Buscar os dados de uma tarefa específica
 router.get('/:id', controller.retrieveOne);
 
-
-// Validada (04/05)
 // Buscar todas as tarefas de um projeto
 router.get('/projeto/:id', controller.retrieveAllProjeto);
 
-
-// Validada (04/05)
 // Alterar Tarefa
 router.put('/:id', upload.single('anexo'), controller.update);
 /*
@@ -46,8 +35,6 @@ router.put('/:id', upload.single('anexo'), controller.update);
     anexo: String (Opcional)
 */
 
-
-// Validada (04/05)
 // Adicionar administrador ao projeto
 router.put('/updateOrdem/:id', controller.updateOrdem);
 /*
@@ -55,8 +42,6 @@ router.put('/updateOrdem/:id', controller.updateOrdem);
     ordem: Number ou tipo: String (antecipar, regredir)
 */
 
-
-// Validada (04/05)
 // Adicionar administrador ao projeto
 router.put('/updateStatus/:id', controller.updateStatus);
 /*
@@ -65,10 +50,7 @@ router.put('/updateStatus/:id', controller.updateStatus);
 
 */
 
-
-// Testar com tarefas / subtarefas / atividades 
 // Deletar tarefa
 router.delete('/:id', controller.delete);
-
 
 export default router;

@@ -783,11 +783,13 @@ async function alterarProjeto() {
     }
 }
 
-function ocultarProjetos(tipo) {
+function ocultarProjetos(tipo, idTitulo, titulo) {
     if (document.getElementById(tipo).style.display === 'block') {
         document.getElementById(tipo).style.display = 'none';
+        document.getElementById(idTitulo).innerHTML = '› ' + titulo;
     } else {
         document.getElementById(tipo).style.display = 'block';
+        document.getElementById(idTitulo).innerHTML = '▾ ' + titulo;
     }
 }
 

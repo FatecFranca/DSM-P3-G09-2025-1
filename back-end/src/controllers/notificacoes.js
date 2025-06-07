@@ -8,30 +8,27 @@ const controller = {};
 // Importando validação de sessão
 import { validarSessao } from './utils.js';
 
-
 // Desativar posteriormente
-controller.retrieveAll = async function(req, res) {
-    try {
-        // Buscando todas a tarefas cadastradas
-        const result = await prisma.notificacao.findMany({
-            orderBy: [ { data_criacao: 'asc' } ]
-        });
+// controller.retrieveAll = async function(req, res) {
+//     try {
+//         // Buscando todas a tarefas cadastradas
+//         const result = await prisma.notificacao.findMany({
+//             orderBy: [ { data_criacao: 'asc' } ]
+//         });
     
-        // Retorna os dados obtidos
-        return res.send(result);
-    }
-    catch(error) {
-        // Deu errado: exibe o erro no terminal
-        console.error(error);
+//         // Retorna os dados obtidos
+//         return res.send(result);
+//     }
+//     catch(error) {
+//         // Deu errado: exibe o erro no terminal
+//         console.error(error);
 
-        // Envia o erro ao front-end, com status de erro
-        // HTTP 500: Internal Server Error
-        return res.status(500).send(error);
-    }
-}
+//         // Envia o erro ao front-end, com status de erro
+//         // HTTP 500: Internal Server Error
+//         return res.status(500).send(error);
+//     }
+// }
 
-
-// Validado (10/05)
 // Obtendo uma notifição específica pelo id
 controller.retrieveOne = async function(req, res) {
     try {
@@ -72,7 +69,6 @@ controller.retrieveOne = async function(req, res) {
     }
 }
 
-// Validado (10/05)
 // Obtendo todas as notificação do usuário 
 controller.retrieveAllUsuario = async function(req, res) {
     try {
@@ -113,7 +109,6 @@ controller.retrieveAllUsuario = async function(req, res) {
     }
 }
 
-// Validado (10/05)
 // Deletando a notificação
 controller.delete = async function(req, res) {
     try {

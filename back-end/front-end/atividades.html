@@ -69,14 +69,12 @@
             <a href="contato.html">Suporte</a>
         </div>
     </footer>
-    <script>
-    function toggleMenu() {
-      const nav = document.querySelector("header nav");
-      nav.classList.toggle("show");
-    }
-    </script>
+
+    <script src="js/menuMobile.js"></script>
+    <script src="js/login.js"></script>
     <script src="js/atividades.js"></script>
     <script>
+        window.onload = sessaoIniGeral();
         window.onload = carregarAtividades();
     </script>
 </body>

@@ -5,7 +5,6 @@ import upload from '../uploads/uploadAneSubTar.js';
 
 const router = Router();
 
-// Validada (07/05)
 // Cadastro de Subtarefa
 router.post('/', upload.single('anexoSub'), controller.create);
 /*
@@ -17,21 +16,14 @@ router.post('/', upload.single('anexoSub'), controller.create);
     id_tarefa: String
 */
 
-
 // Desativar posteriormente
-router.get('/', controller.retrieveAll);
+// router.get('/', controller.retrieveAll);
 
-
-// Validada (07/05)
 // Buscar os dados de uma subtarefa específica
 router.get('/:id', controller.retrieveOne);
 
-
-// Validada (07/05)
 // Buscar todas as subtarefas de uma tarefa
 router.get('/tarefa/:id', controller.retrieveAllTarefa);
-
-
 
 // Alterar Subtarefa
 router.put('/:id', upload.single('anexoSub'), controller.update);
@@ -43,8 +35,6 @@ router.put('/:id', upload.single('anexoSub'), controller.update);
     anexo: String (Opcional)
 */
 
-
-// Validada (07/05)
 // Mudar ordem da subtarefa
 router.put('/updateOrdem/:id', controller.updateOrdem);
 /*
@@ -52,8 +42,6 @@ router.put('/updateOrdem/:id', controller.updateOrdem);
     ordem: Number ou tipo: String (antecipar, regredir)
 */
 
-
-// Validada (07/05)
 // Mudar o status da subtarefa
 router.put('/updateStatus/:id', controller.updateStatus);
 /*
@@ -62,8 +50,6 @@ router.put('/updateStatus/:id', controller.updateStatus);
 
 */
 
-
-// Validada (07/05)
 // Addicionar membro a subtarefa
 router.put('/addMembro/:id', controller.addMembro);
 /*
@@ -72,8 +58,6 @@ router.put('/addMembro/:id', controller.addMembro);
 
 */
 
-
-// Validada (07/05)
 // Addicionar membro a subtarefa
 router.put('/removeMembro/:id', controller.removeMembro);
 /*
@@ -81,8 +65,6 @@ router.put('/removeMembro/:id', controller.removeMembro);
     id_membro: String
 */
 
-
-// Testar com atividades 
 // Deletar subtarefa
 router.delete('/:id', controller.delete);
 

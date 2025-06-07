@@ -104,8 +104,21 @@ async function sessaoIniGeral(){
 
     if(!dados.result){
         return window.location.href = "login.html";
-    }else{
-        return dados;
     }
-        
+
+    const buscaNot = await fetch('http://localhost:8080/notificacoes/usuario/true', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    });
+    
+    const notificacoes = await buscaNot.json();
+
+    if (notificacoes.length > 0){
+        document.getElementById('img-not').src = 'img/icones/sino-de-notificacao-alerta.png';
+        document.getElementById('img-not').title = 'Notificações não Visualizadas';
+    }
+    
+    return dados;
+      
 }

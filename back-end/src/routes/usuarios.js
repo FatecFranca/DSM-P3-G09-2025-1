@@ -5,9 +5,6 @@ import upload from '../uploads/uploadImgUsu.js';
 
 const router = Router();
 
-// Rotas
-
-// Validada (04/05) - Validar Imagem com Front
 // Criar usuário
 router.post('/', upload.single('fotoUsuario'), controller.create);
 /*
@@ -17,17 +14,13 @@ router.post('/', upload.single('fotoUsuario'), controller.create);
     senha: String
 */
 
-
 // Desativa após o desenvolvimento
-router.get('/', controller.retrieveAll);
-
+// router.get('/', controller.retrieveAll);
 
 // Validada (04/05)
 // Buscar dados de um usuário
 router.get('/:id', controller.retrieveOne);
 
-
-// Validada (04/05)
 // Realizar Login
 router.post('/email/:email', controller.loginEmail);
 /*
@@ -35,25 +28,12 @@ router.post('/email/:email', controller.loginEmail);
     senha: String
 */
 
-
-// Realizar Login com goo
-router.post('/verificar-usuario-google/true', controller.loginGoogle);
-/*
-    Dados a serem informados:
-    senha: String
-*/
-
-
-// Validada (04/05)
 // Encerrar sessão
 router.get('/encerrarSessao/true', controller.encerrarSessao);
-
 
 // Verifica se o usuário está logado
 router.get('/verificaSessao/true', controller.verificaSessao);
 
-
-// Validada (04/05) - Validar Imagem com Front
 // Alterar dados do usuário
 router.put('/:id', upload.single('fotoUsuario'), controller.update);
 /*
@@ -65,8 +45,6 @@ router.put('/:id', upload.single('fotoUsuario'), controller.update);
     senha_atual: String (Senha antiga / atual)
 */
 
-
-// Testar com projetos / tarefas / subtarefas / atividades 
 // Deletar usuário
 router.delete('/:id', controller.delete);
 /*

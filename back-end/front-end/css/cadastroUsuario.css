@@ -67,7 +67,7 @@ input {
 button {
     width: 100%;
     padding: 9px;
-    background-color: #0d1b4c;
+    background-color: #4285f4;
     color: white;
     border: none;
     border-radius: 8px;
@@ -76,7 +76,7 @@ button {
 }
 
 button:hover {
-    background-color: #001164;
+    background-color: #366dc7;
 }
 
 .terms {
