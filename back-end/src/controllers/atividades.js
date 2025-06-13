@@ -41,6 +41,13 @@ controller.create = async function(req, res) {
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
         }
 
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
+        }
+
         // Ajustando alguns dados
         req.body.data_realizacao = new Date();
 
@@ -350,6 +357,13 @@ controller.update = async function(req, res) {
 
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        }
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
         }
 
         // Verificando se a tarefa existe

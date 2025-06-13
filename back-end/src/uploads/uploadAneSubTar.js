@@ -17,6 +17,42 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+
+  const tamanhoMaximo = 50 * 1024 * 1024;
+
+  const tiposPermitidos = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'text/plain',
+    'image/jpeg',
+    'image/png',
+    'image/jpg',
+    'application/zip',
+    'application/x-zip-compressed'
+  ];
+
+  if (tiposPermitidos.includes(file.mimetype)) {
+    if (file.size > tamanhoMaximo) {
+        req.tamanhoExedido = true;
+        cb(null, false);
+    }
+    cb(null, true);
+  } else {
+    req.tipoInvalido = true;
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 50 MB
+  fileFilter
+});
 
 export default upload;

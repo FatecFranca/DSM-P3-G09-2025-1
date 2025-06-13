@@ -9,24 +9,30 @@ import { diferencaEmDias, validarSessao } from './utils.js';
 
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo, tipo) {
-    // Caminho absoluto do arquivo
-    const caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
+    try {
+        // Caminho absoluto do arquivo
+        let caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
 
-    if (tipo === "a"){
-        caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
-    }
-
-    // Verifica se o arquivo existe antes de tentar excluir
-    if (fs.existsSync(caminhoAnexo)) {
-        fs.unlink(caminhoAnexo, (err) => {
-        if (err) {
-            console.error('Erro ao deletar o anexo:', err);
-        } else {
-            console.log('Anexo deletado com sucesso!');
+        if (tipo === "a"){
+            caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
         }
-        });
-    } else {
-        console.log('Anexo não encontrado:', caminhoAnexo);
+
+        // Verifica se o arquivo existe antes de tentar excluir
+        if (fs.existsSync(caminhoAnexo)) {
+            fs.unlink(caminhoAnexo, (err) => {
+            if (err) {
+                console.error('Erro ao deletar o anexo:', err);
+            } else {
+                console.log('Anexo deletado com sucesso!');
+            }
+            });
+        } else {
+            console.log('Anexo não encontrado:', caminhoAnexo);
+        }
+
+    }catch(error) {
+        console.error(error);
+        res.status(500).send(error);
     }
 }
 
@@ -39,6 +45,13 @@ controller.create = async function(req, res) {
 
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        }
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
         }
 
         // Ajustando alguns dados
@@ -352,6 +365,13 @@ controller.update = async function(req, res) {
 
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        }
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
         }
 
         // Verificando se a tarefa existe

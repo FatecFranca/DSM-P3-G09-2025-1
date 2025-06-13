@@ -24,28 +24,32 @@ async function validaSenha(senhaNova, idGestor) {
 
 // Função para excluir um arquivo da pasta
 async function deletarAnexo(nomeArquivo, tipo) {
+    try{
+        let caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo); 
 
-    let caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo); 
+        if (tipo === "t"){
+            caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
+        }else if (tipo === "s"){
+            caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
+        }else if (tipo === "a"){
+            caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
+        }
 
-    if (tipo === "t"){
-        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
-    }else if (tipo === "s"){
-        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
-    }else if (tipo === "a"){
-        caminhoAnexo = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
-    }
-
-    // Verifica se o arquivo existe antes de tentar excluir
-    if (fs.existsSync(caminhoAnexo)) {
-        fs.unlink(caminhoAnexo, (err) => {
-            if (err) {
-                console.error('Erro ao deletar o anexo:', err);
-            } else {
-                console.log('Anexo deletado com sucesso!');
-            }
-        });
-    } else {
-        console.log('Anexo não encontrado:', caminhoAnexo);
+        // Verifica se o arquivo existe antes de tentar excluir
+        if (fs.existsSync(caminhoAnexo)) {
+            fs.unlink(caminhoAnexo, (err) => {
+                if (err) {
+                    console.error('Erro ao deletar o anexo:', err);
+                } else {
+                    console.log('Anexo deletado com sucesso!');
+                }
+            });
+        } else {
+            console.log('Anexo não encontrado:', caminhoAnexo);
+        }
+    }catch(error) {
+        console.error(error);
+        res.status(500).send(error);
     }
 }
 
@@ -58,6 +62,13 @@ controller.create = async function (req, res) {
 
         if (!valSes) {
             return res.status(400).json({ mensagem: "Sessão não iniciada!" });
+        }
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
         }
 
         req.body.status = "Pendente";
@@ -370,6 +381,13 @@ controller.update = async function (req, res) {
 
         if (!valSes) {
             return res.status(400).json({ mensagem: "Sessão não iniciada!" });
+        }
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
         }
 
         // Verificando se quem está alterando é o gestor do projeto

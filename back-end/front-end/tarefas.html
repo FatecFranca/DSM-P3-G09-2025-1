@@ -38,7 +38,7 @@
       <input id="data" required="" type="date" />
       <textarea id="descricao" class="descricao" placeholder="Descrição" required=""></textarea>
       <label for="anexo" id="label-anexo">Anexo da Tarefa (Opcional)</label>
-      <input id="anexo" type="file" />
+      <input id="anexo" type="file" accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip"/>
       <p id="msgAviso"></p>
       <button type="button" onclick="cadastrarTarefa()" id="salvar-tarefa" class="btn-cad">Salvar</button>
       <button onclick="fecharFormulario()" type="button" class="btn-cancelar">Cancelar</button>
@@ -54,7 +54,7 @@
       <input id="dataSub" required="" type="date" />
       <textarea id="descricaoSub" class="descricao" placeholder="Descrição" required=""></textarea>
       <label for="anexoSub" id="label-anexoSub">Anexo da Subtarefa (Opcional)</label>
-      <input id="anexoSub" type="file" />
+      <input id="anexoSub" type="file" accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip" />
       <p id="msgAvisoSub"></p>
       <button type="button" onclick="cadastrarSubtarefa()" id="salvar-Subtarefa" class="btn-cad">Salvar</button>
       <button onclick="fecharFormularioSub()" type="button" class="btn-cancelar">Cancelar</button>

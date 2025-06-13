@@ -11,54 +11,69 @@ const controller = {};
 
 // Função para validar senha do usuário
 async function validaSenha(senhaAtual, idUsuario){
-
-    // Obtendo os dados do usuário
-    const verificaUsuario = await prisma.usuario.findFirst({
-        where: { id: idUsuario }
-    }); 
-    
-    // Comprando a senha informada com a senha do banco
-    let verSenha = await bcrypt.compare(senhaAtual, verificaUsuario.senha);
-    if(verSenha){
-        return true;
-    }else{
-        return false;
+    try{
+        // Obtendo os dados do usuário
+        const verificaUsuario = await prisma.usuario.findFirst({
+            where: { id: idUsuario }
+        }); 
+        
+        // Comprando a senha informada com a senha do banco
+        let verSenha = await bcrypt.compare(senhaAtual, verificaUsuario.senha);
+        if(verSenha){
+            return true;
+        }else{
+            return false;
+        }
+    }catch(error) {
+        console.error(error);
+        res.status(500).send(error);
     }
 }
 
 // Função para excluir uma imagem da pasta
 async function deletarAnexo(nomeArquivo, tipo) {
+    try{
+        // Caminho absoluto do arquivo
+        let caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'imgUsuarios', nomeArquivo);
 
-    // Caminho absoluto do arquivo
-    let caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'imgUsuarios', nomeArquivo);
-
-    if (tipo === "p"){
-        caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo);
-    }else if (tipo === "t"){
-        caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
-    }else if (tipo === "s"){
-        caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
-    }else if (tipo === "a"){
-        caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
-    }
-
-    // Verifica se o arquivo existe antes de tentar excluir
-    if (fs.existsSync(caminhoImagem)) {
-        fs.unlink(caminhoImagem, (err) => {
-        if (err) {
-            console.error('Erro ao deletar a imagem:', err);
-        } else {
-            console.log('Imagem deletada com sucesso!');
+        if (tipo === "p"){
+            caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoProjetos', nomeArquivo);
+        }else if (tipo === "t"){
+            caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoTarefas', nomeArquivo);
+        }else if (tipo === "s"){
+            caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoSubTarefas', nomeArquivo);
+        }else if (tipo === "a"){
+            caminhoImagem = path.join(process.cwd(), 'src', 'uploads', 'anexoAtividades', nomeArquivo);
         }
-        });
-    } else {
-        console.log('Imagem não encontrada:', caminhoImagem);
+
+        // Verifica se o arquivo existe antes de tentar excluir
+        if (fs.existsSync(caminhoImagem)) {
+            fs.unlink(caminhoImagem, (err) => {
+            if (err) {
+                console.error('Erro ao deletar a imagem:', err);
+            } else {
+                console.log('Imagem deletada com sucesso!');
+            }
+            });
+        } else {
+            console.log('Imagem não encontrada:', caminhoImagem);
+        }
+    }catch(error) {
+        console.error(error);
+        res.status(500).send(error);
     }
 }
 
 // Criando um novo usuário
 controller.create = async function(req, res) {
     try {
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
+        }
 
         // Verificando se o email informado já não está em uso
         const emailCadastrado = await prisma.usuario.findFirst({
@@ -237,6 +252,13 @@ controller.update = async function(req, res) {
         const valSes = validarSessao(req);
         if (!valSes){
             return res.status(400).json({ mensagem: "Sessão não iniciada!" }); 
+        }
+
+        // Validandoo o tipo do anexo e o seu tamanho
+        if (req.tipoInvalido) {
+            return res.status(400).json({ mensagem: "Tipo de arquivo Inválido!" }); 
+        } else if (req.tamanhoExedido) {
+            return res.status(400).json({ mensagem: "Tamanho do arquivo maior que o permitido (50 MB)!" }); 
         }
 
         // Verificando se o usuário a ser alterado é o que esta com a sessão ativa
