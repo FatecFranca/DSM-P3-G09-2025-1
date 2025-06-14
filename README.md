@@ -47,7 +47,7 @@ O site apresenta as seguintes páginas e funcionalidades:
 ## 📁 Documentação do Projeto
 ### 📓 [Memorial Descritivo](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Memorial-Descritivo.pdf)
 ### 📕 [Relacionamentos de Coleções](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Justificativa-Relacionamento-Colecoes.pdf)
-### 🕔 [Cronograma]()
+### 🕔 [Cronograma](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Conograma-Desenvolvimento-Depois-Entrega.pdf)
 ### 📒 [Documento Final]()
 ### 💎 [Portfólio do Projeto]()
 ### 🎬 [Vídeo de Apresentação]()
@@ -56,32 +56,55 @@ O site apresenta as seguintes páginas e funcionalidades:
 
 ## 📦 Aparência
 
-### Página Inicial
-<img src="/prints">
+### Dasktop
+#### Página Inicial
+<img src="/prints/normal/print-index1.png">
+<img src="/prints/normal/print-index2.png">
+<img src="/prints/normal/print-index3.png">
 
-### Login e Cadastro
-<img src="/prints/">
+#### Sobre
+<img src="/prints/normal/print-sobre.png">
 
-### Página Home do Usuário
-<img src="/prints/">
+#### Contato
+<img src="/prints/normal/print-contato.png">
 
-### Criar (Projeto, Tarefa, Subtarefa e Atividade)
-<img src="/prints/">
+#### Cadastrar-se
+<img src="/prints/normal/print-cadastrarUsuario.png">
 
-### Alterar Dados
-<img src="/prints/">
+#### Login
+<img src="/prints/normal/print-login.png">
 
-### Tarefas
-<img src="/prints/">
+#### Home / Projetos
+<img src="/prints/normal/print-home.png">
 
-### Subtarefas
-<img src="/prints/">
+#### Tarefas / Subtarefas
+<img src="/prints/normal/print-tarefasSubtarefas.png">
 
-### Atividades
-<img src="/prints/">
+#### Atividades
+<img src="/prints/normal/print-atividades.png">
 
-### Responsividade
-<img src="/prints/">
+#### Notificações
+<img src="/prints/normal/print-notificacoes.png">
+
+#### Gerenciar Perfil
+<img src="/prints/normal/print-perfil.png">
+
+### Mobile
+
+#### Página Inicial
+<img src="/prints/mobile/mobile-index.png">
+
+#### Sobre / Contato
+<img src="/prints/mobile/mobile-sobre.png">
+
+#### Login / Cadastrar-se
+<img src="/prints/mobile/mobile-login.png">
+
+#### Home
+<img src="/prints/mobile/mobile-home.png">
+
+#### Gerenciar Perfil / Notificações
+<img src="/prints/mobile/mobile-notificacao.png">
 
 <br><br>
 
