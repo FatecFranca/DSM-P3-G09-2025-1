@@ -120,7 +120,7 @@ nav a:hover {
 }
 
 .hero-image {
-  width: 50%;
+  width: 100%;
 }
 
 .hero h1 {
@@ -416,4 +416,10 @@ footer a {
     width: 100%;
     text-align: center;
   }
+}
+
+
+.menu-foto-perfil {
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
 }

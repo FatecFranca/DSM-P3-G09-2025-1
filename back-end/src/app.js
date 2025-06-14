@@ -91,6 +91,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Permitir acesso à pasta 'uploads' publicamente
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads/imgUsuarios', express.static(path.join(__dirname, 'uploads', 'imgUsuarios')));
 
 
 // Sessão de Rotas

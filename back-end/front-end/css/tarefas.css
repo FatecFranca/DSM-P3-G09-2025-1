@@ -738,3 +738,8 @@ footer a {
   margin-top: 5px;
   white-space: pre-wrap;
 }
+
+.menu-foto-perfil {
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}

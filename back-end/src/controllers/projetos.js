@@ -785,10 +785,10 @@ controller.removeMembro = async function (req, res) {
         });
 
         for (const subtarefa of subtarefas) {
-            if (subtarefa.ids_membros.includes(usuarioId)) {
+            if (subtarefa.ids_membros.includes(req.body.id_membro)) {
 
                 // Remove o usuário da lista
-                const novosMembros = subtarefa.ids_membros.filter(id => id !== usuarioId);
+                const novosMembros = subtarefa.ids_membros.filter(id => id !== req.body.id_membro);
 
                 // Atualiza a subtarefa
                 await prisma.subTarefa.update({

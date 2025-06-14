@@ -16,7 +16,7 @@ export function diferencaEmDias(data1, data2) {
     return Math.floor(diffEmMs / umDiaEmMs);
 }
 
-function converterData(dataFormatar){
+export function converterData(dataFormatar, tipo){
     const data = new Date(dataFormatar)
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0');
@@ -25,7 +25,12 @@ function converterData(dataFormatar){
     const horas = String(data.getHours()).padStart(2, '0');
     const minutos = String(data.getMinutes()).padStart(2, '0');
 
-    const dataFormatada = `${dia}/${mes}/${ano} - ${horas}:${minutos} hrs`;
+    let dataFormatada = '';
+    if (tipo === "Hora"){
+        dataFormatada = `${dia}/${mes}/${ano} - ${horas}:${minutos} hrs`;
+    }else{
+        dataFormatada = `${dia}/${mes}/${ano}`;
+    }
 
     return dataFormatada;
 }
@@ -81,7 +86,7 @@ export async function atualizaStatus(){
                                 if (!notficacao){
 
                                     // Criando a notificação a ser apresentada ao membro da subtarefa
-                                    const dataFormatada = converterData(subTarefa.data_limite);
+                                    const dataFormatada = converterData(subTarefa.data_limite, 'Normal');
 
                                     const notifica = {
                                         tipo: "Atraso",
@@ -110,7 +115,7 @@ export async function atualizaStatus(){
                                 if (!notficacao){
 
                                     // Criando a notificação a ser apresentada ao membro da subtarefa
-                                    const dataFormatada = converterData(subTarefa.data_limite);
+                                    const dataFormatada = converterData(subTarefa.data_limite, 'Normal');
 
                                     const notifica = {
                                         tipo: "Atraso",
@@ -138,7 +143,7 @@ export async function atualizaStatus(){
                             if (!notficacaoGestor){
 
                                 // Criando a notificação a ser apresentada ao membro da subtarefa
-                                const dataFormatada = converterData(subTarefa.data_limite);
+                                const dataFormatada = converterData(subTarefa.data_limite, 'Normal');
 
                                 const notifica = {
                                     tipo: "Atraso",

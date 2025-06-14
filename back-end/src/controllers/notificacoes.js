@@ -82,7 +82,8 @@ controller.retrieveAllUsuario = async function(req, res) {
 
         // Obtendo os dados da subtarefa
         const notificacao = await prisma.notificacao.findMany({
-            where: { id_usuario: req.session.usuario.id }
+            where: { id_usuario: req.session.usuario.id },
+            orderBy: [ { data_criacao: 'desc' } ]
         });
 
         if (!notificacao){

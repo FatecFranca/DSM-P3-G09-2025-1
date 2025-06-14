@@ -205,3 +205,8 @@ footer a {
   margin-right: 8px;
   cursor: pointer;
 }
+
+.menu-foto-perfil {
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}

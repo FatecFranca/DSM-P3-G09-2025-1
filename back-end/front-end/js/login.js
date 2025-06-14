@@ -118,7 +118,13 @@ async function sessaoIniGeral(){
         document.getElementById('img-not').src = 'img/icones/sino-de-notificacao-alerta.png';
         document.getElementById('img-not').title = 'Notificações não Visualizadas';
     }
-    
+
+    if (dados.dados.foto !== null && dados.dados.foto !== undefined && dados.dados.foto !== "" && dados.dados.foto !== "null"){
+        document.getElementById('meu-perfil').src = "http://localhost:8080/uploads/imgUsuarios/" + dados.dados.foto;
+    }else{
+        document.getElementById('meu-perfil').src = "img/icones/meu-perfil.png";
+    }
+
     return dados;
       
 }

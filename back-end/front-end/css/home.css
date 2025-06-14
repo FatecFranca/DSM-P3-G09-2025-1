@@ -635,3 +635,8 @@ footer a {
   padding: 10px;
   border-radius: 8px;
 }
+
+.menu-foto-perfil {
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}

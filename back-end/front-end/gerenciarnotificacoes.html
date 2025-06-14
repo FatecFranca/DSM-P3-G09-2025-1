@@ -19,7 +19,8 @@
       <a href="home.html">Home</a>
       <a href="sobre.html">Sobre nós</a>
       <a href="contato.html">Fale conosco</a>
-      <a title="Meu Perfil" onclick="window.location.href='alterarDadosUsuario.html'"><img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img img-not" ><label class="txt-not">Meu Perfil</label></a>
+      <a href="gerenciarnotificacoes.html" title="Notificações" style="display: none;"><img alt="Notificações" class="icon-img img-not" id="img-not" src="img/icones/sino-de-notificacao.png" /><label class="txt-not">Notificações</label></a>
+      <a title="Meu Perfil" onclick="window.location.href='alterarDadosUsuario.html'"><img id='meu-perfil' src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img img-not menu-foto-perfil" ><label class="txt-not">Meu Perfil</label></a>
       <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-img img-not" src="img/icones/sair.png" /><label class="txt-not">Sair</label></a>
     </nav>
   </header>
@@ -37,8 +38,8 @@
   </main>
   <script src="js/login.js"></script>
   <script src="js/gerenciarnotificacoes.js"></script>
-  <script>window.onload = buscarNotificacoes()</script>
   <script>window.onload = sessaoIniGeral();</script>
+  <script>window.onload = buscarNotificacoes();</script>
   <footer>
     <div class="logo-footer">
       <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
