@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskflow - Atividades</title>
+    <link rel="stylesheet" href="css/atividades.css">
+    <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER PADRÃO -->
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+            <img alt="TaskFlow" class="logo-header" src="img/logos/logocoloridoheader.png" />
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="sobre.html">Sobre nós</a>
+            <a href="contato.html">Fale conosco</a>
+            <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img img-not menu-foto-perfil" id="img-not" src="img/icones/sino-de-notificacao.png" /><label class="txt-not">Notificações</label></a>
+            <a title="Meu Perfil" onclick="window.location.href='alterarDadosUsuario.html'"><img id='meu-perfil' src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img img-not menu-foto-perfil" ><label class="txt-not">Meu Perfil</label></a>
+            <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair img-not" src="img/icones/sair.png" /><label class="txt-not">Sair</label></a>
+        </nav>
+    </header>
+    <main>
+    <div class="topo">
+        <div class="topo">
+        <a aria-label="Voltar" onclick="history.back()" id="voltar" style="cursor: pointer;">⭠</a>
+        <h1 id="nomeSubtarefa"></h1>
+        </div>
+        <hr/>
+        <p><b>Data Máxima Entrega: </b><a id="dtMaxSub"></a></p>
+        <p id="descSubtarefa"></p>
+    </div>
+    <hr />
+    
+        <button class="add-btn" id="add-btn">ADICIONAR ATIVIDADE</button>
+        <div id="form-container" class="form-container">
+            <form id="form-atividade" class="formulario-atividade">
+                <h2 id="tituloForm">Nova Atividade</h2>
+                <input type="text" id="idAtividadeEditar" style="display: none;">
+                <input type="text" id="descricao" placeholder="Descrição da atividade" required>
+                <label for="anexo" id="label-anexo">Anexo da Atividade (opcional)</label>
+                <input type="file" id="anexo" accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip">
+                <p id="msgAviso"></p>
+                <div class="botoes">
+                    <button type="button" onclick="criarAtividade()" class="btn-salvar">Salvar</button>
+                    <button type="button" class="btn-cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+
+        <ul class="atividades" id ="atividades"></ul>
+
+
+    </main>
+    <!-- FOOTER PADRÃO -->
+    <footer>
+        <div class="logo-footer">
+            <img alt="TaskFlow" class="logoimg" src="img/logos/logocoloridoheader.png" />
+            <span>— O site completo para gerenciamento de tarefas</span>
+        </div>
+        <div class="footer-links">
+            <a href="termosUso.html">Termos</a> |
+            <a href="politicaPrivacidade.html">Privacidade</a> |
+            <a href="contato.html">Suporte</a>
+        </div>
+    </footer>
+
+    <script src="js/menuMobile.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/atividades.js"></script>
+    <script>
+        window.onload = sessaoIniGeral();
+        window.onload = carregarAtividades();
+    </script>
+</body>
+</html>

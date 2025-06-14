@@ -1,107 +1,167 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taskflow - Meus Projetos</title>
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/home.css">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
 </head>
+
+
 <body>
 
-    <header class="header">
-        <div class="header-top">
-            <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="logo">
-            <input type="text" placeholder="Pesquisar..." class="search-input">
-            <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+            <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
         </div>
-        <div class="header-bottom">
-            <button class="btn status" id="statusBtn">STATUS ▾</button>
-            <button class="btn icon" id="notificacoesBtn">
-                <img src="img/icones/sino-de-notificacao.png" alt="Notificações" class="icon-img">
-            </button>
-        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav>
+            <a href="sobre.html">Sobre nós</a>
+            <a href="contato.html">Fale conosco</a>
+            <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img img-not" id="img-not" src="img/icones/sino-de-notificacao.png" /><label class="txt-not">Notificações</label></a>
+            <a title="Meu Perfil" onclick="window.location.href='alterarDadosUsuario.html'"><img id='meu-perfil' src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img img-not menu-foto-perfil" ><label class="txt-not">Meu Perfil</label></a>
+            <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair img-not" src="img/icones/sair.png" /><label class="txt-not">Sair</label></a>
+        </nav>
     </header>
 
     <main class="container">
-        <aside class="sidebar">
-            <button class="btn perfil" id="perfilBtn" onclick="window.location.href='alterarDadosUsuario.html'">
-                <img src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img"> Meu Perfil
-            </button>
-            <button class="btn sair" id="sairBtn">
-                <img src="img/icones/sair.png" alt="Sair" class="icon-img"> Sair
-            </button>
-            <div style="margin-top: 30px;">
-                <a href="criar-projeto.html" class="btn dark">NOVO PROJETO</a>
-            </div>
-        </aside>
-
         <section class="projects">
-            <h2 class="section-title">Meus projetos</h2>
+            <h2 class="section-title">MEUS PROJETOS</h2>
+            <select class="btn status" id="statusBtn" onchange="statusProjetos()">
+                <option value="todos">STATUS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▾</option>
+                <option value="todos">Todos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▾</option>
+                <option value="pendentes">Pendentes &nbsp;&nbsp;&nbsp;▾</option>
+                <option value="atrasados">Atrasados &nbsp;&nbsp;&nbsp;&nbsp;▾</option>
+                <option value="concluidos">Concluídos &nbsp;&nbsp;▾</option>
+            </select>
 
+            <a onclick="abrirPopupProjeto()" class="btn dark">NOVO PROJETO</a>
+            
+
+            <br><br>
             <div class="project-group">
-                <h3 class="category-title">› GESTOR</h3>
-                <div class="project-card">
-                    <div class="project-header">
-                        <h4>PROJETO A</h4>
-                        <span class="actions">✎ 👤 ➕</span>
-                    </div>
-                    <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                    <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
-                </div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <h4>PROJETO A</h4>
-                        <span class="actions">✎ 👤 ➕</span>
-                    </div>
-                    <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                    <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
-                </div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <h4>PROJETO A</h4>
-                        <span class="actions">✎ 👤 ➕</span>
-                    </div>
-                    <p><strong>Data máxima de entrega:</strong> 01/06/2025</p>
-                    <p><strong>Status:</strong> <span class="pendente">Pendente</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosGestor', 'titleGestor', 'GESTOR')" id="titleGestor" title="Oculta/Mostrar">› GESTOR</h3>
+                <div id="projetosGestor" style="display: block;">
+                    <p class="pAvisoProjetos" id="pAvisoGestor">Você não possui nenhum projeto sob a sua gestão! Clique em NOVO PROJETO para criar um!</p>
+                    <div id="projetosGestorAtrasados" class="project-unique"></div>
+                    <div id="projetosGestorPendentes" class="project-unique"></div>
+                    <div id="projetosGestorConcluidos" class="project-unique"></div>
                 </div>
             </div>
 
             <div class="project-group">
-                <h3 class="category-title">› ADMINISTRADOR</h3>
-                <div class="project-card">
-                    <h4>PROJETO B</h4>
-                    <p><strong>Data máxima de entrega:</strong> 20/04/2025</p>
-                    <p><strong>Status:</strong> <span class="atrasado">Atrasado</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosAdministrador', 'titleAdministrador', 'ADMINISTRADOR')" id="titleAdministrador" title="Oculta/Mostrar">› ADMINISTRADOR</h3>
+                <div id="projetosAdministrador" style="display: block;">
+                    <p class="pAvisoProjetos" id="pAvisoAdministrador">Você não participa de nenhum projeto como Administrador!</p>
+                    <div id="projetosAdmAtrasados" class="project-unique"></div>
+                    <div id="projetosAdmPendentes" class="project-unique"></div>
+                    <div id="projetosAdmConcluidos" class="project-unique"></div>
                 </div>
             </div>
 
             <div class="project-group">
-                <h3 class="category-title">› MEMBRO</h3>
-                <div class="project-card">
-                    <h4>PROJETO C</h4>
-                    <p><strong>Data máxima de entrega:</strong> 15/05/2025</p>
-                    <p><strong>Status:</strong> <span class="concluido">Concluído</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
-                </div>
-                <div class="project-card">
-                    <h4>PROJETO C</h4>
-                    <p><strong>Data máxima de entrega:</strong> 15/05/2025</p>
-                    <p><strong>Status:</strong> <span class="concluido">Concluído</span></p>
-                    <p class="descricao">Descrição breve do projeto.</p>
-                    <button class="btn download">⬇</button>
+                <h3 class="category-title" onclick="ocultarProjetos('projetosMembro','titleMembro','MEMBRO')" id="titleMembro" title="Oculta/Mostrar">› MEMBRO</h3>
+                <div id="projetosMembro" style="display: block;">
+                    <p class="pAvisoProjetos" id="pAvisoMembro">Você não participa de nenhum projeto como Membro!</p>
+                    <div id="projetosMembroAtrasados" class="project-unique"></div>
+                    <div id="projetosMembroPendentes" class="project-unique"></div>
+                    <div id="projetosMembroConcluidos" class="project-unique"></div>
                 </div>
             </div>
         </section>
+
+        <div id="meuPopup" class="popup-overlay" style="display: none;">
+            <div class="popup-conteudo">
+                <input type="text" id="idProjeto" name="idProjeto" style="display: none;"/>
+                <h2 class="popup-titulo">Dados do Projeto</h2>
+
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" placeholder="Título do Projeto" required />
+
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" rows="4" placeholder="Descrição do projeto"
+                    required></textarea>
+
+                <label for="dataLimite">Data máxima de entrega</label>
+                <input type="date" id="dataLimite" name="dataLimite" required />
+
+                <label for="anexo">Substituir Arquivo de Anexo</label>
+                <input type="file" id="anexo" name="anexo"
+                    accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip" />
+
+                <p id="msgAviso" class="msgAviso"></p>
+
+                <button type="button" onclick="alterarProjeto()">ALTERAR</button>
+                <div onclick="fecharPopup()" class="btn-cancelar">CANCELAR</div>
+                <br><br>
+            </div>
+        </div>
+
+        <div id="criarProjetoPopup" class="popup-overlay" style="display: none;">
+            <div class="popup-conteudo">
+                <h2 class="popup-titulo">Criar Projeto</h2>
+
+                <input type="text" id="tituloCri" name="tituloCri" placeholder="Título" required />
+
+                <textarea id="descricaoCri" name="descricaoCri" placeholder="Descrição" required></textarea>
+
+                <label for="arquivoCri">Anexo do Projeto (Opcional)</label>
+                <input type="file" id="arquivoCri" name="arquivoCri" accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip" />
+
+                <label for="dataEntregaCri">Data Máxima  de Entrega</label>
+                <input type="date" id="dataEntregaCri" name="dataEntregaCri" required />
+
+                <p id="msgAvisoCri" class="msgAviso"></p>
+
+                <button type="button" class="criar-btn" onclick="criarProjeto()">CRIAR</button>
+                <div onclick="fecharPopupProjeto()" class="btn-cancelar">CANCELAR</div>
+            </div>
+        </div>
+
+        <div id="gestaoPopup" class="popup-overlay" style="display: none;">
+            <div class="popup-conteudo">
+                <input type="text" id="idProjetoGestaoMembros" name="idProjetoGestaoMembros" style="display: none;" />
+                <span class="fechar" onclick="fecharPopupGestao()">&times;</span>
+                <h2 class="popup-titulo">Gerenciar Membros e Administradores</h2>
+
+                <!-- Membros -->
+                <h3>Membros</h3>
+                <div id="listaMembros" class="lista-usuarios">
+                    <!-- Lista preenchida dinamicamente com JS -->
+                </div>
+                <input type="email" id="emailNovoMembro" placeholder="E-mail do novo membro" />
+                <button type="button" onclick="adicionarMembro()">Adicionar Membro</button>
+
+                <hr style="margin: 20px 0;">
+
+                <!-- Administradores -->
+                <h3>Administradores</h3>
+                <div id="listaAdmins" class="lista-usuarios">
+                    <!-- Lista preenchida dinamicamente com JS -->
+                </div>
+                <input type="email" id="emailNovoAdmin" placeholder="E-mail do novo administrador" />
+                <button type="button" onclick="adicionarAdmin()">Adicionar Administrador</button>
+
+                <hr style="margin: 20px 0;">
+
+                <!-- Ceder cargo de gestor -->
+                <h3>Ceder Cargo de Gestor</h3>
+                <select id="novoGestor" class="select-gestor">
+                    <option value=""></option>
+                </select>
+                <input type="password" id="senhaGestor" placeholder="Digite a senha para ceder o cargo" />
+                <button type="button" onclick="cederCargoGestor()">Ceder Cargo</button>
+
+                <p id="msgAvisoGestao" class="mensagem-erro"></p>
+            </div>
+        </div>
+
+
+
     </main>
 
     <footer class="footer">
@@ -111,11 +171,11 @@
                 <p>O site completo para gerenciamento de tarefas.</p>
             </div>
             <div class="footer-links">
-                <a href="#">Sobre Nós</a>
-                <a href="#">Fale Conosco</a>
-                <a href="#">Termos de Uso</a>
-                <a href="#">Política de Privacidade</a>
-            </div>
+                <a href="sobre.html">Sobre Nós</a>
+                <a href="contato.html">Fale Conosco</a>
+                <a href="termosUso.html">Termos de Uso</a>
+                <a href="politicaPrivacidade.html">Política de Privacidade</a>
+            </div><br>
         </div>
         <div class="footer-bottom">
             <p>© 2025 Taskflow</p>
@@ -124,6 +184,13 @@
 
     <script src="js/home.js"></script>
     <script src="js/login.js"></script>
-    <script>window.onload = sessaoIniGeral()</script>
+    <script src="js/menuMobile.js"></script>
+
+    <script>
+        window.onload = sessaoIniGeral();
+        window.onload = carregarProjetos();
+    </script>
 </body>
+
+
 </html>

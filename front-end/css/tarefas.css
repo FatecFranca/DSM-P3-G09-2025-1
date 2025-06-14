@@ -1,3 +1,4 @@
+/* RESET E FONTES */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,6 +11,124 @@ body {
     color: #000;
     padding: 20px;
 }
+
+/* ================== HEADER ================== */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    box-shadow: none;
+    position: relative;
+    z-index: 100;
+}
+
+/* Logo */
+.logo-header {
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Navegação desktop */
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+/* Links do menu */
+nav a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 20px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #3f5fff;
+}
+
+#txt-sair{
+  display: none;
+}
+
+#txt-not{
+  display: none;
+}
+
+.icon-img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.icon-sair {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* Botão menu hamburger - só aparece no mobile */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Responsividade para telas menores que 750px */
+.txt-not{
+  display: none;
+}
+
+.img-not{
+  display: block;
+}
+
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    flex-direction: column;
+    background: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  nav a {
+    margin: 10px 0;
+  }
+
+  .txt-not{
+    display: block;
+  }
+
+  .img-not{
+    display: none;
+  }
+}
+
+/* ================== PÁGINA TAREFAS ================== */
 
 header {
     margin-bottom: 20px;
@@ -24,7 +143,7 @@ header {
 }
 
 .topo h1 {
-    font-family: 'Space Grotesk', sans-serif;;
+    font-family: 'Montserrat', sans-serif;
     text-align: center;
 }
 
@@ -45,7 +164,7 @@ hr {
     margin-bottom: 20px;
 }
 
-#add-task {
+.add-task {
     background: #4285f4;
     color: white;
     padding: 10px 20px;
@@ -53,6 +172,18 @@ hr {
     font-weight: bold;
     border-radius: 4px;
     margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.subTarefa {
+    background: #4285f4;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    cursor: pointer;
 }
 
 main {
@@ -68,7 +199,7 @@ main {
 
 .categoria h2 {
     font-weight: bold;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 10px;
 }
 
@@ -83,13 +214,17 @@ main {
     padding: 15px;
     border: 1px solid #c6d3df;
     border-radius: 8px;
-    width: 300px;
+    width: 48%;
+    margin: 8px;
+    margin-left: 0px;
     position: relative;
 }
 
 .tarefa h3 {
     font-weight: bold;
     margin-bottom: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
 .data {
@@ -117,28 +252,48 @@ main {
     background-color: #4285f4;
 }
 
+.laranja {
+    background-color: #f39c12;
+}
+
 .vermelho {
     background-color: #ff3b30;
 }
 
-.acoes {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-}
+/* ================== FOOTER ================== */
 
 footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    font-size: 0.8rem;
+    color: #666;
+    border-top: 1px solid #eee;
     margin-top: 30px;
     text-align: right;
 }
 
-.logofooter{
-    height: 11px;
+footer a {
+    color: #444;
+    text-decoration: none;
+    margin-left: 0.5rem;
 }
 
+.logo-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logoimg, .logofooter {
+    height: 12px;
+}
 
 /* Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 855px) {
     .tarefas {
         flex-direction: column;
         align-items: center;
@@ -146,7 +301,7 @@ footer {
 
     .tarefa {
         width: 100%;
-        max-width: 90%;
+        max-width: 95%;
     }
 
     .topo {
@@ -156,4 +311,435 @@ footer {
     #add-task {
         width: 100%;
     }
+
+}
+
+@media (max-width: 750px) {
+    footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    footer div {
+        margin: 5px 0;
+    }
+
+}
+
+/* ================== FORMULÁRIO ================== */
+
+.form-container {
+  position: fixed;
+  inset: 0; /* equivale a top: 0; left: 0; bottom: 0; right: 0 */
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.3s ease;
+}
+
+
+.task-form h3 {
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.task-form input[type="text"],
+.task-form input[type="date"],
+.task-form select,
+.task-form textarea,
+.task-form input[type="file"] {
+  padding: 10px;
+  border: 1px solid #c6d3df;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.task-form input[type="date"]{
+  margin-top: 0;
+}
+
+.task-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.task-form button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-cad {
+  background: #4285f4;
+  color: white;
+}
+
+.btn-cad:hover {
+  background: #3367d6;
+}
+
+.btn-cancelar {
+  background: #ccc;
+  color: #333;
+}
+
+.btn-cancelar:hover {
+  background: #bbb;
+}
+
+.tarefa button, .position, .edit-tarefa {
+  background: white;
+  border: 1px solid #4285f4;
+  color: #4285f4;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tarefa button:hover, .position:hover, .edit-tarefa:hover {
+  background: #4285f4;
+  color: white;
+}
+
+.tarefa a {
+  text-decoration: none;
+  color: #fff;
+  background: #4285f4;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+.tarefa a:hover {
+  background: #366dc7;
+}
+
+.baixar-anexo {
+  text-decoration: none;
+  color: #fff;
+  background: #4285f4;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.baixar-anexo:hover {
+  background: #366dc7;
+}
+
+.btn-excluir {
+  text-decoration: none;
+  color: #fff;
+  background: #c02525;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-excluir:hover {
+  background: #9e1f1f;
+}
+
+#msgAviso, #msgAvisoSub {
+  color: #960505;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.drag{
+    display: flex;
+}
+
+.drag a{
+    text-decoration: none;
+    color: #fff;
+    background: #4285f4;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    text-align: center;
+    height: 28px;
+}
+
+.drag h3{
+    width: 95%;
+}
+
+.drag h2{
+    width: 95%;
+    text-transform: uppercase;
+}
+
+.descricao{
+    white-space: pre-wrap;
+}
+
+.btn-concluir{
+  text-decoration: none;
+  color: #fff;
+  background: #4cd964;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-concluir:hover {
+  background: #3baa4e;
+}
+
+.btn-reabrir{
+  text-decoration: none;
+  color: #fff;
+  background: #dfd21e;
+  padding: 5px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-reabrir:hover {
+  background: #b8ad18;
+}
+
+.btns-tarefa{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 535px) {
+    .btns-tarefa{
+      display: block;
+    }
+}
+
+.btns-subTarefa{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 1073px) {
+    .btns-subTarefa{
+      display: block;
+    }
+}
+
+#nomeProjeto{
+  text-transform: uppercase;
+}
+
+.popup-conteudo {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.popup-conteudo {
+  background-color: #fff;
+  padding: 20px;
+  max-height: 100%;
+  overflow-y: auto;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.popup-conteudo h2 {
+  margin-top: 0;
+  color: #3c8eff;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.popup-conteudo label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.popup-conteudo input,
+.popup-conteudo textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+}
+
+.popup-conteudo textarea {
+  resize: none;
+}
+
+.popup-conteudo button {
+  background-color: #3c8eff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.popup-conteudo button:hover {
+  background-color: #276fd1;
+}
+
+.popup-conteudo .fechar {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#msgAviso {
+  color: #960505;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.popup-conteudo h3 {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+@media (max-width: 690px) {
+  .popup-overlay {
+    width: 93%;
+  }
+}
+
+.lista-usuarios {
+  max-height: 200px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.lista-usuarios div {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  background-color: #5176f0;
+  padding: 5px;
+  padding-left: 7px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+}
+
+.lista-usuarios div a{
+  width: 90%;
+  font-size: 15px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.lista-usuarios div label{
+  width: 8%;
+  font-size: 15px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 100%;
+}
+
+.lista-usuarios button {
+  background-color: #ff4e4e;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.lista-usuarios button:hover {
+  background-color: #cc0000;
+}
+
+.nadaEncontrado{
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  margin: 8px;
+}
+
+.btn-excluir-membro{
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  max-width: 10%;
+}
+
+.descricao {
+  margin-top: 5px;
+  white-space: pre-wrap;
+}
+
+.menu-foto-perfil {
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
 }

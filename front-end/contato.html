@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contato - Taskflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header" />
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Fale Conosco</h1>
+      <p>Estamos aqui para te ajudar. Envie suas dúvidas, sugestões ou problemas.</p>
+    </div>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <div class="card-content">
+        <p>Entre em contato conosco pelo e-mail: <strong>suporte@taskflow.com.br</strong></p>
+        <p>Você também pode nos encontrar nas redes sociais ou preencher o formulário disponível abaixo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-header">
+    <h2>Envie sua mensagem</h2>
+    <p>Preencha o formulário abaixo para entrar em contato conosco. Estamos prontos para ajudar!</p>
+  </section>
+
+  <section class="form-contato">
+    <form id="formContato">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required placeholder="Seu nome completo" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required placeholder="seu@email.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="assunto">Assunto</label>
+        <input type="text" id="assunto" name="assunto" required placeholder="Motivo do contato" />
+      </div>
+
+      <div class="form-group">
+        <label for="mensagem">Mensagem</label>
+        <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Escreva sua mensagem aqui..."></textarea>
+      </div>
+
+      <p id="msgAviso" style="text-align: center; color: red;"></p>
+
+      <button type="button" class="btn-enviar" onclick="enviar()">Enviar</button>
+    </form>
+  </section>
+
+  <section class="hero">
+    <div class="hero-text">
+      <p>TaskFlow permanece a sua disposição para tirar as suas dúvidas e sanar as suas necessidades.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo-footer">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
+      <span>— O site completo para gerenciamento de tarefas</span>
+    </div>
+    <div class="footer-links">
+      <a href="termosUso.html">Termos</a> |
+      <a href="politicaPrivacidade.html">Privacidade</a> |
+      <a href="contato.html">Suporte</a>
+    </div>
+  </footer>
+
+  <script>
+    function enviar(){
+      const mensagem = document.getElementById('mensagem').value.trim();
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const assunto = document.getElementById('assunto').value.trim();
+      let msgAviso = document.getElementById('msgAviso');
+      msgAviso.innerHTML = "";
+
+      if (nome === ""){
+        msgAviso.innerHTML = "Prencha o campo nome!";
+        return;
+      }else if (email === ""){
+        msgAviso.innerHTML = "Prencha o campo e-mail!";
+        return;
+      }else if (assunto === ""){
+        msgAviso.innerHTML = "Prencha o campo assunto!";
+        return;
+      }else if (mensagem === ""){
+        msgAviso.innerHTML = "Prencha o campo mensagem!";
+        return;
+      }
+
+      alert("Sua mensagem foi enviada, aguarde nosso retorno!")
+      window.location.reload();
+      return;
+    }
+  </script>
+
+  <script src="js/menuMobile.js"></script>
+</body>
+</html>

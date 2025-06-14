@@ -1,103 +1,116 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefas</title>
-    <link rel="icon" href="img/icones/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/tarefas.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Taskflow - Tarefas e Subtarefas</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link href="css/tarefas.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&amp;family=Space+Grotesk:wght@500&amp;display=swap"
+    rel="stylesheet" />
+  <link href="img/icones/icone-TF.png" rel="shortcut icon" type="image/x-icon" />
 </head>
+
 <body>
-    <header>
-        <div class="topo">
-            <a href="home.html" id="voltar" aria-label="Voltar">⭠</a>
-            <h1>Nome Projeto</h1>
-        </div>
-        <hr>
-        <button id="add-task">ADICIONAR TAREFA</button>
-    </header>
+  <!-- HEADER PADRÃO -->
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img alt="TaskFlow" class="logo-header" src="img/logos/logocoloridoheader.png" />
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+      <a href="gerenciarnotificacoes.html" title="Notificações"><img alt="Notificações" class="icon-img img-not" id="img-not" src="img/icones/sino-de-notificacao.png" /><label class="txt-not">Notificações</label></a>
+      <a title="Meu Perfil" onclick="window.location.href='alterarDadosUsuario.html'"><img id='meu-perfil' src="img/icones/meu-perfil.png" alt="Perfil" class="icon-img img-not menu-foto-perfil" ><label class="txt-not">Meu Perfil</label></a>
+      <a onclick="encerrarSessao()" title="Sair"><img alt="Sair" class="icon-sair img-not" src="img/icones/sair.png" /><label class="txt-not">Sair</label></a>
+    </nav>
+  </header>
 
-    <main>
-        <section class="categoria">
-            <h2>&rsaquo; GESTOR</h2>
-            <div class="tarefas">
-                <div class="tarefa concluida">
-                    <div class="drag"></div>
-                    <h3>PROTOTIPAÇÃO TELA TAREFAS</h3>
-                    <p class="data">Entregue em 17/05/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status verde">Concluída</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-                <div class="tarefa pendente">
-                    <div class="drag"></div>
-                    <h3>TAREFA UM</h3>
-                    <p class="data">Data máxima para entrega 01/06/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status azul">Pendente</span>
-                    <div class="acoes">
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div id="form-container" class="form-container" style="display: none;">
+    <form id="task-form" class="task-form">
+      <h3 id="form-title">Nova Tarefa</h3>
+      <input id="titulo" placeholder="Título" required="" type="text" />
+      <label for="data">Data Máxima de Entrega</label>
+      <input id="data" required="" type="date" />
+      <textarea id="descricao" class="descricao" placeholder="Descrição" required=""></textarea>
+      <label for="anexo" id="label-anexo">Anexo da Tarefa (Opcional)</label>
+      <input id="anexo" type="file" accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip"/>
+      <p id="msgAviso"></p>
+      <button type="button" onclick="cadastrarTarefa()" id="salvar-tarefa" class="btn-cad">Salvar</button>
+      <button onclick="fecharFormulario()" type="button" class="btn-cancelar">Cancelar</button>
+    </form>
+  </div>
 
-        <section class="categoria">
-            <h2>&rsaquo; ADMINISTRADOR</h2>
-            <div class="tarefas">
-                <div class="tarefa atrasada">
-                    <div class="drag"></div>
-                    <h3>DOCUMENTAÇÃO</h3>
-                    <p class="data">Data máxima para entrega 15/05/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status vermelho">Atrasada</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div id="form-subtarefa" class="form-container" style="display: none;">
+    <form id="sub-form" class="task-form">
+      <h3 id="sub-title">Nova Subtarefa</h3>
+      <input type="text" id="id-tarefa" style="display: none;">
+      <input id="tituloSub" placeholder="Título" required="" type="text" />
+      <label for="tituloSub">Data Máxima de Entrega</label>
+      <input id="dataSub" required="" type="date" />
+      <textarea id="descricaoSub" class="descricao" placeholder="Descrição" required=""></textarea>
+      <label for="anexoSub" id="label-anexoSub">Anexo da Subtarefa (Opcional)</label>
+      <input id="anexoSub" type="file" accept=".pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .jpeg, .jpg, .png, .zip" />
+      <p id="msgAvisoSub"></p>
+      <button type="button" onclick="cadastrarSubtarefa()" id="salvar-Subtarefa" class="btn-cad">Salvar</button>
+      <button onclick="fecharFormularioSub()" type="button" class="btn-cancelar">Cancelar</button>
+    </form>
+  </div>
 
-        <section class="categoria">
-            <h2>&rsaquo; MEMBRO</h2>
-            <div class="tarefas">
-                <div class="tarefa pendente">
-                    <div class="drag"></div>
-                    <h3>TAREFA DOIS</h3>
-                    <p class="data">Data máxima para entrega 01/06/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status azul">Pendente</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-                <div class="tarefa pendente">
-                    <div class="drag"></div>
-                    <h3>TAREFA TRÊS</h3>
-                    <p class="data">Data máxima para entrega 01/06/2025</p>
-                    <p class="descricao">Nunc faucibus sagittis felis nec ultrices...</p>
-                    <span class="status azul">Pendente</span>
-                    <div class="acoes">
-                        <button class="editar" aria-label="Editar tarefa">✎</button>
-                        <button class="mover" aria-label="Mover tarefa">⭳</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+  <main>
+    <div class="topo">
+      <a aria-label="Voltar" href="home.html" id="voltar">⭠</a>
+      <h1 id="nomeProjeto"></h1>
+    </div>
+    <hr/>
+    <p><b>Data Máxima Entrega: </b><a id="dtMaxProj"></a></p>
+    <br>
+    <p id="descProj"></p>
+    <br>
+    <hr/>
+    <button id="add-task" class="add-task">ADICIONAR TAREFA</button>
+    <div id="tarefasProjeto"></div>
+  </main>
 
-    <footer>
-        <div class="logo-footer">
-            <img src="img/logos/logocoloridoheader.png" alt="Taskflow Logo" class="logofooter">
-        </div>
-    </footer>
+  <div id="membrosPopup" class="popup-overlay" style="display: none;">
+      <div class="popup-conteudo">
+          <input type="text" id="idProjetoGestaoMembros" name="idProjetoGestaoMembros" style="display: none;" />
+          <span class="fechar" onclick="fecharPopupMembros()">&times;</span>
+          <h2 class="popup-titulo">Gerenciar Membros da Subtarefa</h2>
 
-    <script src="js/script.js"></script>
+          <!-- Membros -->
+          <h3>Membros Projeto (Adicionar a Subtarefa)</h3>
+          <div id="listaMembrosProjeto" class="lista-usuarios"></div>
+
+          <h3>Membros Subtarefa</h3>
+          <div id="listaMembrosSubTarefa" class="lista-usuarios"></div>
+          <br>
+      </div>
+  </div>
+
+  <!-- FOOTER PADRÃO -->
+  <footer>
+    <div class="logo-footer">
+      <img alt="TaskFlow" class="logoimg" src="img/logos/logocoloridoheader.png" />
+      <span>— O site completo para gerenciamento de tarefas</span>
+    </div>
+    <div class="footer-links">
+      <a href="termosUso.html">Termos</a> |
+      <a href="politicaPrivacidade.html">Privacidade</a> |
+      <a href="contato.html">Suporte</a>
+    </div>
+  </footer>
+  <script src="js/login.js"></script>
+  <script src="js/menuMobile.js"></script>
+  <script src="js/tarefas.js"></script>
+  <script>
+    window.onload = sessaoIniGeral();
+    window.onload = carregarDados();
+  </script>
 </body>
+
 </html>

@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background-color: #f9f9f9;
 }
 
@@ -35,7 +35,7 @@ body {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #fff;;
 }
 
 .erro {
@@ -64,7 +64,7 @@ input[type="password"] {
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-bottom: 2px;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .form-actions {
@@ -75,35 +75,37 @@ input[type="password"] {
 }
 
 .btn-salvar {
-  background-color: #0d1b4c;
+  background: #4285f4;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 8px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
   cursor: pointer;
-  font-size: 1rem;
-  width: 48%;
-  max-width: 125px;
+  width: 40%;
+  max-width: 120px;
 }
 
 .btn-salvar:hover {
-  background-color: #001164;
+  background: #3367d6;
 }
 
 .btn-cancelar {
-  background-color: #fafafa;
-  color: #0d1b4c;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  background: white;
+  border: 1px solid #4285f4;
+  color: #4285f4;
+  padding: 8px 10px;
+  margin-right: 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
   cursor: pointer;
-  font-size: 1rem;
-  width: 48%;
-  max-width: 125px;
+  width: 40%;
+  max-width: 120px;
 }
 
 .btn-cancelar:hover {
-  background-color: #ffffff;
+  background: #f3f3f3;
 }
 
 .logo-taskflow {
@@ -122,7 +124,7 @@ input[type="password"] {
     padding-right: 8px;
     padding-top: 3px;
     padding-bottom: 3px;
-    background-color: #1e00c5;
+    background-color: none;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -135,16 +137,12 @@ input[type="password"] {
     height: 25px;
 }
 
-.upload-btn:hover {
-    background-color: #170097;
-}
-
 .lixeira-btn {
   padding-left: 8px;
     padding-right: 8px;
     padding-top: 3px;
     padding-bottom: 3px;
-    background-color: #da0000;
+    background-color: none;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -153,13 +151,10 @@ input[type="password"] {
 }
 
 .lixeira-btn img {
-    width: 25px;
-    height: 25px;
+    width: 22px;
+    height: 22px;
 }
 
-.lixeira-btn:hover {
-    background-color: #be0000;
-}
 
 #imagemPreview {
     max-width: 150px;
@@ -167,7 +162,7 @@ input[type="password"] {
     width: 50%;
     height: auto;
     display: block;
-    border-radius: 300px;
+    border-radius: 20px;
     border: 1px solid #010016;
     aspect-ratio: 1 / 1;
     object-fit: cover;   
@@ -218,6 +213,14 @@ input[type="password"] {
 }
 
 .icon-sair {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.icon-img {
     width: 20px;
     height: 20px;
     vertical-align: middle;
@@ -280,34 +283,6 @@ input[type="password"] {
     color: #666;
     font-size: 14px;
 }
-/* 
-@media (max-width: 750px) {
-  .right{
-    width: 100%;
-  }
-
-  .left{
-    width: 100%;
-  } 
-  
-  .form-alterar{
-    display: block;
-  }
-
-  .msg-status{
-    width: 100%;
-  }
-
-  .footer-left{
-    display: block;
-  }
-
-  .container{
-    height: auto;
-  }
-
-  
-} */
 
 /* Botão do menu só visível no mobile */
 .menu-toggle {
@@ -364,6 +339,49 @@ input[type="password"] {
   .container{
     height: auto;
     z-index: 1;
+  }
+}
+
+.txt-not{
+  display: none;
+}
+
+.img-not{
+  display: block;
+}
+
+@media (max-width: 750px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    flex-direction: column;
+    background: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  nav a {
+    margin: 10px 0;
+  }
+
+  .txt-not{
+    display: block;
+  }
+
+  .img-not{
+    display: none;
   }
 }
 
