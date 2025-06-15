@@ -712,7 +712,7 @@ controller.updateOrdem = async function(req, res) {
                 }
             });
 
-            return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + (verificaTarefa.ordem -1) + "!" });
+            return res.status(200).json({ result: true, tarefaAlterar_ordem: verificaTarefa.ordem - 1, tarefaMenor_ordem: tarefaMenor.ordem + 1, tarefaMenor_id: tarefaMenor.id });
 
 
         // Se for regredir uma casa, alterada sera +1 e a que esta no seu lugar sera -1 (Troca de posições)
@@ -750,7 +750,7 @@ controller.updateOrdem = async function(req, res) {
                 }
             });
 
-            return res.status(200).json({ result: true, mensagem: "Tarefa alterada para a posição " + (verificaTarefa.ordem +1) + "!" });
+            return res.status(200).json({ result: true, tarefaAlterar_ordem: verificaTarefa.ordem + 1, tarefaMaior_ordem: tarefaMaior.ordem - 1, tarefaMaior_id: tarefaMaior.id});
         }else{
             return res.status(400).json({ mensagem: "Função Inválida! Operação não existente!"});
         }

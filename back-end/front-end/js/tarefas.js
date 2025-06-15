@@ -109,7 +109,7 @@ async function carregarDados() {
         let tarefasFinal = '';
         card.className = "categoria";
         tarefasFinal += `
-          <div class="drag"><h2>${tarefa.titulo}</h2><a title="Ordem" style="background-color: rgb(93, 93, 212);">${tarefa.ordem}</a></div>
+          <div class="drag"><h2>${tarefa.titulo}</h2><a title="Ordem" style="background-color: rgb(93, 93, 212);" id="ordemTarefa${tarefa.id}">${tarefa.ordem}</a></div>
           <p><b>${descDataTarefa}</b> ${dataFormatada}</p><br>
           <span class="status ${statusTarefa}">${tarefa.status}</span><br><br>
           <p class="descricao">${tarefa.descricao}</p><br>
@@ -158,7 +158,7 @@ async function carregarDados() {
             if ((dadosProjeto.projeto.id_gestor === dadosSessao.dados.id || dadosProjeto.projeto.ids_administradores.includes(dadosSessao.dados.id)) && (dadosProjeto.projeto.status !== "Concluído") && (tarefa.status !== "Concluída")) {
               if (subtarefa.status === "Concluída") {
                 exibirConcluirEditarSub = `<label class="btn-reabrir" onclick="statusSubTarefa('${subtarefa.id}', 'Reabrir')">Reabrir</label>`;
-                exibirMudarOrdem = `<button onclick="moverParaCimaSub('${subtarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixoSub('${subtarefa.id}')" title="Descer" class="position">🔽</button>`;
+                exibirMudarOrdemSub = `<button onclick="moverParaCimaSub('${subtarefa.id}')" title="Subir" class="position">🔼</button><button onclick="moverParaBaixoSub('${subtarefa.id}')" title="Descer" class="position">🔽</button>`;
               } else {
                 exibirConcluirEditarSub = `<label class="btn-concluir" onclick="statusSubTarefa('${subtarefa.id}', 'Concluir')">Concluir</label>&nbsp;<button onclick="editarSubTarefa('${subtarefa.id}')" class="edit-subTarefa">Editar</button>&nbsp;<label class="btn-excluir" onclick="excluirSubTarefa('${subtarefa.id}')">Excluir</label>`;
                 exibirMembrosSub = `<button onclick="membrosSubtatrefa('${subtarefa.id}')" title="Gerenciar Membros" class="position">👤</button>`;
@@ -171,7 +171,7 @@ async function carregarDados() {
 
             tarefasFinal += `
               <div class="tarefa concluida" id=${subtarefa.id}>
-              <div class="drag"><h3 onclick="window.location.href='atividades.html?id=${subtarefa.id}'"><u>${subtarefa.titulo}</u></h3><a title="Ordem" style="background-color: rgb(93, 93, 212);">${subtarefa.ordem}</a></div>
+              <div class="drag"><h3 onclick="window.location.href='atividades.html?id=${subtarefa.id}'"><u>${subtarefa.titulo}</u></h3><a title="Ordem" style="background-color: rgb(93, 93, 212);" id="ordem${subtarefa.id}">${subtarefa.ordem}</a></div>
               <br>
               <p class="data">${descDataSub}${dataFormatada}</p>
               <br>
@@ -334,6 +334,13 @@ async function moverParaCima(idTarefa) {
     return alert(dados.mensagem);
   }
 
+  if (!dados.tarefaAlterar_ordem || !dados.tarefaMenor_id || !dados.tarefaMenor_ordem) {
+    return alert("Erro ao atualizar a ordem da tarefa.");
+  }
+
+  document.getElementById("ordemTarefa" + idTarefa).innerHTML = dados.tarefaAlterar_ordem;
+  document.getElementById("ordemTarefa" + dados.tarefaMenor_id).innerHTML = dados.tarefaMenor_ordem;
+
   // Troca no DOM
   tarefaAtual.parentNode.insertBefore(tarefaAtual, tarefaAnterior);
   return;
@@ -358,6 +365,13 @@ async function moverParaBaixo(idTarefa) {
   if (!dados.result) {
     return alert(dados.mensagem);
   }
+
+  if (!dados.tarefaAlterar_ordem || !dados.tarefaMaior_id || !dados.tarefaMaior_ordem) {
+    return alert("Erro ao atualizar a ordem da tarefa.");
+  }
+
+  document.getElementById("ordemTarefa" + idTarefa).innerHTML = dados.tarefaAlterar_ordem;
+  document.getElementById("ordemTarefa" + dados.tarefaMaior_id).innerHTML = dados.tarefaMaior_ordem;
 
   // Troca no DOM
   tarefaPosterior.parentNode.insertBefore(tarefaPosterior, tarefaAtual);
@@ -623,6 +637,9 @@ async function moverParaCimaSub(idSubTarefa) {
     return alert(dados.mensagem);
   }
 
+  document.getElementById("ordem" + idSubTarefa).innerHTML = dados.subTarefaAlterar_ordem;
+  document.getElementById("ordem" + dados.subTarefaMenor_id).innerHTML = dados.subTarefaMenor_ordem;
+
   // Troca no DOM
   tarefaSubAtual.parentNode.insertBefore(tarefaSubAtual, tarefaSubAnterior);
   return;
@@ -647,6 +664,9 @@ async function moverParaBaixoSub(idSubTarefa) {
   if (!dados.result) {
     return alert(dados.mensagem);
   }
+
+  document.getElementById("ordem" + idSubTarefa).innerHTML = dados.subTarefaAlterar_ordem;
+  document.getElementById("ordem" + dados.subTarefaMaior_id).innerHTML = dados.subTarefaMaior_ordem;
 
   // Troca no DOM
   tarefaSubPosterior.parentNode.insertBefore(tarefaSubPosterior, tarefaSubAtual);

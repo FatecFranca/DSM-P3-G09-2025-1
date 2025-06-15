@@ -975,7 +975,7 @@ controller.updateOrdem = async function(req, res) {
                 }
             });
 
-            return res.status(200).json({ result: true, mensagem: "Subtarefa alterada para a posição " + (verificaSubTarefa.ordem -1) + "!" });
+            return res.status(200).json({ result: true, subTarefaMenor_id: subTarefaMenor.id, subTarefaMenor_ordem: subTarefaMenor.ordem + 1, subTarefaAlterar_ordem: verificaSubTarefa.ordem - 1 });
 
 
         // Se for regredir uma casa, alterada sera +1 e a que esta no seu lugar sera -1 (Troca de posições)
@@ -1013,7 +1013,7 @@ controller.updateOrdem = async function(req, res) {
                 }
             });
 
-            return res.status(200).json({ result: true, mensagem: "Subtarefa alterada para a posição " + (verificaSubTarefa.ordem +1) + "!" });
+            return res.status(200).json({ result: true, subTarefaMaior_id: subTarefaMaior.id, subTarefaMaior_ordem: subTarefaMaior.ordem - 1, subTarefaAlterar_ordem: verificaSubTarefa.ordem + 1 });
         }
         
     }

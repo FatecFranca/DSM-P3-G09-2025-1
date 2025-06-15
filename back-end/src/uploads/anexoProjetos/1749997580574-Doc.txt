@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taskflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="shortcut icon" href="img/icones/icone-TF.png" type="image/x-icon">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logo-header">
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <nav>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="contato.html">Fale conosco</a>
+      <a href="login.html">Entrar</a>
+      <a href="cadastrarUsuario.html" class="register">Cadastre-se</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Taskflow: o jeito mais inteligente de organizar sua vida</h1>
+      <p>SEJA NO TRABALHO, NOS ESTUDOS OU NAS METAS PESSOAIS - GERENCIE TUDO EM UM SÓ LUGAR COM QUEM ENTENDE DE PRODUTIVIDADE</p>
+    </div>
+  
+
+    <div class="hero-image">
+      <img src="img/paisagens/apresentacao.png" alt="Apresentação" style="height: 320px;">
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <img src="img/icones/pasta.png" alt="Projetos">
+      <p>CRIE E GERENCIE PROJETOS COM OBJETIVOS DEFINIDOS</p>
+    </div>
+    <div class="feature">
+      <img src="img/icones/check.png"Status">
+      <p>ACOMPANHE O STATUS DE TAREFAS E SUBTAREFAS EM TEMPO REAL</p>
+    </div>
+    <div class="feature">
+      <img src="img/icones/colabore.png" alt="Equipe">
+      <p>COLABORE COM OUTROS MEMBROS DA EQUIPE</p>
+    </div>
+    <div class="feature">
+      <img src="img/icones/notificacao.png" alt="Notificações">
+      <p>RECEBA NOTIFICAÇÕES SOBRE PRAZOS E ATUALIZAÇÕES</p>
+    </div>
+    <div class="feature">
+      <img src="img/icones/grafico.png" alt="Relatórios">
+      <p>GERE RELATÓRIOS DE DESEMPENHO E PROGRESSO</p>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a href="cadastrarUsuario.html">COMEÇAR ➔</a><a style="color: #0088FF; background-color: white;">Gratuito</a>
+    <p style="margin-top: 10px;"></p>
+    <p style="margin-top: 10px;">Já possui uma conta? <a href="login.html" style="color: #0088FF; background-color: white; ">Entrar</a></p>
+  </div>
+
+  <section class="cards">
+    <div class="card">
+      <div class="card-content">
+        <h3>Colaboração</h3>
+        <p><b>Colabore com eficiência.</b><br><br>Trabalhe em equipe como nunca antes. Atribua tarefas, compartilhe responsabilidades e mantenha todos alinhados com atualizações em tempo real. Com o Taskflow, a comunicação entre os membros da equipe é simplificada e centralizada, promovendo uma colaboração mais fluida e produtiva.</p>
+      </div>
+      <div class="card-image">
+        <img src="img/paisagens/varios-usuaarios.gif" alt="Colaboração">
+      </div>
+    </div>
+
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <div class="card-image">
+        <img src="img/paisagens/alvo.gif" alt="Alvo">
+      </div>
+      <div class="card-content">
+        <h3>Foco e Objetivo</h3>
+        <p><b>Foque no que realmente importa.</b><br><br> Defina prioridades, acompanhe metas e mantenha o foco em cada etapa do projeto. O Taskflow ajuda você e sua equipe a manterem-se direcionados aos resultados com uma visualização clara dos objetivos e progresso de cada tarefa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-blue">
+    <p>Se junte às equipes que estão mudando a forma de organizar suas rotinas</p>
+    <a href="cadastrarUsuario.html">COMEÇAR ➔</a>
+  </section>
+ <footer>
+  <div class="logo-footer" style="display: flex; align-items: center;">
+    <img src="img/logos/logocoloridoheader.png" alt="TaskFlow" class="logoimg">
+    &nbsp;&nbsp;&nbsp; — &nbsp;&nbsp; O site completo para gerenciamento de tarefas
+  </div>
+  <br>
+  <div>
+    <a href="termosUso.html">Termos</a> | 
+    <a href="politicaPrivacidade.html">Privacidade</a> | 
+    <a href="contato.html">Suporte</a>
+  </div>
+</footer>
+
+
+  <script src="js/menuMobile.js"></script>
+</body>
+</html>
