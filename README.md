@@ -49,8 +49,8 @@ O site apresenta as seguintes páginas e funcionalidades:
 ### 📕 [Relacionamentos de Coleções](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Justificativa-Relacionamento-Colecoes.pdf)
 ### 🕔 [Cronograma](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Conograma-Desenvolvimento-Depois-Entrega.pdf)
 ### 📒 [Documento Final](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Documentacao-PI-3-Semestre.pdf)
-### 💎 [Portfólio do Projeto]()
-### 🎬 [Vídeo de Apresentação]()
+### 💎 [Portfólio do Projeto](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Portfolio-Taskflow.pdf)
+### 🎬 [Vídeo de Apresentação](https://youtu.be/F0ldIhUy5Fs)
 
 <br>
 

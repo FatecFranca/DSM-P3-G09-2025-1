@@ -483,7 +483,7 @@ footer a {
 }
 
 .popup-conteudo textarea {
-  resize: none;
+  flex-shrink: 0;
 }
 
 .popup-conteudo button {
