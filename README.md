@@ -38,8 +38,8 @@ O site apresenta as seguintes páginas e funcionalidades:
 <br>
 
 ## 🏆 Protótipos
-### 🥇 [Versão Final](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipo-versao-final/prototipo-versao-final.zip)
-### 🥈 [1° Versão](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipo-primeira-versao/prototipo-primeira-versao.zip)
+### 🥇 [Versão Final](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipos/prototipo-versao-final/prototipo-versao-final.zip)
+### 🥈 [1° Versão](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipos/prototipo-primeira-versao/prototipo-primeira-versao.zip)
 ### 🥉 [Rabiscoframe](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipos/rabiscoframe/rabiscoframe.zip)
 
 <br>
