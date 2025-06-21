@@ -38,9 +38,9 @@ O site apresenta as seguintes páginas e funcionalidades:
 <br>
 
 ## 🏆 Protótipos
-### 🥇 [Alta Fidelidade]()
-### 🥈 [Baixa Fidelidade]()
-### 🥉 [Rabiscoframe]()
+### 🥇 [Versão Final](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipo-versao-final/prototipo-versao-final.zip)
+### 🥈 [1° Versão](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipo-primeira-versao/prototipo-primeira-versao.zip)
+### 🥉 [Rabiscoframe](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/prototipos/rabiscoframe/rabiscoframe.zip)
 
 <br>
 
@@ -48,7 +48,7 @@ O site apresenta as seguintes páginas e funcionalidades:
 ### 📓 [Memorial Descritivo](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Memorial-Descritivo.pdf)
 ### 📕 [Relacionamentos de Coleções](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Justificativa-Relacionamento-Colecoes.pdf)
 ### 🕔 [Cronograma](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Conograma-Desenvolvimento-Depois-Entrega.pdf)
-### 📒 [Documento Final]()
+### 📒 [Documento Final](https://github.com/FatecFranca/DSM-P3-G09-2025-1/raw/main/docs/Documentacao-PI-3-Semestre.pdf)
 ### 💎 [Portfólio do Projeto]()
 ### 🎬 [Vídeo de Apresentação]()
 
